@@ -68,3 +68,11 @@ class LocalizacaoTests(TestCase):
         b = ConfiguracaoSite.get()
         self.assertEqual(a.pk, b.pk)
         self.assertEqual(ConfiguracaoSite.objects.count(), 1)
+
+
+class QrTests(TestCase):
+    def test_qr_svg(self):
+        r = self.client.get(reverse("cardapio:menu_qr"))
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r["Content-Type"], "image/svg+xml")
+        self.assertIn(b"<svg", r.content)

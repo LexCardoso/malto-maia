@@ -4,8 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Malto Maia · Doceria & Cafeteria · Praia Seca – RJ{% endblock %}</title>
-  <meta name="description" content="Doceria & Cafeteria Malto Maia — café de raiz mineira à beira-mar, em Praia Seca, Araruama – RJ." />
+  {% block meta_description %}<meta name="description" content="Doceria & Cafeteria Malto Maia — café de raiz mineira à beira-mar, em Praia Seca, Araruama – RJ." />{% endblock %}
+  <link rel="canonical" href="{{ request.build_absolute_uri }}" />
   <link rel="icon" type="image/png" href="{% static 'img/logo-mark.png' %}" />
+  <link rel="apple-touch-icon" href="{% static 'img/logo-mark.png' %}" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Malto Maia" />
+  <meta property="og:locale" content="{% if LANG == 'en' %}en_US{% else %}pt_BR{% endif %}" />
+  <meta property="og:title" content="{% block og_title %}Malto Maia · Doceria & Cafeteria{% endblock %}" />
+  <meta property="og:description" content="{% block og_description %}Café de raiz mineira à beira-mar, em Praia Seca, Araruama – RJ.{% endblock %}" />
+  <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/logo-full.png' %}" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,6 +26,7 @@
   <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
   <link rel="stylesheet" href="{% static 'css/site.css' %}" />
   {% block extra_head %}{% endblock %}
+  {% block structured_data %}{% endblock %}
 </head>
 <body>
 <div class="app paper-grain">

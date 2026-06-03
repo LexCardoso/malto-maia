@@ -16,6 +16,7 @@
         </p>
       </div>
       <div class="menu-actions no-print">
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('qr-modal').showModal()">{% t 'menu.qr' %}</button>
         <button class="btn btn-ghost btn-sm" onclick="window.print()">{% t 'menu.exportPdf' %}</button>
       </div>
     </div>
@@ -62,4 +63,11 @@
   </section>
   {% endfor %}
 </div>
+
+<dialog id="qr-modal" class="qr-modal no-print">
+  <h3 class="h-2 center">{% t 'menu.qrTitle' %}</h3>
+  <p class="text-muted center" style="margin-top:6px">{% t 'menu.qrHint' %}</p>
+  <img src="{% url 'cardapio:menu_qr' %}" alt="QR Code do cardápio" width="220" height="220" style="display:block;margin:16px auto" />
+  <div class="center"><button class="btn btn-ghost btn-sm" onclick="document.getElementById('qr-modal').close()">{% t 'menu.close' %}</button></div>
+</dialog>
 {% endblock %}

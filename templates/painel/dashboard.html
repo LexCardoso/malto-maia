@@ -28,6 +28,7 @@
     <button class="btn btn-ghost btn-sm" type="submit">Buscar</button>
     <a class="btn btn-primary btn-sm" href="{% url 'painel:item_novo' %}">+ {% t 'adm.add' %}</a>
     <a class="btn btn-ghost btn-sm" href="{% url 'cardapio:menu' %}?print=1" target="_blank">{% t 'adm.exportPdf' %}</a>
+    <a class="btn btn-ghost btn-sm" href="{% url 'cardapio:menu_qr' %}" target="_blank">{% t 'adm.qr' %}</a>
   </form>
 
   <table class="adm-table">

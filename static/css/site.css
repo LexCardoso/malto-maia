@@ -162,3 +162,9 @@
 /* ---- Page intro band (subpaginas) ---- */
 .page-intro { background: var(--cream-deep); border-bottom: 1px solid var(--line); }
 .page-intro .wrap { padding-top: clamp(28px, 5vw, 52px); padding-bottom: clamp(24px, 4vw, 40px); }
+
+/* ---- QR modal (cardápio) ---- */
+.qr-modal { border: 0; border-radius: var(--r-lg); padding: 28px; max-width: 320px;
+  background: var(--cream-soft); color: var(--espresso); box-shadow: 0 24px 70px -24px var(--shadow-deep); }
+.qr-modal::backdrop { background: rgba(59, 42, 32, 0.55); backdrop-filter: blur(2px); }
+.qr-modal img { border: 1px solid var(--line); border-radius: var(--r-sm); background: #fff; }

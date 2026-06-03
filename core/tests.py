@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 
@@ -7,6 +7,11 @@ class LandingTests(TestCase):
         r = self.client.get(reverse("core:landing"))
         self.assertEqual(r.status_code, 200)
         self.assertContains(r, "Malto Maia")
+
+    def test_landing_seo(self):
+        r = self.client.get(reverse("core:landing"))
+        self.assertContains(r, 'property="og:title"')
+        self.assertContains(r, "CafeOrCoffeeShop")  # JSON-LD
 
     def test_health(self):
         r = self.client.get(reverse("core:health"))
@@ -22,3 +27,11 @@ class LanguageToggleTests(TestCase):
     def test_toggle_lang_invalido_ignora(self):
         self.client.get(reverse("core:set_language", args=["xx"]))
         self.assertIsNone(self.client.session.get("lang"))
+
+
+@override_settings(DEBUG=False, ALLOWED_HOSTS=["testserver"])
+class ErrorPageTests(TestCase):
+    def test_404_branded(self):
+        r = self.client.get("/rota-que-nao-existe/")
+        self.assertEqual(r.status_code, 404)
+        self.assertContains(r, "Página não encontrada", status_code=404)

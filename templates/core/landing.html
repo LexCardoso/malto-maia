@@ -1,6 +1,36 @@
 {% extends 'base.html' %}
 {% load static maltomaia %}
 
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CafeOrCoffeeShop",
+  "name": "Malto Maia — Doceria & Cafeteria",
+  "description": "Café de raiz mineira à beira-mar, em Praia Seca, Araruama – RJ.",
+  "image": "{{ request.scheme }}://{{ request.get_host }}{% static 'img/logo-full.png' %}",
+  "url": "{{ SITE_URL }}",
+  "telephone": "+{{ WHATSAPP_NUMBER }}",
+  "servesCuisine": ["Café", "Doces", "Comida mineira"],
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Estrada de Praia Seca",
+    "addressLocality": "Araruama",
+    "addressRegion": "RJ",
+    "addressCountry": "BR"
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    "opens": "09:00",
+    "closes": "18:00"
+  },
+  "sameAs": ["https://instagram.com/{{ INSTAGRAM_HANDLE }}"]
+}
+</script>
+{% endblock %}
+
 {% block content %}
 {# ---------- HERO ---------- #}
 <section class="hero">

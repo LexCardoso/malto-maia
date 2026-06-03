@@ -1,0 +1,24 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Algo deu errado · Malto Maia</title>
+  <link rel="icon" type="image/png" href="{% static 'img/logo-mark.png' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/malto.css' %}" />
+</head>
+<body>
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(170deg,var(--cream),var(--cream-deep))">
+    <div class="card card-pad center" style="max-width:460px">
+      <img src="{% static 'img/logo-full.png' %}" alt="Malto Maia" style="height:96px;margin:0 auto 12px" />
+      <h1 class="h-1">Algo deu errado</h1>
+      <p class="lead" style="margin-top:12px">Tivemos um problema momentâneo aqui na cozinha. Tente novamente em instantes.</p>
+      <p class="text-muted" style="margin-top:6px;font-size:14px">Something went wrong on our side. Please try again shortly.</p>
+      <p style="margin-top:20px"><a class="btn btn-primary" href="/">Voltar ao início</a></p>
+    </div>
+  </div>
+</body>
+</html>

@@ -41,6 +41,9 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # HTTPS hardening
 SECURE_SSL_REDIRECT = True
+# O health check do Render bate no app por HTTP interno (sem X-Forwarded-Proto),
+# entao /healthz/ responderia 301. Isenta esse path do redirect -> sempre 200.
+SECURE_REDIRECT_EXEMPT = [r"^healthz/$"]
 SECURE_HSTS_SECONDS = 31536000  # 1 ano
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True

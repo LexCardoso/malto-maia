@@ -24,10 +24,11 @@ media/
 .env.local
 .env.production
 
-# IDE
+# IDE / preview local
 .vscode/
 .cursor/
 .idea/
+.claude/launch.json
 *.swp
 *.swo
 *~

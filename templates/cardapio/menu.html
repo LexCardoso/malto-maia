@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static maltomaia %}
+
+{% block title %}{% t 'menu.title' %} · Malto Maia{% endblock %}
+
+{% block content %}
+<section class="page-intro menu-page">
+  <div class="wrap">
+    <div class="menu-head">
+      <div>
+        <span class="eyebrow">{% t 'menu.title' %}</span>
+        <h1 class="h-1">{% t 'menu.title' %}</h1>
+        <p class="lead" style="margin-top:8px">{% t 'menu.sub' %}</p>
+        <p class="text-muted" style="margin-top:6px;font-size:14px">
+          {% t 'common.updated' %} {{ atualizado_em|date:"d/m/Y" }}
+        </p>
+      </div>
+      <div class="menu-actions no-print">
+        <button class="btn btn-ghost btn-sm" onclick="window.print()">{% t 'menu.exportPdf' %}</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<nav class="menu-quicknav no-print">
+  <div class="wrap">
+    {% for c in categorias %}
+      <a class="chip" href="#cat-{{ c.slug }}">{{ c.nome }}</a>
+    {% endfor %}
+  </div>
+</nav>
+
+<div class="wrap section-tight">
+  <div class="print-only print-head">
+    <h2 class="h-2">Malto Maia · {% t 'menu.title' %}</h2>
+    <p>{% t 'common.updated' %} {{ atualizado_em|date:"d/m/Y" }} · {% t 'visit.addr' %}</p>
+  </div>
+
+  {% for c in categorias %}
+  <section class="menu-cat" id="cat-{{ c.slug }}">
+    <h2 class="h-2">{{ c.nome }}</h2>
+    {% if c.nota %}<p class="nota">{{ c.nota }}</p>{% endif %}
+    <div class="menu-list menu-cols">
+      {% for i in c.itens %}
+      <div class="menu-row {% if not i.disponivel %}off{% endif %}">
+        <div>
+          <span class="nm">{{ i.nome }}</span>
+          {% if i.destaque %}<span class="chip chip-sun" style="margin-left:6px">★ {% t 'common.signature' %}</span>{% endif %}
+          {% if i.desc %}<div class="ds">{{ i.desc }}</div>{% endif %}
+        </div>
+        <span class="leader"></span>
+        {% if not i.disponivel %}
+          <span class="tag-off">{% t 'common.unavailable' %}</span>
+        {% elif i.preco %}
+          <span class="pr">{{ i.preco|brl }}</span>
+        {% else %}
+          <span class="pr" style="color:var(--muted)">{% t 'common.askPrice' %}</span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+</div>
+{% endblock %}

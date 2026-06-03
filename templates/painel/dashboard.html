@@ -1,0 +1,76 @@
+{% extends 'painel/base_painel.html' %}
+{% load static maltomaia %}
+
+{% block body %}
+<div class="adm-wrap">
+  <div class="adm-head">
+    <div>
+      <h1 class="h-1">{% t 'adm.title' %}</h1>
+      <p class="adm-sub">{% t 'adm.sub' %}</p>
+    </div>
+    <div style="text-align:right">
+      <div class="text-muted" style="font-size:13px">{% t 'adm.lastUpdate' %}</div>
+      <div style="font-weight:800">{{ config.cardapio_atualizado_em|date:"d/m/Y" }}</div>
+      <form method="post" action="{% url 'painel:marcar_atualizado' %}" style="margin-top:6px">{% csrf_token %}
+        <button class="iconbtn" type="submit">{% t 'adm.markToday' %}</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="adm-stats">
+    <div class="adm-stat"><b>{{ n_total }}</b><span>{% t 'adm.itemsCount' %}</span></div>
+    <div class="adm-stat"><b>{{ n_disp }}</b><span>{% t 'adm.available' %}</span></div>
+    <div class="adm-stat"><b>{{ n_cat }}</b><span>categorias</span></div>
+  </div>
+
+  <form class="adm-toolbar" method="get">
+    <input class="adm-input grow" type="search" name="q" value="{{ busca }}" placeholder="{% t 'adm.search' %}" />
+    <button class="btn btn-ghost btn-sm" type="submit">Buscar</button>
+    <a class="btn btn-primary btn-sm" href="{% url 'painel:item_novo' %}">+ {% t 'adm.add' %}</a>
+    <a class="btn btn-ghost btn-sm" href="{% url 'cardapio:menu' %}?print=1" target="_blank">{% t 'adm.exportPdf' %}</a>
+  </form>
+
+  <table class="adm-table">
+    <thead>
+      <tr>
+        <th>{% t 'adm.col.item' %}</th>
+        <th>{% t 'adm.col.price' %}</th>
+        <th>{% t 'adm.col.status' %}</th>
+        <th style="text-align:right">{% t 'adm.col.actions' %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% regroup itens by categoria as grupos %}
+      {% for grupo in grupos %}
+        <tr class="adm-cat-row"><td colspan="4">{{ grupo.grouper.nome_pt }}</td></tr>
+        {% for i in grupo.list %}
+        <tr>
+          <td>
+            <div class="nm">{{ i.nome }}{% if i.destaque %} <span class="chip chip-sun" style="padding:1px 8px;font-size:11px">★</span>{% endif %}</div>
+            {% if i.desc_pt %}<div class="ds">{{ i.desc_pt }}</div>{% endif %}
+          </td>
+          <td>{% if i.preco %}{{ i.preco|brl }}{% else %}<span class="text-muted">{% t 'adm.priceTbd' %}</span>{% endif %}</td>
+          <td>
+            {% if i.disponivel %}<span class="badge on">{% t 'adm.available' %}</span>
+            {% else %}<span class="badge off">{% t 'common.unavailable' %}</span>{% endif %}
+          </td>
+          <td>
+            <div class="row-actions" style="justify-content:flex-end">
+              <a class="iconbtn" href="{% url 'painel:item_editar' i.pk %}">{% t 'adm.edit' %}</a>
+              <form method="post" action="{% url 'painel:item_toggle' i.pk %}">{% csrf_token %}
+                <button class="iconbtn" type="submit">{% if i.disponivel %}Pausar{% else %}Ativar{% endif %}</button>
+              </form>
+              <form method="post" action="{% url 'painel:item_excluir' i.pk %}" onsubmit="return confirm('Remover “{{ i.nome|escapejs }}”?')">{% csrf_token %}
+                <button class="iconbtn danger" type="submit">Excluir</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      {% empty %}
+        <tr><td colspan="4" class="center text-muted" style="padding:30px">Nenhum item encontrado.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

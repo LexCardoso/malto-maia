@@ -1,0 +1,42 @@
+{% load static maltomaia %}<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar · Malto Maia</title>
+  <link rel="icon" type="image/png" href="{% static 'img/logo-mark.png' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/malto.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/painel.css' %}" />
+</head>
+<body>
+  <div class="adm-login">
+    <form class="card card-pad" method="post" action="{% url 'painel:login' %}">
+      {% csrf_token %}
+      <a class="brand" href="{% url 'core:landing' %}">
+        <img src="{% static 'img/logo-full.png' %}" alt="Malto Maia" style="height:84px" />
+      </a>
+      <h1 class="h-2 center" style="margin-bottom:18px">Painel do Cardápio</h1>
+
+      {% if form.errors %}
+        <div class="form-error">Usuário ou senha inválidos. Tente novamente.</div>
+      {% endif %}
+
+      <div class="field">
+        <label for="id_username">Usuário</label>
+        <input class="adm-input" type="text" name="username" id="id_username" autofocus required autocomplete="username" />
+      </div>
+      <div class="field">
+        <label for="id_password">Senha</label>
+        <input class="adm-input" type="password" name="password" id="id_password" required autocomplete="current-password" />
+      </div>
+
+      <input type="hidden" name="next" value="{{ next }}" />
+      <button class="btn btn-primary btn-block btn-lg" type="submit">Entrar</button>
+      <p class="center" style="margin-top:16px"><a href="{% url 'core:landing' %}" class="text-muted">← Voltar ao site</a></p>
+    </form>
+  </div>
+</body>
+</html>

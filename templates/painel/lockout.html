@@ -1,0 +1,22 @@
+{% load static %}<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acesso bloqueado · Malto Maia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/malto.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/painel.css' %}" />
+</head>
+<body>
+  <div class="adm-login">
+    <div class="card card-pad center" style="max-width:420px">
+      <h1 class="h-2">Muitas tentativas</h1>
+      <p class="lead" style="margin-top:12px">Por segurança, o acesso foi temporariamente bloqueado após várias tentativas de login. Tente novamente em cerca de 1 hora.</p>
+      <p style="margin-top:18px"><a class="btn btn-ghost" href="{% url 'core:landing' %}">← Voltar ao site</a></p>
+    </div>
+  </div>
+</body>
+</html>

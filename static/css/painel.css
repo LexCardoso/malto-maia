@@ -1,0 +1,64 @@
+/* ============================================================
+   MALTO MAIA — Painel admin. Sobrio, coerente com a marca.
+   ============================================================ */
+.adm-body { background: var(--cream); min-height: 100vh; }
+.adm-top { background: var(--espresso-ink); color: var(--cream); }
+.adm-top .wrap { display: flex; align-items: center; gap: 16px; height: 62px; }
+.adm-top .brand b { color: var(--cream); }
+.adm-top .brand span { color: rgba(247,241,230,0.6); }
+.adm-top a { color: rgba(247,241,230,0.8); font-weight: 700; font-size: 14px; }
+.adm-top a:hover { color: var(--sun); }
+.adm-top .spacer { flex: 1; }
+
+.adm-wrap { max-width: 1100px; margin: 0 auto; padding: 28px var(--pad) 80px; }
+.adm-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
+.adm-sub { color: var(--muted); margin-top: 4px; }
+
+.adm-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 22px 0; }
+.adm-stat { background: var(--cream-soft); border: 1px solid var(--line); border-radius: var(--r-md); padding: 16px 18px; }
+.adm-stat b { font-family: var(--display); font-size: 26px; color: var(--espresso-ink); display: block; }
+.adm-stat span { font-size: 13px; color: var(--muted); }
+
+.adm-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 18px 0; }
+.adm-toolbar .grow { flex: 1; }
+.adm-input { width: 100%; font-family: var(--body); font-size: 15px; padding: 11px 14px;
+  border: 1.5px solid var(--line-strong); border-radius: var(--r-md); background: #fff; color: var(--espresso); }
+.adm-input:focus { outline: none; border-color: var(--sun-deep); box-shadow: 0 0 0 3px var(--sun-soft); }
+
+.adm-table { width: 100%; border-collapse: collapse; background: var(--cream-soft); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
+.adm-table th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
+  padding: 12px 14px; border-bottom: 2px solid var(--line); }
+.adm-table td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.adm-table tr:last-child td { border-bottom: 0; }
+.adm-table .nm { font-weight: 700; }
+.adm-table .ds { color: var(--muted); font-size: 13px; }
+.adm-cat-row td { background: var(--cream-deep); font-family: var(--display); font-weight: 700; font-size: 16px; color: var(--espresso-ink); }
+
+.badge { font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: var(--r-pill); }
+.badge.on { background: #E2EFDA; color: #3c5530; }
+.badge.off { background: #F0E2DA; color: #8a4a2c; }
+
+.row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.row-actions form { display: inline; }
+.iconbtn { border: 1px solid var(--line-strong); background: var(--cream); border-radius: var(--r-sm); padding: 6px 10px; font-weight: 700; font-size: 13px; color: var(--espresso); }
+.iconbtn:hover { border-color: var(--espresso); }
+.iconbtn.danger:hover { border-color: var(--terracota); color: var(--terracota); }
+
+/* Login */
+.adm-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;
+  background: linear-gradient(170deg, var(--cream) 0%, var(--cream-deep) 100%); }
+.adm-login .card { width: 100%; max-width: 400px; }
+.adm-login .brand { justify-content: center; margin-bottom: 8px; }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+.field .help, .field .errorlist { color: var(--terracota-d); font-size: 13px; margin-top: 5px; list-style: none; padding: 0; }
+.form-error { background: #F6E0D6; color: #8a3b1e; border: 1px solid #e3b59f; padding: 11px 14px; border-radius: var(--r-md); margin-bottom: 14px; font-weight: 600; font-size: 14px; }
+
+@media (max-width: 620px) {
+  .adm-stats { grid-template-columns: repeat(2, 1fr); }
+  .adm-table thead { display: none; }
+  .adm-table, .adm-table tbody, .adm-table tr, .adm-table td { display: block; width: 100%; }
+  .adm-table tr { border-bottom: 1px solid var(--line); padding: 6px 0; }
+  .adm-table td { border: 0; padding: 5px 14px; }
+  .adm-cat-row td { padding: 10px 14px; }
+}

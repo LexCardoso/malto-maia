@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: malto-maia
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: "bash build.sh"
+    startCommand: "gunicorn maltomaia.wsgi:application --bind 0.0.0.0:$PORT --timeout 60 --workers 1 --threads 2 --max-requests 250 --max-requests-jitter 50"
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.10"
+      - key: DJANGO_SETTINGS_MODULE
+        value: maltomaia.settings.prod
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: SITE_URL
+        sync: false
+      # Cria o admin no 1o deploy (preencher no painel do Render; sync:false = secreto)
+      - key: DJANGO_SUPERUSER_USERNAME
+        sync: false
+      - key: DJANGO_SUPERUSER_EMAIL
+        sync: false
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false

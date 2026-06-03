@@ -1,0 +1,97 @@
+{% load static maltomaia %}<!DOCTYPE html>
+<html lang="{% if LANG == 'en' %}en{% else %}pt-BR{% endif %}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Malto Maia · Doceria & Cafeteria · Praia Seca – RJ{% endblock %}</title>
+  <meta name="description" content="Doceria & Cafeteria Malto Maia — café de raiz mineira à beira-mar, em Praia Seca, Araruama – RJ." />
+  <link rel="icon" type="image/png" href="{% static 'img/logo-mark.png' %}" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="{% static 'css/malto.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/site.css' %}" />
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="app paper-grain">
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="{% url 'core:landing' %}">
+        <img src="{% static 'img/logo-mark.png' %}" alt="Malto Maia" />
+        <span><b>Malto Maia</b>Praia Seca – RJ</span>
+      </a>
+      <div class="hdr-spacer"></div>
+      <nav class="hdr-nav">
+        <a href="{% url 'core:landing' %}">{% t 'nav.home' %}</a>
+        <a href="{% url 'cardapio:menu' %}">{% t 'nav.menu' %}</a>
+        <a href="{% url 'pedidos:encomenda' %}">{% t 'nav.order' %}</a>
+        <a href="{% url 'core:landing' %}#visite">{% t 'nav.visit' %}</a>
+      </nav>
+      <div class="lang-toggle" aria-label="Idioma / Language">
+        <a href="{% url 'core:set_language' 'pt' %}?next={{ request.path|urlencode }}" class="{% if LANG == 'pt' %}on{% endif %}">PT</a>
+        <span>·</span>
+        <a href="{% url 'core:set_language' 'en' %}?next={{ request.path|urlencode }}" class="{% if LANG == 'en' %}on{% endif %}">EN</a>
+      </div>
+      <a class="btn btn-primary btn-sm" href="{% url 'pedidos:encomenda' %}">{% t 'cta.order' %}</a>
+      <button class="burger" type="button" aria-label="Menu" onclick="document.getElementById('mnav').classList.toggle('open')">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="mobile-nav" id="mnav">
+      <a href="{% url 'core:landing' %}">{% t 'nav.home' %}</a>
+      <a href="{% url 'cardapio:menu' %}">{% t 'nav.menu' %}</a>
+      <a href="{% url 'pedidos:encomenda' %}">{% t 'nav.order' %}</a>
+      <a href="{% url 'core:landing' %}#visite">{% t 'nav.visit' %}</a>
+    </nav>
+  </header>
+
+  {% if messages %}
+  <div class="messages">
+    {% for m in messages %}<div class="toast {{ m.tags }}">{{ m }}</div>{% endfor %}
+  </div>
+  {% endif %}
+
+  <main style="flex:1">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div class="brand"><img src="{% static 'img/logo-mark.png' %}" alt="" style="height:38px" />
+            <span><b style="color:var(--cream)">Malto Maia</b><span style="color:rgba(247,241,230,0.6)">Doceria & Cafeteria</span></span></div>
+          <p style="margin-top:14px;max-width:30em">{% t 'foot.tagline' %}</p>
+        </div>
+        <div>
+          <h4>{% t 'foot.explore' %}</h4>
+          <div class="stack-sm">
+            <a href="{% url 'core:landing' %}">{% t 'nav.home' %}</a>
+            <a href="{% url 'cardapio:menu' %}">{% t 'nav.menu' %}</a>
+            <a href="{% url 'pedidos:encomenda' %}">{% t 'nav.order' %}</a>
+            <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener">Instagram</a>
+          </div>
+        </div>
+        <div>
+          <h4>{% t 'foot.contact' %}</h4>
+          <div class="stack-sm">
+            <a href="https://wa.me/{{ WHATSAPP_NUMBER }}" target="_blank" rel="noopener">WhatsApp</a>
+            <span>{% t 'visit.addr' %}</span>
+            <span>{% t 'visit.hours' %}</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© Malto Maia · {% t 'foot.rights' %}</span>
+        <a href="{% url 'painel:dashboard' %}">{% t 'nav.admin' %}</a>
+      </div>
+    </div>
+  </footer>
+</div>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

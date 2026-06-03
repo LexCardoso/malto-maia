@@ -1,0 +1,40 @@
+{% load static maltomaia %}<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}{% t 'adm.title' %} · Malto Maia{% endblock %}</title>
+  <link rel="icon" type="image/png" href="{% static 'img/logo-mark.png' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/malto.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/site.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/painel.css' %}" />
+</head>
+<body class="adm-body">
+  <header class="adm-top">
+    <div class="wrap">
+      <a class="brand" href="{% url 'painel:dashboard' %}">
+        <img src="{% static 'img/logo-mark.png' %}" alt="" style="height:34px" />
+        <span><b>Malto Maia</b>{% t 'adm.title' %}</span>
+      </a>
+      <div class="spacer"></div>
+      {% if user.is_authenticated %}
+        <a href="{% url 'core:landing' %}" target="_blank">Ver site ↗</a>
+        <form method="post" action="{% url 'painel:logout' %}" style="display:inline">{% csrf_token %}
+          <button class="iconbtn" type="submit" style="background:transparent;border-color:rgba(247,241,230,0.3);color:var(--cream)">Sair</button>
+        </form>
+      {% endif %}
+    </div>
+  </header>
+
+  {% if messages %}
+  <div class="messages">
+    {% for m in messages %}<div class="toast {{ m.tags }}">{{ m }}</div>{% endfor %}
+  </div>
+  {% endif %}
+
+  {% block body %}{% endblock %}
+</body>
+</html>

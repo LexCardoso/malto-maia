@@ -1,0 +1,164 @@
+/* ============================================================
+   MALTO MAIA — Layout do site (header, hero, secoes, footer, cardapio,
+   encomenda). Usa os tokens de malto.css (:root). Mobile-first.
+   ============================================================ */
+
+/* ---- Header ---- */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(247, 241, 230, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.site-header .wrap { display: flex; align-items: center; gap: 18px; height: 68px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand img { height: 42px; width: auto; }
+.brand b { font-family: var(--display); font-weight: 800; font-size: 20px; color: var(--espresso-ink); line-height: 1; }
+.brand span { display: block; font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+.hdr-spacer { flex: 1; }
+.hdr-nav { display: flex; align-items: center; gap: 26px; }
+.hdr-nav a { font-weight: 700; font-size: 15px; color: var(--espresso); transition: color .15s; }
+.hdr-nav a:hover, .hdr-nav a.active { color: var(--terracota); }
+.lang-toggle { display: flex; align-items: center; gap: 4px; font-weight: 800; font-size: 13px; }
+.lang-toggle a { color: var(--muted); padding: 2px 5px; border-radius: 6px; }
+.lang-toggle a.on { color: var(--espresso-ink); background: var(--sun-soft); }
+.burger { display: none; background: none; border: 0; padding: 8px; }
+.burger span { display: block; width: 24px; height: 2.5px; background: var(--espresso); margin: 5px 0; border-radius: 2px; }
+.mobile-nav { display: none; border-top: 1px solid var(--line); background: var(--cream-soft); }
+.mobile-nav.open { display: block; }
+.mobile-nav a { display: block; padding: 14px var(--pad); font-weight: 700; border-bottom: 1px solid var(--line); }
+
+@media (max-width: 920px) {
+  .hdr-nav { display: none; }
+  .burger { display: block; }
+}
+
+/* ---- Hero ---- */
+.hero { background: linear-gradient(170deg, var(--cream) 0%, var(--cream-deep) 100%); overflow: hidden; }
+.hero .wrap { padding-top: clamp(40px, 7vw, 84px); padding-bottom: clamp(40px, 7vw, 84px); }
+.hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(28px, 5vw, 64px); align-items: center; }
+.hero h1 { font-size: clamp(36px, 6.5vw, 66px); margin-top: 14px; }
+.hero .lead { margin-top: 20px; max-width: 30em; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+.hero-art { position: relative; }
+.hero-art .ph { min-height: clamp(280px, 42vw, 440px); }
+.hero-badge { margin-top: 18px; }
+@media (max-width: 920px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-art { max-width: 480px; margin: 0 auto; }
+}
+
+/* ---- Generic section header ---- */
+.sec-head { max-width: 40em; }
+.sec-head .h-1, .sec-head .h-2 { margin-top: 6px; }
+.sec-head .lead { margin-top: 14px; }
+.alt-bg { background: var(--cream-deep); }
+
+/* ---- Highlights ---- */
+.hl-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 40px; }
+.hl-card { display: flex; flex-direction: column; overflow: hidden; }
+.hl-card .ph { border-radius: 0; min-height: 170px; }
+.hl-body { padding: 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.hl-body h3 { font-size: 21px; }
+.hl-price { margin-top: auto; font-weight: 800; color: var(--terracota); font-size: 18px; }
+@media (max-width: 1000px) { .hl-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 460px) { .hl-grid { grid-template-columns: 1fr; } }
+
+/* ---- About ---- */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 56px); align-items: center; }
+.about-stats { display: flex; gap: 28px; margin-top: 26px; flex-wrap: wrap; }
+.about-stats b { font-family: var(--display); font-size: 32px; color: var(--terracota); display: block; line-height: 1; }
+.about-stats span { font-size: 13.5px; color: var(--muted); }
+@media (max-width: 920px) { .about-grid { grid-template-columns: 1fr; } }
+
+/* ---- Gallery ---- */
+.gal-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 36px; }
+.gal-grid .ph { min-height: 200px; }
+.gal-grid .tall { grid-row: span 2; }
+@media (max-width: 1000px) { .gal-grid { grid-template-columns: repeat(2, 1fr); } .gal-grid .tall { grid-row: span 1; } }
+
+/* ---- Order strip ---- */
+.order-strip { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 32px; align-items: center;
+  background: var(--espresso); color: var(--cream); border-radius: var(--r-xl); padding: clamp(28px, 5vw, 56px); }
+.order-strip h2 { color: var(--cream); }
+.order-strip .lead { color: rgba(247,241,230,0.8); }
+.order-strip .ph { min-height: 220px; }
+@media (max-width: 920px) { .order-strip { grid-template-columns: 1fr; } }
+
+/* ---- Reviews ---- */
+.rev-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 38px; }
+.rev-card p { margin-top: 12px; }
+.rev-card cite { display: block; margin-top: 16px; font-style: normal; font-weight: 800; font-size: 14px; color: var(--muted); }
+@media (max-width: 920px) { .rev-grid { grid-template-columns: 1fr; } }
+
+/* ---- Visit ---- */
+.visit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 48px); align-items: stretch; }
+.visit-grid .ph { min-height: 280px; }
+.visit-info { display: flex; flex-direction: column; gap: 16px; }
+.visit-line { display: flex; gap: 12px; align-items: baseline; }
+.visit-line b { min-width: 96px; color: var(--muted); font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; }
+@media (max-width: 920px) { .visit-grid { grid-template-columns: 1fr; } }
+
+/* ---- Concept ---- */
+.concept { background: var(--leaf); color: #fff; }
+.concept h2 { color: #fff; }
+.concept .lead { color: rgba(255,255,255,0.85); max-width: 46em; }
+
+/* ---- Footer ---- */
+.site-footer { background: var(--espresso-ink); color: rgba(247,241,230,0.72); padding: clamp(40px, 6vw, 72px) 0 28px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
+.site-footer h4 { color: var(--cream); font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; }
+.site-footer a { color: rgba(247,241,230,0.72); }
+.site-footer a:hover { color: var(--sun); }
+.site-footer .stack-sm a { display: block; }
+.footer-bottom { margin-top: 36px; padding-top: 20px; border-top: 1px solid rgba(247,241,230,0.15); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 13.5px; }
+@media (max-width: 720px) { .footer-grid { grid-template-columns: 1fr; gap: 24px; } }
+
+/* ---- Messages / toast ---- */
+.messages { position: fixed; top: 80px; right: 16px; z-index: 100; display: flex; flex-direction: column; gap: 8px; max-width: 360px; }
+.toast { padding: 13px 18px; border-radius: var(--r-md); font-weight: 700; box-shadow: 0 10px 30px -12px var(--shadow-deep); }
+.toast.success { background: #E8F0E4; color: #3c5530; border: 1px solid #c5d8ba; }
+.toast.error { background: #F6E0D6; color: #8a3b1e; border: 1px solid #e3b59f; }
+.toast.info { background: var(--cream-soft); color: var(--espresso); border: 1px solid var(--line-strong); }
+
+/* ============================================================
+   CARDAPIO (menu)
+   ============================================================ */
+.menu-head { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between; }
+.menu-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.menu-quicknav { position: sticky; top: 68px; z-index: 20; background: rgba(247,241,230,0.94); backdrop-filter: blur(8px);
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 12px 0; margin-top: 24px; }
+.menu-quicknav .wrap { display: flex; gap: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.menu-quicknav a { white-space: nowrap; }
+.menu-cat { padding-top: 44px; }
+.menu-cat h2 { display: flex; align-items: baseline; gap: 12px; }
+.menu-cat .nota { color: var(--muted); font-style: italic; margin-top: 4px; }
+.menu-list { margin-top: 22px; }
+.menu-row { display: flex; gap: 14px; align-items: baseline; padding: 13px 0; border-bottom: 1px dashed var(--line); }
+.menu-row.off { opacity: 0.5; }
+.menu-row .nm { font-weight: 700; }
+.menu-row .ds { color: var(--muted); font-size: 14.5px; }
+.menu-row .leader { flex: 1; border-bottom: 1px dotted var(--line-strong); transform: translateY(-4px); min-width: 16px; }
+.menu-row .pr { font-weight: 800; color: var(--terracota); white-space: nowrap; }
+.tag-off { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border: 1px solid var(--line-strong); border-radius: var(--r-pill); padding: 2px 8px; }
+
+/* ============================================================
+   ENCOMENDA (order)
+   ============================================================ */
+.order-grid { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 30px; align-items: start; }
+.order-cat h3 { margin-top: 26px; font-size: 22px; }
+.order-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px dashed var(--line); }
+.order-item .grow { flex: 1; }
+.order-item .nm { font-weight: 700; }
+.order-item .pr { color: var(--muted); font-size: 14px; }
+.order-summary { position: sticky; top: 84px; }
+.cart-line { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+.cart-line .grow { flex: 1; }
+.qty { display: inline-flex; align-items: center; gap: 8px; }
+.qty button { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line-strong); background: var(--cream); font-weight: 800; line-height: 1; }
+.cart-total { display: flex; justify-content: space-between; font-weight: 800; font-size: 19px; margin: 16px 0; }
+@media (max-width: 920px) { .order-grid { grid-template-columns: 1fr; } .order-summary { position: static; } }
+
+/* ---- Page intro band (subpaginas) ---- */
+.page-intro { background: var(--cream-deep); border-bottom: 1px solid var(--line); }
+.page-intro .wrap { padding-top: clamp(28px, 5vw, 52px); padding-bottom: clamp(24px, 4vw, 40px); }

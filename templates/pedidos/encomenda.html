@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static maltomaia %}
+
+{% block title %}{% t 'ord.title' %} · Malto Maia{% endblock %}
+
+{% block content %}
+<section class="page-intro">
+  <div class="wrap">
+    <span class="eyebrow">{% t 'order.eyebrow' %}</span>
+    <h1 class="h-1">{% t 'ord.title' %}</h1>
+    <p class="lead" style="margin-top:8px">{% t 'ord.sub' %}</p>
+  </div>
+</section>
+
+<div class="wrap section-tight">
+  <div class="order-grid">
+    {# ---- Lista de itens ---- #}
+    <div>
+      <h2 class="h-2">{% t 'ord.pick' %}</h2>
+      {% for c in categorias %}
+      <div class="order-cat">
+        <h3>{{ c.nome }}</h3>
+        {% for i in c.itens %}
+        <div class="order-item">
+          <div class="grow">
+            <div class="nm">{{ i.nome }}</div>
+            <div class="pr">{% if i.preco %}{{ i.preco|brl }}{% else %}{% t 'common.askPrice' %}{% endif %}{% if i.desc %} · {{ i.desc }}{% endif %}</div>
+          </div>
+          <button class="btn btn-ghost btn-sm js-add"
+                  data-id="{{ i.id }}"
+                  data-name="{{ i.nome }}"
+                  data-price="{% if i.preco %}{{ i.preco|stringformat:'.2f' }}{% endif %}">
+            {% t 'ord.add' %}
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+
+    {# ---- Resumo ---- #}
+    <aside class="order-summary card card-pad">
+      <h2 class="h-2">{% t 'ord.summary' %}</h2>
+      <div id="cart" style="margin-top:14px">
+        <p class="text-muted" id="cart-empty">{% t 'ord.empty' %}</p>
+      </div>
+      <div class="cart-total" id="cart-total-row" style="display:none">
+        <span>{% t 'ord.total' %}</span><span id="cart-total">R$ 0,00</span>
+      </div>
+      <p class="text-muted" id="cart-note" style="font-size:13px;display:none">{% t 'ord.totalNote' %}</p>
+
+      <div class="field" style="margin-top:16px">
+        <label for="cli-nome">{% t 'ord.name' %}</label>
+        <input class="adm-input" id="cli-nome" type="text" placeholder="{% t 'ord.namePh' %}" />
+      </div>
+      <div class="field">
+        <label for="cli-obs">{% t 'ord.notes' %}</label>
+        <textarea class="adm-input" id="cli-obs" rows="3" placeholder="{% t 'ord.notesPh' %}"></textarea>
+      </div>
+
+      <a class="btn btn-wa btn-block btn-lg" id="send-wa" href="#" target="_blank" rel="noopener">{% t 'ord.send' %}</a>
+      <button class="btn btn-ghost btn-block btn-sm" id="clear-cart" style="margin-top:10px">{% t 'ord.clear' %}</button>
+    </aside>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  window.MALTO_ORDER = {
+    wa: "{{ WHATSAPP_NUMBER }}",
+    waHeader: "{% t 'ord.waHeader' %}",
+    total: "{% t 'ord.total' %}",
+    notes: "{% t 'ord.notes' %}",
+    name: "{% t 'ord.name' %}",
+    askPrice: "{% t 'common.askPrice' %}",
+    empty: `{% t 'ord.empty' %}`,
+    add: "{% t 'ord.add' %}"
+  };
+</script>
+<script src="{% static 'js/order.js' %}"></script>
+{% endblock %}

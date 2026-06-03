@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.cursor/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Static collected (regenerado por collectstatic no deploy)
+staticfiles/
+
+# Node (caso adicione build de assets depois)
+node_modules/
+
+# Skill router / monitor (runtime local — index, fila e feedback)
+data/skill_router/inbox/
+data/skill_router/outbox/
+data/skill_router/state.json
+data/skill_router/STOP
+# feedback.jsonl NAO e ignorado: o aprendizado do router e versionado de proposito.

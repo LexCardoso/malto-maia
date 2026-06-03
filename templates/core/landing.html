@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static maltomaia %}
+
+{% block content %}
+{# ---------- HERO ---------- #}
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="rise">
+        <span class="eyebrow">{% t 'hero.eyebrow' %}</span>
+        {% t 'hero.title' as hero_title %}
+        <h1>{{ hero_title|linebreaksbr }}</h1>
+        <p class="lead">{% t 'hero.sub' %}</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary btn-lg" href="{% url 'cardapio:menu' %}">{% t 'cta.menu' %}</a>
+          <a class="btn btn-ghost btn-lg" href="{% url 'pedidos:encomenda' %}">{% t 'cta.order' %}</a>
+        </div>
+        <div class="hero-badge"><span class="chip chip-sun">★ {% t 'hero.badge' %}</span></div>
+      </div>
+      <div class="hero-art rise">
+        <div class="ph ph-coffee" data-label="cappuccino · espuma com sol"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ---------- SOBRE ---------- #}
+<section class="section" id="sobre">
+  <div class="wrap about-grid">
+    <div class="ph" data-label="a casa colonial amarela" style="min-height:340px"></div>
+    <div>
+      <span class="eyebrow-tag">{% t 'about.eyebrow' %}</span>
+      <h2 class="h-1">{% t 'about.title' %}</h2>
+      <p class="lead" style="margin-top:16px">{% t 'about.p1' %}</p>
+      <p class="lead" style="margin-top:12px">{% t 'about.p2' %}</p>
+      <div class="about-stats">
+        <div><b>+10</b><span>{% t 'about.stat1' %}</span></div>
+        <div><b>100%</b><span>{% t 'about.stat2' %}</span></div>
+        <div><b>4,4★</b><span>{% t 'about.stat3' %}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ---------- CARROS-CHEFE ---------- #}
+<section class="section alt-bg">
+  <div class="wrap">
+    <div class="sec-head center" style="margin:0 auto">
+      <span class="eyebrow">{% t 'high.eyebrow' %}</span>
+      <h2 class="h-1">{% t 'high.title' %}</h2>
+      <p class="lead">{% t 'high.sub' %}</p>
+    </div>
+    <div class="hl-grid">
+      {% for d in destaques %}
+      <article class="card hl-card">
+        <div class="ph ph-coffee" data-label="{{ d.nome }}"></div>
+        <div class="hl-body">
+          <h3>{{ d.nome }}</h3>
+          {% if d.desc %}<p class="text-muted" style="font-size:14.5px">{{ d.desc }}</p>{% endif %}
+          <span class="hl-price">{% if d.preco %}{{ d.preco|brl }}{% else %}{% t 'common.askPrice' %}{% endif %}</span>
+        </div>
+      </article>
+      {% empty %}
+      <p class="text-muted">Marque itens como “carro-chefe” no painel para destacá-los aqui.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ---------- GALERIA ---------- #}
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow-tag">{% t 'gal.eyebrow' %}</span><h2 class="h-1">{% t 'gal.title' %}</h2></div>
+    <div class="gal-grid">
+      <div class="ph tall" data-label="o jardim"></div>
+      <div class="ph" data-label="a lousa do dia"></div>
+      <div class="ph ph-coffee" data-label="espresso"></div>
+      <div class="ph" data-label="torta de coco"></div>
+      <div class="ph" data-label="pão de queijo"></div>
+    </div>
+  </div>
+</section>
+
+{# ---------- ENCOMENDAS ---------- #}
+<section class="section alt-bg">
+  <div class="wrap">
+    <div class="order-strip">
+      <div>
+        <span class="eyebrow" style="color:var(--sun)">{% t 'order.eyebrow' %}</span>
+        <h2 class="h-1" style="margin-top:6px">{% t 'order.title' %}</h2>
+        <p class="lead" style="margin-top:14px">{% t 'order.sub' %}</p>
+        <div style="margin-top:24px"><a class="btn btn-wa btn-lg" href="{% url 'pedidos:encomenda' %}">{% t 'cta.whatsapp' %}</a></div>
+      </div>
+      <div class="ph" data-label="tortas inteiras"></div>
+    </div>
+  </div>
+</section>
+
+{# ---------- AVALIAÇÕES ---------- #}
+<section class="section">
+  <div class="wrap">
+    <div class="sec-head center" style="margin:0 auto">
+      <span class="eyebrow">{% t 'rev.eyebrow' %}</span><h2 class="h-1">{% t 'rev.title' %}</h2>
+    </div>
+    <div class="rev-grid">
+      {% for n in '123' %}
+      <article class="card card-pad rev-card">
+        <div class="stars">★★★★★</div>
+        <p>{% t 'rev.r'|add:n %}</p>
+        <cite>{% t 'rev.r'|add:n|add:'a' %}</cite>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{# ---------- VISITE ---------- #}
+<section class="section alt-bg" id="visite">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow-tag">{% t 'visit.eyebrow' %}</span><h2 class="h-1">{% t 'visit.title' %}</h2></div>
+    <div class="visit-grid" style="margin-top:30px">
+      <div class="ph" data-label="mapa · Praia Seca"></div>
+      <div class="visit-info card card-pad">
+        <div class="visit-line"><b>{% t 'visit.eyebrow' %}</b><span>{% t 'visit.addr' %}</span></div>
+        <div class="visit-line"><b>{% t 'visit.hoursLabel' %}</b><span>{% t 'visit.hours' %}</span></div>
+        <div class="visit-line"><b>{% t 'visit.phoneLabel' %}</b><a href="https://wa.me/{{ WHATSAPP_NUMBER }}" target="_blank" rel="noopener" class="text-terra">+{{ WHATSAPP_NUMBER }}</a></div>
+        <div class="row row-wrap" style="margin-top:8px">
+          <a class="btn btn-terra" href="https://www.google.com/maps/search/?api=1&query=Malto+Maia+Praia+Seca+Araruama" target="_blank" rel="noopener">{% t 'cta.directions' %}</a>
+          <a class="btn btn-wa" href="https://wa.me/{{ WHATSAPP_NUMBER }}" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# ---------- CONCEITO ---------- #}
+<section class="section concept">
+  <div class="wrap center" style="max-width:54em;margin:0 auto">
+    <span class="eyebrow" style="color:var(--sun-soft)">{% t 'concept.eyebrow' %}</span>
+    <h2 class="h-1">{% t 'concept.title' %}</h2>
+    <p class="lead" style="margin:18px auto 0">{% t 'concept.body' %}</p>
+  </div>
+</section>
+{% endblock %}

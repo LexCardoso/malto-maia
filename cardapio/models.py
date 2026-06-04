@@ -65,6 +65,9 @@ class ConfiguracaoSite(models.Model):
     cardapio_atualizado_em = models.DateField(default=timezone.now)
     whatsapp = models.CharField(max_length=20, blank=True)
     instagram = models.CharField(max_length=40, blank=True)
+    tripadvisor_url = models.URLField("TripAdvisor (link)", blank=True)
+    latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, blank=True)
 
     class Meta:
         verbose_name = "configuração do site"
@@ -85,3 +88,34 @@ class ConfiguracaoSite(models.Model):
     def marcar_atualizado_hoje(self):
         self.cardapio_atualizado_em = timezone.localdate()
         self.save(update_fields=["cardapio_atualizado_em"])
+
+    @property
+    def tem_mapa(self):
+        return self.latitude is not None and self.longitude is not None
+
+
+class Avaliacao(models.Model):
+    """Avaliacao curada pelo dono (Google/TripAdvisor/outro) — ele escolhe quais aparecem."""
+
+    FONTES = [("google", "Google"), ("tripadvisor", "TripAdvisor"), ("outro", "Outro")]
+
+    autor = models.CharField(max_length=80)
+    texto = models.TextField()
+    nota = models.PositiveSmallIntegerField("nota (1-5)", default=5)
+    fonte = models.CharField(max_length=20, choices=FONTES, default="google")
+    aparece = models.BooleanField("aparece no site", default=True)
+    ordem = models.PositiveIntegerField(default=0)
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["ordem", "-criado_em"]
+        verbose_name = "avaliação"
+        verbose_name_plural = "avaliações"
+
+    def __str__(self):
+        return f"{self.autor} ({self.get_fonte_display()})"
+
+    @property
+    def estrelas(self):
+        n = max(0, min(5, int(self.nota)))
+        return "★" * n + "☆" * (5 - n)

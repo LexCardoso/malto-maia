@@ -133,14 +133,17 @@
       <span class="eyebrow">{% t 'rev.eyebrow' %}</span><h2 class="h-1">{% t 'rev.title' %}</h2>
     </div>
     <div class="rev-grid">
-      {% for n in '123' %}
+      {% for av in avaliacoes %}
       <article class="card card-pad rev-card">
-        <div class="stars">★★★★★</div>
-        <p>{% t 'rev.r'|add:n %}</p>
-        <cite>{% t 'rev.r'|add:n|add:'a' %}</cite>
+        <div class="stars">{{ av.estrelas }}</div>
+        <p>{{ av.texto }}</p>
+        <cite>{{ av.autor }} · {{ av.get_fonte_display }}</cite>
       </article>
       {% endfor %}
     </div>
+    {% if TRIPADVISOR_URL %}
+    <div class="center" style="margin-top:28px"><a class="btn btn-ghost" href="{{ TRIPADVISOR_URL }}" target="_blank" rel="noopener">{% t 'rev.seeAll' %}</a></div>
+    {% endif %}
   </div>
 </section>
 
@@ -149,13 +152,17 @@
   <div class="wrap">
     <div class="sec-head"><span class="eyebrow-tag">{% t 'visit.eyebrow' %}</span><h2 class="h-1">{% t 'visit.title' %}</h2></div>
     <div class="visit-grid" style="margin-top:30px">
+      {% if TEM_MAPA %}
+      <div class="ph visit-map"><iframe src="https://www.google.com/maps?q={{ MAP_LAT }},{{ MAP_LNG }}&z=16&output=embed" loading="lazy" title="Mapa Malto Maia" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
+      {% else %}
       <div class="ph has-photo"><img src="{% static 'img/fotos/visite.jpg' %}" alt="Entrada e jardim da Malto Maia" loading="lazy" /></div>
+      {% endif %}
       <div class="visit-info card card-pad">
         <div class="visit-line"><b>{% t 'visit.eyebrow' %}</b><span>{% t 'visit.addr' %}</span></div>
         <div class="visit-line"><b>{% t 'visit.hoursLabel' %}</b><span>{% t 'visit.hours' %}</span></div>
         <div class="visit-line"><b>{% t 'visit.phoneLabel' %}</b><a href="https://wa.me/{{ WHATSAPP_NUMBER }}" target="_blank" rel="noopener" class="text-terra">+{{ WHATSAPP_NUMBER }}</a></div>
         <div class="row row-wrap" style="margin-top:8px">
-          <a class="btn btn-terra" href="https://www.google.com/maps/search/?api=1&query=Malto+Maia+Praia+Seca+Araruama" target="_blank" rel="noopener">{% t 'cta.directions' %}</a>
+          <a class="btn btn-terra" href="{% if TEM_MAPA %}https://www.google.com/maps/dir/?api=1&destination={{ MAP_LAT }},{{ MAP_LNG }}{% else %}https://www.google.com/maps/search/?api=1&query=Malto+Maia+Praia+Seca+Araruama{% endif %}" target="_blank" rel="noopener">{% t 'cta.directions' %}</a>
           <a class="btn btn-wa" href="https://wa.me/{{ WHATSAPP_NUMBER }}" target="_blank" rel="noopener">WhatsApp</a>
         </div>
       </div>

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Categoria, ConfiguracaoSite, Item
+from .models import Avaliacao, Categoria, ConfiguracaoSite, Item
 
 
 class ItemInline(admin.TabularInline):
@@ -23,6 +23,14 @@ class ItemAdmin(admin.ModelAdmin):
     list_filter = ("categoria", "destaque", "disponivel")
     list_editable = ("preco", "destaque", "disponivel")
     search_fields = ("nome", "desc_pt", "desc_en")
+
+
+@admin.register(Avaliacao)
+class AvaliacaoAdmin(admin.ModelAdmin):
+    list_display = ("autor", "fonte", "nota", "aparece", "ordem")
+    list_filter = ("fonte", "aparece")
+    list_editable = ("aparece", "ordem")
+    search_fields = ("autor", "texto")
 
 
 @admin.register(ConfiguracaoSite)

@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from cardapio.models import ConfiguracaoSite
+from cardapio.models import Avaliacao, ConfiguracaoSite
 from cardapio.services import destaques_localizados
 
 
@@ -18,6 +18,7 @@ def landing(request):
         {
             "destaques": destaques_localizados(lang, limite=4),
             "atualizado_em": config.cardapio_atualizado_em,
+            "avaliacoes": Avaliacao.objects.filter(aparece=True),
         },
     )
 

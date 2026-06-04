@@ -19,6 +19,13 @@
         <img src="{% static 'img/logo-mark.png' %}" alt="" style="height:34px" />
         <span><b>Malto Maia</b>{% t 'adm.title' %}</span>
       </a>
+      {% if user.is_authenticated %}
+      <nav class="adm-nav">
+        <a href="{% url 'painel:dashboard' %}">Cardápio</a>
+        <a href="{% url 'painel:avaliacoes' %}">Avaliações</a>
+        <a href="{% url 'painel:configuracoes' %}">Config</a>
+      </nav>
+      {% endif %}
       <div class="spacer"></div>
       {% if user.is_authenticated %}
         <a href="{% url 'core:landing' %}" target="_blank">Ver site ↗</a>

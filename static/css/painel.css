@@ -9,6 +9,13 @@
 .adm-top a { color: rgba(247,241,230,0.8); font-weight: 700; font-size: 14px; }
 .adm-top a:hover { color: var(--sun); }
 .adm-top .spacer { flex: 1; }
+.adm-nav { display: flex; gap: 18px; }
+.adm-nav a { font-weight: 700; font-size: 14px; }
+@media (max-width: 620px) {
+  .adm-top .wrap { gap: 10px; }
+  .adm-nav { gap: 12px; }
+  .adm-top .brand span { display: none; } /* abre espaço no mobile */
+}
 
 .adm-wrap { max-width: 1100px; margin: 0 auto; padding: 28px var(--pad) 80px; }
 .adm-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 8px; }

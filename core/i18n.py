@@ -57,6 +57,7 @@ STRINGS = {
     # Reviews
     "rev.eyebrow": {"pt": "Quem visita, conta", "en": "In their words"},
     "rev.title": {"pt": "4,4 de 5 — e contando", "en": "4.4 out of 5 — and counting"},
+    "rev.seeAll": {"pt": "Ver todas no TripAdvisor", "en": "See all on TripAdvisor"},
     "rev.r1": {"pt": "O melhor espresso da região, num ambiente que dá vontade de não ir embora. A torta de coco é obrigatória.", "en": "The best espresso in the region, in a place you won’t want to leave. The coconut pie is a must."},
     "rev.r1a": {"pt": "Marina R. · Google", "en": "Marina R. · Google"},
     "rev.r2": {"pt": "Casinha charmosa, atendimento caprichado e cappuccino mineiro maravilhoso. Voltarei sempre.", "en": "Charming little house, attentive service and a wonderful Minas cappuccino. I’ll always come back."},

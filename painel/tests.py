@@ -53,3 +53,59 @@ class AcessoPainelTests(TestCase):
         self.assertEqual(r.status_code, 302)
         self.item.refresh_from_db()
         self.assertEqual(self.item.nome, "Espresso Duplo")
+
+
+class AvaliacoesPainelTests(TestCase):
+    def setUp(self):
+        from cardapio.models import Avaliacao
+        self.Avaliacao = Avaliacao
+        self.av = Avaliacao.objects.create(autor="Joao", texto="Otimo", nota=5, fonte="google")
+        U = get_user_model()
+        self.staff = U.objects.create_user("dono", password="senha-forte-123", is_staff=True)
+
+    def test_lista_exige_staff(self):
+        r = self.client.get(reverse("painel:avaliacoes"))
+        self.assertEqual(r.status_code, 302)
+
+    def test_staff_lista_e_cria(self):
+        self.client.force_login(self.staff)
+        self.assertEqual(self.client.get(reverse("painel:avaliacoes")).status_code, 200)
+        r = self.client.post(
+            reverse("painel:avaliacao_nova"),
+            {"autor": "Ana", "texto": "Adorei", "nota": "5", "fonte": "tripadvisor", "ordem": "0", "aparece": "on"},
+        )
+        self.assertEqual(r.status_code, 302)
+        self.assertTrue(self.Avaliacao.objects.filter(autor="Ana").exists())
+
+    def test_toggle_aparece(self):
+        self.client.force_login(self.staff)
+        self.assertTrue(self.av.aparece)
+        r = self.client.post(reverse("painel:avaliacao_toggle", args=[self.av.pk]))
+        self.assertEqual(r.status_code, 302)
+        self.av.refresh_from_db()
+        self.assertFalse(self.av.aparece)
+
+    def test_landing_mostra_so_visiveis(self):
+        self.Avaliacao.objects.create(autor="Oculto", texto="x", nota=5, fonte="outro", aparece=False)
+        html = self.client.get(reverse("core:landing")).content.decode()
+        self.assertIn("Joao", html)
+        self.assertNotIn("Oculto", html)
+
+
+class ConfiguracoesPainelTests(TestCase):
+    def setUp(self):
+        U = get_user_model()
+        self.staff = U.objects.create_user("dono", password="senha-forte-123", is_staff=True)
+
+    def test_salva_mapa_e_tripadvisor(self):
+        from cardapio.models import ConfiguracaoSite
+        self.client.force_login(self.staff)
+        r = self.client.post(
+            reverse("painel:configuracoes"),
+            {"whatsapp": "5521999999999", "instagram": "maltomaia",
+             "tripadvisor_url": "https://www.tripadvisor.com/x", "latitude": "-22.92", "longitude": "-42.25"},
+        )
+        self.assertEqual(r.status_code, 302)
+        cfg = ConfiguracaoSite.get()
+        self.assertTrue(cfg.tem_mapa)
+        self.assertEqual(cfg.tripadvisor_url, "https://www.tripadvisor.com/x")

@@ -15,4 +15,8 @@ def site_context(request):
         "WHATSAPP_NUMBER": whatsapp,
         "INSTAGRAM_HANDLE": instagram,
         "SITE_URL": settings.SITE_URL,
+        "TRIPADVISOR_URL": config.tripadvisor_url,
+        "MAP_LAT": config.latitude,
+        "MAP_LNG": config.longitude,
+        "TEM_MAPA": config.tem_mapa,
     }

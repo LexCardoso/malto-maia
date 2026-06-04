@@ -1,0 +1,48 @@
+{% extends 'painel/base_painel.html' %}
+{% load maltomaia %}
+
+{% block title %}Avaliações · Malto Maia{% endblock %}
+
+{% block body %}
+<div class="adm-wrap">
+  <div class="adm-head">
+    <div>
+      <h1 class="h-1">Avaliações</h1>
+      <p class="adm-sub">Copie avaliações do Google/TripAdvisor e escolha quais aparecem no site.</p>
+    </div>
+    <a class="btn btn-primary btn-sm" href="{% url 'painel:avaliacao_nova' %}">+ Nova avaliação</a>
+  </div>
+
+  <div class="adm-stats">
+    <div class="adm-stat"><b>{{ avaliacoes|length }}</b><span>cadastradas</span></div>
+    <div class="adm-stat"><b>{{ n_visiveis }}</b><span>aparecem no site</span></div>
+  </div>
+
+  <table class="adm-table">
+    <thead>
+      <tr><th>Avaliação</th><th>Fonte</th><th>Nota</th><th>No site</th><th style="text-align:right">Ações</th></tr>
+    </thead>
+    <tbody>
+      {% for av in avaliacoes %}
+      <tr>
+        <td><div class="nm">{{ av.autor }}</div><div class="ds">{{ av.texto|truncatechars:90 }}</div></td>
+        <td>{{ av.get_fonte_display }}</td>
+        <td><span class="stars" style="font-size:14px">{{ av.estrelas }}</span></td>
+        <td>{% if av.aparece %}<span class="badge on">Sim</span>{% else %}<span class="badge off">Não</span>{% endif %}</td>
+        <td>
+          <div class="row-actions" style="justify-content:flex-end">
+            <a class="iconbtn" href="{% url 'painel:avaliacao_editar' av.pk %}">Editar</a>
+            <form method="post" action="{% url 'painel:avaliacao_toggle' av.pk %}">{% csrf_token %}
+              <button class="iconbtn" type="submit">{% if av.aparece %}Ocultar{% else %}Mostrar{% endif %}</button></form>
+            <form method="post" action="{% url 'painel:avaliacao_excluir' av.pk %}" onsubmit="return confirm('Remover avaliação de “{{ av.autor|escapejs }}”?')">{% csrf_token %}
+              <button class="iconbtn danger" type="submit">Excluir</button></form>
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="center text-muted" style="padding:30px">Nenhuma avaliação ainda. Clique em “Nova avaliação”.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

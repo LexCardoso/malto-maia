@@ -1,0 +1,39 @@
+{% extends 'painel/base_painel.html' %}
+{% load maltomaia %}
+
+{% block title %}Configurações · Malto Maia{% endblock %}
+
+{% block body %}
+<div class="adm-wrap" style="max-width:620px">
+  <p><a href="{% url 'painel:dashboard' %}" class="text-muted">← {% t 'adm.title' %}</a></p>
+  <h1 class="h-1">Configurações do site</h1>
+  <p class="adm-sub">Contatos, redes e localização que aparecem no site.</p>
+
+  <form method="post" class="card card-pad" style="margin-top:20px">
+    {% csrf_token %}
+    <div class="field">
+      <label for="{{ form.whatsapp.id_for_label }}">WhatsApp <span class="text-muted">(só números, com 55 + DDD)</span></label>
+      {{ form.whatsapp }}
+    </div>
+    <div class="field">
+      <label for="{{ form.instagram.id_for_label }}">Instagram <span class="text-muted">(sem @)</span></label>
+      {{ form.instagram }}
+    </div>
+    <div class="field">
+      <label for="{{ form.tripadvisor_url.id_for_label }}">Link do TripAdvisor</label>
+      {{ form.tripadvisor_url }}
+      {% if form.tripadvisor_url.errors %}<ul class="errorlist">{{ form.tripadvisor_url.errors }}</ul>{% endif %}
+    </div>
+    <div class="row" style="gap:14px;align-items:flex-start">
+      <div class="field" style="flex:1"><label for="{{ form.latitude.id_for_label }}">Latitude</label>{{ form.latitude }}</div>
+      <div class="field" style="flex:1"><label for="{{ form.longitude.id_for_label }}">Longitude</label>{{ form.longitude }}</div>
+    </div>
+    <div class="help">📍 No Google Maps, clique com o botão direito no local → as coordenadas aparecem no topo (ex.: <code>-22.9226, -42.2519</code>). Com latitude e longitude preenchidas, um mapa interativo aparece na seção “Visite”.</div>
+
+    <div class="row" style="gap:10px;margin-top:16px">
+      <button class="btn btn-primary" type="submit">Salvar</button>
+      <a class="btn btn-ghost" href="{% url 'painel:dashboard' %}">Voltar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

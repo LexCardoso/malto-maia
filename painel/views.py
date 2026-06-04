@@ -8,9 +8,9 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from cardapio.models import Categoria, ConfiguracaoSite, Item
+from cardapio.models import Avaliacao, Categoria, ConfiguracaoSite, Item
 
-from .forms import ItemForm
+from .forms import AvaliacaoForm, ConfiguracaoForm, ItemForm
 
 staff_required = user_passes_test(
     lambda u: u.is_active and u.is_staff, login_url="painel:login"
@@ -98,3 +98,70 @@ def marcar_atualizado(request):
     ConfiguracaoSite.get().marcar_atualizado_hoje()
     messages.success(request, "Data de atualização marcada para hoje.")
     return redirect("painel:dashboard")
+
+
+# ── Configuracoes do site (TripAdvisor, Instagram, mapa) ──
+@staff_required
+def configuracoes(request):
+    config = ConfiguracaoSite.get()
+    form = ConfiguracaoForm(request.POST or None, instance=config)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Configurações salvas.")
+        return redirect("painel:configuracoes")
+    return render(request, "painel/configuracoes.html", {"form": form, "config": config})
+
+
+# ── Avaliacoes (curadoria — o dono escolhe quais aparecem) ──
+@staff_required
+def avaliacoes(request):
+    return render(
+        request,
+        "painel/avaliacoes.html",
+        {
+            "avaliacoes": Avaliacao.objects.all(),
+            "n_visiveis": Avaliacao.objects.filter(aparece=True).count(),
+        },
+    )
+
+
+@staff_required
+def avaliacao_nova(request):
+    form = AvaliacaoForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Avaliação adicionada.")
+        return redirect("painel:avaliacoes")
+    return render(request, "painel/avaliacao_form.html", {"form": form, "novo": True})
+
+
+@staff_required
+def avaliacao_editar(request, pk):
+    av = get_object_or_404(Avaliacao, pk=pk)
+    form = AvaliacaoForm(request.POST or None, instance=av)
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Avaliação atualizada.")
+        return redirect("painel:avaliacoes")
+    return render(request, "painel/avaliacao_form.html", {"form": form, "av": av, "novo": False})
+
+
+@require_POST
+@staff_required
+def avaliacao_toggle(request, pk):
+    av = get_object_or_404(Avaliacao, pk=pk)
+    av.aparece = not av.aparece
+    av.save(update_fields=["aparece"])
+    estado = "aparece" if av.aparece else "está oculta"
+    messages.success(request, f"Avaliação de “{av.autor}” {estado} no site.")
+    return redirect("painel:avaliacoes")
+
+
+@require_POST
+@staff_required
+def avaliacao_excluir(request, pk):
+    av = get_object_or_404(Avaliacao, pk=pk)
+    autor = av.autor
+    av.delete()
+    messages.success(request, f"Avaliação de “{autor}” removida.")
+    return redirect("painel:avaliacoes")

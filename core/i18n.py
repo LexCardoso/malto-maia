@@ -75,7 +75,7 @@ STRINGS = {
     "visit.title": {"pt": "Venha nos visitar", "en": "Come and visit us"},
     "visit.addr": {"pt": "Estr. de Praia Seca, 12793 — loja 01 · Centro, Araruama – RJ", "en": "Estr. de Praia Seca, 12793 — loja 01 · Centro, Araruama – RJ"},
     "visit.hoursLabel": {"pt": "Horário", "en": "Hours"},
-    "visit.hours": {"pt": "Todos os dias · 9h às 18h", "en": "Every day · 9am to 6pm"},
+    "visit.hours": {"pt": "Quarta a domingo · 9h às 18h", "en": "Wednesday to Sunday · 9am to 6pm"},
     "visit.phoneLabel": {"pt": "WhatsApp", "en": "WhatsApp"},
 
     # Concept

@@ -103,6 +103,15 @@
 .gal-grid .ph { min-height: 0; height: 100%; border-radius: var(--r-lg); border: 1px solid rgba(247,241,230,0.12); }
 .gal-grid .tall { grid-row: span 2; }
 .gal-grid .wide { grid-column: span 2; }
+.gal-grid .ph { cursor: zoom-in; }
+
+/* Lightbox da galeria (clicar na foto amplia) */
+.lightbox { width: 100%; height: 100%; max-width: 100%; max-height: 100%; margin: 0; inset: 0; padding: 0; border: 0; background: transparent; overflow: hidden; }
+.lightbox[open] { display: flex; align-items: center; justify-content: center; }
+.lightbox::backdrop { background: rgba(31, 22, 16, 0.9); backdrop-filter: blur(3px); }
+.lightbox img { max-width: 92vw; max-height: 86vh; width: auto; height: auto; border-radius: 16px; box-shadow: 0 30px 90px -20px rgba(0, 0, 0, 0.7); cursor: zoom-out; }
+.lightbox-close { position: fixed; top: 16px; right: 18px; width: 48px; height: 48px; border-radius: 999px; border: none; background: rgba(247, 241, 230, 0.16); color: var(--cream); font-size: 28px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background 0.15s; }
+.lightbox-close:hover { background: rgba(247, 241, 230, 0.3); }
 
 /* ---------- ORDER STRIP (terracota) ---------- */
 .order-strip { position: relative; overflow: hidden;
@@ -223,8 +232,20 @@
 .cart-line { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
 .cart-line .grow { flex: 1; }
 .qty { display: inline-flex; align-items: center; gap: 8px; }
-.qty button { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line-strong); background: var(--cream); font-weight: 800; line-height: 1; }
+.qty button { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--line-strong); background: var(--cream); color: var(--espresso); font-size: 16px; font-weight: 800; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background .12s, border-color .12s; }
+.qty button:hover { background: var(--sun-soft); border-color: var(--sun); }
+.qty b { min-width: 18px; text-align: center; }
 .cart-total { display: flex; justify-content: space-between; font-weight: 800; font-size: 19px; margin: 16px 0; }
+
+/* Formulario publico (encomenda): painel.css nao carrega na area publica, estilo proprio. */
+.field { margin-bottom: 14px; }
+.field label { display: block; font-weight: 700; font-size: 14px; color: var(--espresso-ink); margin-bottom: 6px; }
+.field input, .field textarea { width: 100%; font-family: var(--body); font-size: 15px; padding: 12px 14px; background: var(--cream-soft); border: 1.5px solid var(--line-strong); border-radius: 14px; color: var(--espresso); transition: border-color .15s, box-shadow .15s, background .15s; }
+.field input::placeholder, .field textarea::placeholder { color: var(--muted); opacity: 0.75; }
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--sun-deep); box-shadow: 0 0 0 3px var(--sun-soft); background: #fff; }
+.field textarea { resize: vertical; min-height: 84px; line-height: 1.45; }
+/* Estado vazio do carrinho (order.js substitui #cart por <p class="text-muted">). */
+#cart > p { text-align: center; margin: 0; padding: 22px 14px; border: 1.5px dashed var(--line-strong); border-radius: 16px; background: var(--cream-soft); font-size: 14.5px; line-height: 1.5; }
 
 .page-intro { background: var(--cream-deep); border-bottom: 1px solid var(--line); }
 .page-intro .wrap { padding-top: clamp(28px, 5vw, 52px); padding-bottom: clamp(24px, 4vw, 40px); }

@@ -16,7 +16,9 @@ def site_context(request):
         "INSTAGRAM_HANDLE": instagram,
         "SITE_URL": settings.SITE_URL,
         "TRIPADVISOR_URL": config.tripadvisor_url,
-        "MAP_LAT": config.latitude,
-        "MAP_LNG": config.longitude,
+        # String com ponto decimal (nao localizar: URL do Google Maps exige ponto,
+        # senao o locale pt-BR formata com virgula e o mapa quebra).
+        "MAP_LAT": str(config.latitude) if config.latitude is not None else "",
+        "MAP_LNG": str(config.longitude) if config.longitude is not None else "",
         "TEM_MAPA": config.tem_mapa,
     }

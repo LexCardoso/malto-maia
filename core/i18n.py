@@ -68,12 +68,12 @@ STRINGS = {
     # Instagram
     "ig.eyebrow": {"pt": "No nosso feed", "en": "On our feed"},
     "ig.title": {"pt": "Acompanhe o dia a dia", "en": "Follow our day to day"},
-    "ig.follow": {"pt": "Seguir @maltomaia", "en": "Follow @maltomaia"},
+    "ig.follow": {"pt": "Seguir @doceria_maltomaia", "en": "Follow @doceria_maltomaia"},
 
     # Visit
     "visit.eyebrow": {"pt": "Onde estamos", "en": "Find us"},
     "visit.title": {"pt": "Venha nos visitar", "en": "Come and visit us"},
-    "visit.addr": {"pt": "Estrada de Praia Seca, Araruama – RJ", "en": "Estrada de Praia Seca, Araruama – RJ"},
+    "visit.addr": {"pt": "Estr. de Praia Seca, 12793 — loja 01 · Centro, Araruama – RJ", "en": "Estr. de Praia Seca, 12793 — loja 01 · Centro, Araruama – RJ"},
     "visit.hoursLabel": {"pt": "Horário", "en": "Hours"},
     "visit.hours": {"pt": "Todos os dias · 9h às 18h", "en": "Every day · 9am to 6pm"},
     "visit.phoneLabel": {"pt": "WhatsApp", "en": "WhatsApp"},

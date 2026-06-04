@@ -34,8 +34,11 @@ def set_language(request, lang):
 
 
 def health(request):
-    """Health check simples para o Render."""
-    return HttpResponse("ok", content_type="text/plain")
+    """Health check do Render — devolve o commit no ar (RENDER_GIT_COMMIT)."""
+    import os
+
+    commit = os.environ.get("RENDER_GIT_COMMIT", "dev")[:7]
+    return HttpResponse(f"ok {commit}", content_type="text/plain")
 
 
 def robots(request):

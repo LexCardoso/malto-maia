@@ -48,7 +48,7 @@
         <span>·</span>
         <a href="{% url 'core:set_language' 'en' %}?next={{ request.path|urlencode }}" class="{% if LANG == 'en' %}on{% endif %}">EN</a>
       </div>
-      <a class="btn btn-primary btn-sm" href="{% url 'pedidos:encomenda' %}">{% t 'cta.order' %}</a>
+      <a class="btn btn-primary btn-sm hdr-cta" href="{% url 'pedidos:encomenda' %}">{% t 'cta.order' %}</a>
       <button class="burger" type="button" aria-label="Menu" onclick="document.getElementById('mnav').classList.toggle('open')">
         <span></span><span></span><span></span>
       </button>
@@ -58,6 +58,14 @@
       <a href="{% url 'cardapio:menu' %}">{% t 'nav.menu' %}</a>
       <a href="{% url 'pedidos:encomenda' %}">{% t 'nav.order' %}</a>
       <a href="{% url 'core:landing' %}#visite">{% t 'nav.visit' %}</a>
+      <div class="mnav-foot">
+        <a class="btn btn-primary btn-block" href="{% url 'pedidos:encomenda' %}">{% t 'cta.order' %}</a>
+        <div class="lang-toggle mnav-lang" aria-label="Idioma / Language">
+          <a href="{% url 'core:set_language' 'pt' %}?next={{ request.path|urlencode }}" class="{% if LANG == 'pt' %}on{% endif %}">PT</a>
+          <span>·</span>
+          <a href="{% url 'core:set_language' 'en' %}?next={{ request.path|urlencode }}" class="{% if LANG == 'en' %}on{% endif %}">EN</a>
+        </div>
+      </div>
     </nav>
   </header>
 

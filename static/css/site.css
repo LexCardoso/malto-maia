@@ -27,10 +27,17 @@
 .mobile-nav { display: none; border-top: 1px solid var(--line); background: var(--cream-soft); }
 .mobile-nav.open { display: block; }
 .mobile-nav a { display: block; padding: 14px var(--pad); font-weight: 700; border-bottom: 1px solid var(--line); }
+.mnav-foot { padding: 16px var(--pad) 20px; display: flex; flex-direction: column; gap: 14px; }
+.mnav-foot .btn { width: 100%; }
+.mnav-lang { justify-content: center; font-size: 16px; gap: 8px; }
+.mnav-lang a { padding: 6px 12px; }
 
 @media (max-width: 920px) {
   .hdr-nav { display: none; }
   .burger { display: block; }
+  /* header enxuto no mobile: so logo + burger. CTA e idioma vao pro menu. */
+  .site-header .wrap > .lang-toggle { display: none; }
+  .site-header .hdr-cta { display: none; }
 }
 
 /* ---- Hero ---- */

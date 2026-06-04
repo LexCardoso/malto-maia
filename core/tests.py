@@ -16,7 +16,7 @@ class LandingTests(TestCase):
     def test_health(self):
         r = self.client.get(reverse("core:health"))
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.content, b"ok")
+        self.assertTrue(r.content.startswith(b"ok"))
 
 
 class LanguageToggleTests(TestCase):

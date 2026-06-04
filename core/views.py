@@ -12,11 +12,18 @@ from cardapio.services import destaques_localizados
 def landing(request):
     lang = getattr(request, "LANG", "pt")
     config = ConfiguracaoSite.get()
+    destaques = destaques_localizados(lang, limite=4)
+    # card flutuante do hero = o item que casa com a foto grande (cappuccino), dinamico
+    hero_item = next(
+        (d for d in destaques if d["nome"] == "Cappuccino Mineiro"),
+        destaques[0] if destaques else None,
+    )
     return render(
         request,
         "core/landing.html",
         {
-            "destaques": destaques_localizados(lang, limite=4),
+            "destaques": destaques,
+            "hero_item": hero_item,
             "atualizado_em": config.cardapio_atualizado_em,
             "avaliacoes": Avaliacao.objects.filter(aparece=True),
         },

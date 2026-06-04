@@ -48,6 +48,7 @@
 .adm-table tr:last-child td { border-bottom: 0; }
 .adm-table .nm { font-weight: 700; }
 .adm-table .ds { color: var(--muted); font-size: 13px; }
+.adm-table td.c-price { white-space: nowrap; color: var(--terracota); font-weight: 800; }
 .adm-cat-row td { background: var(--cream-deep); font-family: var(--display); font-weight: 700; font-size: 16px; color: var(--espresso-ink); }
 
 .badge { font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: var(--r-pill); }
@@ -82,10 +83,13 @@
 
 @media (max-width: 620px) {
   .adm-stats { grid-template-columns: repeat(2, 1fr); }
+  /* Tabela vira CARDS: nome no topo, acoes no canto, demais em linhas "rotulo .... valor". */
+  .adm-table { border: 0; background: transparent; overflow: visible; }
   .adm-table thead { display: none; }
-  .adm-table, .adm-table tbody, .adm-table tr, .adm-table td { display: block; width: 100%; }
-  .adm-table tr { border-bottom: 1px solid var(--line); padding: 8px 0; }
-  .adm-table td { border: 0; padding: 5px 14px; }
-  .adm-table td.center { text-align: left; }
-  .adm-table td[data-l]::before { content: attr(data-l); display: inline-block; min-width: 92px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+  .adm-table tbody { display: flex; flex-direction: column; gap: 12px; }
+  .adm-table tr { display: block; position: relative; background: var(--cream-soft); border: 1px solid var(--line); border-radius: var(--r-md); padding: 14px 14px 6px; }
+  .adm-table td { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 0; border-top: 1px solid var(--line); padding: 9px 0; text-align: left; }
+  .adm-table td.c-item { display: block; border-top: 0; padding: 0 84px 6px 0; }
+  .adm-table td.c-act { position: absolute; top: 13px; right: 13px; padding: 0; border-top: 0; }
+  .adm-table td[data-l]::before { content: attr(data-l); font-size: 13px; font-weight: 700; color: var(--muted); }
 }

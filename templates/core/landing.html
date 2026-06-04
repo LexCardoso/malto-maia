@@ -44,15 +44,17 @@
     </div>
     <div class="rise hero-art" style="animation-delay:.1s">
       <div class="ph ph-coffee has-photo hero-shot"><img src="{% static 'img/fotos/hero-cappuccino.jpg' %}" alt="Cappuccino com o sol desenhado na espuma" /></div>
+      {% if hero_item %}
       <div class="card card-pad hero-float">
         <div class="row" style="gap:13px">
-          <div class="ph has-photo thumb"><img src="{% static 'img/fotos/destaque-torta.jpg' %}" alt="" /></div>
+          <div class="ph has-photo thumb">{% if hero_item.imagem %}<img src="{% static hero_item.imagem %}" alt="" />{% endif %}</div>
           <div style="min-width:0">
-            <div class="nm">Torta de coco</div>
-            <div class="pr">R$ 13,80</div>
+            <div class="nm">{{ hero_item.nome }}</div>
+            <div class="pr">{% if hero_item.preco %}{{ hero_item.preco|brl }}{% else %}{% t 'common.askPrice' %}{% endif %}</div>
           </div>
         </div>
       </div>
+      {% endif %}
       <div class="hero-seal"><img src="{% static 'img/logo-full.png' %}" alt="Malto Maia" /></div>
     </div>
   </div>

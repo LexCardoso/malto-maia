@@ -16,6 +16,7 @@ urlpatterns = [
     path("atualizar-data/", views.marcar_atualizado, name="marcar_atualizado"),
     path("configuracoes/", views.configuracoes, name="configuracoes"),
     path("avaliacoes/", views.avaliacoes, name="avaliacoes"),
+    path("avaliacoes/sincronizar-google/", views.avaliacoes_sync_google, name="avaliacoes_sync_google"),
     path("avaliacao/nova/", views.avaliacao_nova, name="avaliacao_nova"),
     path("avaliacao/<int:pk>/editar/", views.avaliacao_editar, name="avaliacao_editar"),
     path("avaliacao/<int:pk>/aparece/", views.avaliacao_toggle, name="avaliacao_toggle"),

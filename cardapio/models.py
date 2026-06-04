@@ -103,6 +103,10 @@ class Avaliacao(models.Model):
     texto = models.TextField()
     nota = models.PositiveSmallIntegerField("nota (1-5)", default=5)
     fonte = models.CharField(max_length=20, choices=FONTES, default="google")
+    ref = models.CharField(
+        "ref. externa", max_length=300, blank=True, default="",
+        help_text="ID da avaliação na fonte (ex.: Google) — usado pelo sync p/ não duplicar.",
+    )
     aparece = models.BooleanField("aparece no site", default=True)
     ordem = models.PositiveIntegerField(default=0)
     criado_em = models.DateTimeField(auto_now_add=True)

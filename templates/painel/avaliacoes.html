@@ -8,9 +8,16 @@
   <div class="adm-head">
     <div>
       <h1 class="h-1">Avaliações</h1>
-      <p class="adm-sub">Copie avaliações do Google/TripAdvisor e escolha quais aparecem no site.</p>
+      <p class="adm-sub">Sincronize do Google ou cadastre à mão — depois escolha quais aparecem no site.</p>
     </div>
-    <a class="btn btn-primary btn-sm" href="{% url 'painel:avaliacao_nova' %}">+ Nova avaliação</a>
+    <div class="row" style="gap:8px;align-items:center;flex-wrap:wrap">
+      {% if google_pronto %}
+      <form method="post" action="{% url 'painel:avaliacoes_sync_google' %}" style="display:inline">{% csrf_token %}
+        <button class="btn btn-ghost btn-sm" type="submit">&#8635; Sincronizar do Google</button>
+      </form>
+      {% endif %}
+      <a class="btn btn-primary btn-sm" href="{% url 'painel:avaliacao_nova' %}">+ Nova avaliação</a>
+    </div>
   </div>
 
   <div class="adm-stats">

@@ -91,6 +91,26 @@ class AvaliacoesPainelTests(TestCase):
         self.assertIn("Joao", html)
         self.assertNotIn("Oculto", html)
 
+    def test_sync_google_exige_post(self):
+        self.client.force_login(self.staff)
+        r = self.client.get(reverse("painel:avaliacoes_sync_google"))
+        self.assertEqual(r.status_code, 405)
+
+    def test_sync_google_sem_config_avisa_sem_crash(self):
+        self.client.force_login(self.staff)
+        with self.settings(GOOGLE_PLACES_API_KEY="", GOOGLE_PLACE_ID=""):
+            r = self.client.post(reverse("painel:avaliacoes_sync_google"))
+        self.assertEqual(r.status_code, 302)  # redireciona, sem rede/crash
+
+    def test_botao_sync_so_aparece_quando_configurado(self):
+        self.client.force_login(self.staff)
+        with self.settings(GOOGLE_PLACES_API_KEY="", GOOGLE_PLACE_ID=""):
+            html = self.client.get(reverse("painel:avaliacoes")).content.decode()
+        self.assertNotIn("Sincronizar do Google", html)
+        with self.settings(GOOGLE_PLACES_API_KEY="k", GOOGLE_PLACE_ID="p"):
+            html2 = self.client.get(reverse("painel:avaliacoes")).content.decode()
+        self.assertIn("Sincronizar do Google", html2)
+
 
 class ConfiguracoesPainelTests(TestCase):
     def setUp(self):

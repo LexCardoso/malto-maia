@@ -76,3 +76,80 @@ class QrTests(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r["Content-Type"], "image/svg+xml")
         self.assertIn(b"<svg", r.content)
+
+
+class MenuPdfTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        call_command("seed_cardapio")
+
+    def test_pagina_pdf_renderiza(self):
+        r = self.client.get(reverse("cardapio:menu_pdf"))
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "menu-label")
+        self.assertContains(r, "pdf-divider")
+
+
+class GoogleReviewsTests(TestCase):
+    """Sync do Google: parse puro + upsert idempotente que preserva a curadoria."""
+
+    FIXTURE = {
+        "rating": 4.4,
+        "userRatingCount": 91,
+        "reviews": [
+            {"name": "places/ABC/reviews/r1", "rating": 5,
+             "text": {"text": "Melhor espresso da regiao.", "languageCode": "pt"},
+             "authorAttribution": {"displayName": "Marina R."}},
+            {"name": "places/ABC/reviews/r2", "rating": 4,
+             "originalText": {"text": "Charming little house.", "languageCode": "en"},
+             "authorAttribution": {"displayName": "Paulo C."}},
+            # sem texto -> deve ser ignorada
+            {"name": "places/ABC/reviews/r3", "rating": 3,
+             "authorAttribution": {"displayName": "Sem Texto"}},
+        ],
+    }
+
+    def test_extrai_ignora_incompleta_e_faz_fallback(self):
+        from cardapio.reviews_google import extrair_avaliacoes
+
+        out = extrair_avaliacoes(self.FIXTURE)
+        self.assertEqual(len(out), 2)
+        self.assertEqual(out[0]["autor"], "Marina R.")
+        self.assertEqual(out[0]["nota"], 5)
+        # r2 sem 'text' cai no 'originalText'
+        self.assertEqual(out[1]["texto"], "Charming little house.")
+
+    def test_salva_como_rascunho_e_preserva_curadoria(self):
+        from cardapio.models import Avaliacao
+        from cardapio.reviews_google import extrair_avaliacoes, salvar_avaliacoes
+
+        # escopo nas SINCRONIZADAS (ref != "") — independe das avaliacoes-exemplo do seed
+        sincronizadas = Avaliacao.objects.exclude(ref="")
+        avs = extrair_avaliacoes(self.FIXTURE)
+        r1 = salvar_avaliacoes(avs)
+        self.assertEqual(r1["criadas"], 2)
+        self.assertEqual(sincronizadas.count(), 2)
+        # tudo entra como rascunho (nao aparece sozinho)
+        self.assertFalse(sincronizadas.filter(aparece=True).exists())
+
+        # dono cura: liga a primeira
+        a = Avaliacao.objects.get(ref="places/ABC/reviews/r1")
+        a.aparece = True
+        a.save(update_fields=["aparece"])
+
+        # re-sync com texto novo: nao duplica, preserva 'aparece', atualiza texto
+        avs[0]["texto"] = "Texto atualizado."
+        r2 = salvar_avaliacoes(avs)
+        self.assertEqual(r2["criadas"], 0)
+        self.assertEqual(r2["atualizadas"], 2)
+        self.assertEqual(sincronizadas.count(), 2)
+        a.refresh_from_db()
+        self.assertTrue(a.aparece)
+        self.assertEqual(a.texto, "Texto atualizado.")
+
+    def test_command_sem_config_levanta(self):
+        from django.core.management.base import CommandError
+
+        with self.settings(GOOGLE_PLACES_API_KEY="", GOOGLE_PLACE_ID=""):
+            with self.assertRaises(CommandError):
+                call_command("sync_avaliacoes_google")

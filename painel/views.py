@@ -115,14 +115,47 @@ def configuracoes(request):
 # ── Avaliacoes (curadoria — o dono escolhe quais aparecem) ──
 @staff_required
 def avaliacoes(request):
+    from cardapio.reviews_google import esta_configurado
+
     return render(
         request,
         "painel/avaliacoes.html",
         {
             "avaliacoes": Avaliacao.objects.all(),
             "n_visiveis": Avaliacao.objects.filter(aparece=True).count(),
+            "google_pronto": esta_configurado(),
         },
     )
+
+
+@require_POST
+@staff_required
+def avaliacoes_sync_google(request):
+    """Puxa as avaliacoes do Google como rascunho; o dono liga quais aparecem."""
+    from cardapio.reviews_google import (
+        GoogleReviewsError,
+        esta_configurado,
+        sincronizar_google,
+    )
+
+    if not esta_configurado():
+        messages.error(
+            request,
+            "Sincronização do Google ainda não configurada (faltam a chave e o Place ID).",
+        )
+        return redirect("painel:avaliacoes")
+    try:
+        r = sincronizar_google()
+    except GoogleReviewsError as e:
+        messages.error(request, f"Não consegui sincronizar com o Google: {e}")
+        return redirect("painel:avaliacoes")
+    messages.success(
+        request,
+        f"Google: {r['encontradas']} avaliações lidas — {r['criadas']} novas (como "
+        f"rascunho), {r['atualizadas']} atualizadas. Clique em “Mostrar” nas que quiser "
+        "no site.",
+    )
+    return redirect("painel:avaliacoes")
 
 
 @staff_required

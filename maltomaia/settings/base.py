@@ -24,6 +24,11 @@ SITE_URL = env("SITE_URL", default="http://localhost:8000")
 WHATSAPP_NUMBER = env("WHATSAPP_NUMBER", default="5521999999999")
 INSTAGRAM_HANDLE = env("INSTAGRAM_HANDLE", default="maltomaia")
 
+# Avaliacoes do Google (Places API New). Vazio = sync desligado (painel esconde o botao).
+# GOOGLE_PLACE_ID: o ID da ficha no Google Maps. GOOGLE_PLACES_API_KEY: chave do Google Cloud.
+GOOGLE_PLACES_API_KEY = env("GOOGLE_PLACES_API_KEY", default="")
+GOOGLE_PLACE_ID = env("GOOGLE_PLACE_ID", default="")
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",

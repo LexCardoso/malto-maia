@@ -112,6 +112,15 @@
     </div>
   </footer>
 </div>
+<script>
+  // Fecha o menu do burger ao escolher uma opcao (senao fica aberto e bagunca a ancora).
+  document.querySelectorAll('.mobile-nav a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var m = document.getElementById('mnav');
+      if (m) m.classList.remove('open');
+    });
+  });
+</script>
 {% block extra_scripts %}{% endblock %}
 </body>
 </html>

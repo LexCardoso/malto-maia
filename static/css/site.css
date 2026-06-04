@@ -44,6 +44,11 @@
 .ph.has-photo > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .ph.has-photo::after { display: none; }
 
+/* Ancoras nao podem ficar escondidas atras do header/quicknav fixos */
+:target { scroll-margin-top: 84px; }
+#sobre, #visite { scroll-margin-top: 84px; }
+.menu-cat { scroll-margin-top: 112px; } /* header (68) + quicknav sticky */
+
 /* ---- Hero ---- */
 .hero { background: linear-gradient(170deg, var(--cream) 0%, var(--cream-deep) 100%); overflow: hidden; }
 .hero .wrap { padding-top: clamp(40px, 7vw, 84px); padding-bottom: clamp(40px, 7vw, 84px); }

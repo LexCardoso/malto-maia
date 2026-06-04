@@ -29,6 +29,8 @@ JOBS = [
     ("WhatsApp Image 2026-05-31 at 20.44.53.jpeg", "encomenda.jpg", 1100),
     ("WhatsApp Image 2026-06-01 at 18.15.32.jpeg", "visite.jpg", 1100),
     ("WhatsApp Image 2026-06-01 at 18.13.22.jpeg", "conceito.jpg", 1100),
+    # placeholder temporario da torta (bolo de cenoura) ate ter a foto da torta de coco
+    ("WhatsApp Image 2026-05-31 at 20.42.14 (2).jpeg", "destaque-torta.jpg", 900),
 ]
 
 

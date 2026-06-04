@@ -6,6 +6,8 @@ from .models import Categoria
 DESTAQUE_IMAGENS = {
     "Cappuccino Mineiro": "img/fotos/destaque-cappuccino.jpg",
     "Pão de Queijo": "img/fotos/destaque-pao-de-queijo.jpg",
+    # placeholder temporario (bolo de cenoura) ate ter foto da torta de coco
+    "Torta — fatia": "img/fotos/destaque-torta.jpg",
 }
 
 

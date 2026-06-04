@@ -52,7 +52,7 @@ MENU = [
             ("Chocolate Shake", "350 ml", "350 ml", 16.00, False),
             ("Jarra de Suco Detox", "400 ml", "400 ml", 12.50, False),
             ("Brownie com Sorvete e Chantilly", "", "", 10.00, False),
-            ("Açaí", "Granola e calda a escolher", "Choose granola & topping", None, False),
+            ("Açaí", "Granola e calda a escolher", "Granola and topping of your choice", None, False),
         ],
     },
     {
@@ -107,7 +107,7 @@ MENU = [
         "nota_en": "Served individually, plated to order.",
         "itens": [
             ("Lasanha de Berinjela — Bolonhesa", "Com mozarela", "Bolognese with mozzarella", 45.00, False),
-            ("Lasanha de Berinjela — Camarão", "Com cottage", "Shrimp with cottage", 48.00, False),
+            ("Lasanha de Berinjela — Camarão", "Com cottage", "Shrimp with cottage cheese", 48.00, False),
             ("Estrogonoff de Frango", "Batata noisette", "Chicken · noisette potatoes", 38.00, False),
             ("Estrogonoff de Filé Mignon", "", "Filet mignon", 45.00, False),
             ("Estrogonoff de Camarão", "", "Shrimp", 45.00, False),

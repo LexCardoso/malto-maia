@@ -34,7 +34,7 @@ STRINGS = {
     # About
     "about.eyebrow": {"pt": "Nossa casa", "en": "Our house"},
     "about.title": {"pt": "A alma mineira que veio morar na praia", "en": "A Minas Gerais soul that came to live by the beach"},
-    "about.p1": {"pt": "A Malto Maia nasceu do desejo de juntar duas coisas boas: o aconchego das cozinhas de Minas e a brisa de Praia Seca. Funcionamos numa casa colonial de telha de barro, com jardim, móveis de madeira patinada e pratos de cerâmica nas paredes.", "en": "Malto Maia was born from the wish to bring together two good things: the warmth of Minas kitchens and the breeze of Praia Seca. We live in a colonial house with clay-tile roofs, a garden, patinated wooden furniture and ceramic plates on the walls."},
+    "about.p1": {"pt": "A Malto Maia nasceu do desejo de juntar duas coisas boas: o aconchego das cozinhas de Minas e a brisa de Praia Seca. Funcionamos numa casa colonial de telha de barro, com jardim, móveis de madeira patinada e pratos de cerâmica nas paredes.", "en": "Malto Maia was born from a wish to bring together two good things: the warmth of Minas kitchens and the breeze of Praia Seca. We are set in a colonial house with a clay-tile roof, a garden, weathered wooden furniture and ceramic plates on the walls."},
     "about.p2": {"pt": "Aqui o café é coado com calma — da prensa francesa ao espresso bem extraído. É um lugar para conversar sem pressa, com a lousa anunciando o doce do dia.", "en": "Here coffee is brewed unhurried — from the French press to a well-pulled espresso. A place for slow conversation, with the chalkboard announcing the sweet of the day."},
     "about.stat1": {"pt": "Anos à beira-mar", "en": "Years by the sea"},
     "about.stat2": {"pt": "Feito em casa", "en": "Homemade"},
@@ -43,7 +43,7 @@ STRINGS = {
     # Highlights
     "high.eyebrow": {"pt": "Carros-chefe", "en": "House favourites"},
     "high.title": {"pt": "O que as pessoas voltam para comer", "en": "What people come back for"},
-    "high.sub": {"pt": "Os queridinhos das avaliações — direto da lousa.", "en": "The reviewers’ darlings — straight from the chalkboard."},
+    "high.sub": {"pt": "Os queridinhos das avaliações — direto da lousa.", "en": "The crowd favourites from our reviews — straight off the chalkboard."},
 
     # Gallery
     "gal.eyebrow": {"pt": "O ambiente", "en": "The space"},
@@ -66,7 +66,7 @@ STRINGS = {
 
     # Instagram
     "ig.eyebrow": {"pt": "No nosso feed", "en": "On our feed"},
-    "ig.title": {"pt": "Acompanhe o dia a dia", "en": "Follow our everyday"},
+    "ig.title": {"pt": "Acompanhe o dia a dia", "en": "Follow our day to day"},
     "ig.follow": {"pt": "Seguir @maltomaia", "en": "Follow @maltomaia"},
 
     # Visit
@@ -105,13 +105,13 @@ STRINGS = {
     "ord.pick": {"pt": "Escolha os itens", "en": "Choose items"},
     "ord.add": {"pt": "Adicionar", "en": "Add"},
     "ord.summary": {"pt": "Resumo do pedido", "en": "Order summary"},
-    "ord.empty": {"pt": "Seu pedido está vazio. Toque em “Adicionar” nos itens ao lado.", "en": "Your order is empty. Tap “Add” on the items beside."},
+    "ord.empty": {"pt": "Seu pedido está vazio. Toque em “Adicionar” nos itens ao lado.", "en": "Your order is empty. Tap “Add” on the items alongside."},
     "ord.notes": {"pt": "Observações", "en": "Notes"},
     "ord.notesPh": {"pt": "Ex.: torta de coco inteira para sábado, retirar 15h…", "en": "e.g. whole coconut pie for Saturday, pickup at 3pm…"},
     "ord.name": {"pt": "Seu nome", "en": "Your name"},
     "ord.namePh": {"pt": "Como podemos te chamar?", "en": "What may we call you?"},
     "ord.total": {"pt": "Total estimado", "en": "Estimated total"},
-    "ord.totalNote": {"pt": "Itens “a definir” serão confirmados na conversa.", "en": "Items marked “ask us” are confirmed in chat."},
+    "ord.totalNote": {"pt": "Itens “a definir” serão confirmados na conversa.", "en": "Items marked “ask us” will be confirmed in the chat."},
     "ord.send": {"pt": "Enviar pedido no WhatsApp", "en": "Send order on WhatsApp"},
     "ord.clear": {"pt": "Limpar", "en": "Clear"},
     "ord.search": {"pt": "Buscar item…", "en": "Search item…"},

@@ -63,6 +63,12 @@
     </aside>
   </div>
 </div>
+
+{# Barra flutuante de enviar (so no mobile; aparece quando ha itens) #}
+<div class="order-fab no-print" id="order-fab" style="display:none">
+  <div class="fab-total"><span>{% t 'ord.total' %}</span><b id="fab-total">R$ 0,00</b></div>
+  <a class="btn btn-wa" id="send-wa-fab" href="#" target="_blank" rel="noopener">{% t 'ord.send' %}</a>
+</div>
 {% endblock %}
 
 {% block extra_scripts %}

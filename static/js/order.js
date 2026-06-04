@@ -20,10 +20,12 @@
     var ids = Object.keys(cart);
     var totalRow = document.getElementById("cart-total-row");
     var note = document.getElementById("cart-note");
+    var fab = document.getElementById("order-fab");
     if (!ids.length) {
       el.innerHTML = '<p class="text-muted">' + esc(cfg.empty || "") + "</p>";
       totalRow.style.display = "none";
       note.style.display = "none";
+      if (fab) fab.style.display = "none";
       return;
     }
     var html = "", total = 0, tbd = false;
@@ -42,6 +44,7 @@
     document.getElementById("cart-total").textContent = fmt(total);
     totalRow.style.display = "flex";
     note.style.display = tbd ? "block" : "none";
+    if (fab) { fab.style.display = "flex"; document.getElementById("fab-total").textContent = fmt(total); }
   }
 
   function add(id, name, price) {
@@ -72,12 +75,9 @@
     render();
   });
 
-  document.getElementById("send-wa").addEventListener("click", function (e) {
+  function buildWaHref() {
     var ids = Object.keys(cart);
-    if (!ids.length) {
-      e.preventDefault();
-      return;
-    }
+    if (!ids.length) return null;
     var d = new Date();
     var p2 = function (n) { return (n < 10 ? "0" : "") + n; };
     // codigo da comanda com SEGUNDOS (2 pedidos no mesmo minuto nao colidem)
@@ -92,8 +92,8 @@
     L.push("\u2615 *MALTO MAIA*");
     L.push("_" + (cfg.waSubtitle || "") + "_");
     L.push("");
-    L.push("\ud83d\udccb *" + (cfg.waComanda || "Comanda") + ":* " + code);
-    L.push("\ud83d\udcc5 " + when);
+    L.push("\ud83e\uddfe *" + (cfg.waComanda || "Comanda") + ":* " + code);
+    L.push("\ud83d\uddd3\ufe0f " + when);
     L.push(DIV);
     L.push("\ud83d\uded2 *" + (cfg.waItems || "") + "*");
     var total = 0, tbd = false;
@@ -112,11 +112,16 @@
     if (nome) L.push("\ud83d\ude4b *" + (cfg.waClient || "Cliente") + ":* " + nome);
     if (obs) L.push("\ud83d\udcdd *" + (cfg.notes || "Obs") + ":* " + obs);
 
-    this.setAttribute(
-      "href",
-      "https://wa.me/" + cfg.wa + "?text=" + encodeURIComponent(L.join("\n"))
-    );
-  });
+    return "https://wa.me/" + cfg.wa + "?text=" + encodeURIComponent(L.join("\n"));
+  }
+  function onSend(e) {
+    var href = buildWaHref();
+    if (!href) { e.preventDefault(); return; }
+    this.setAttribute("href", href);
+  }
+  document.getElementById("send-wa").addEventListener("click", onSend);
+  var waFab = document.getElementById("send-wa-fab");
+  if (waFab) waFab.addEventListener("click", onSend);
 
   render();
 })();

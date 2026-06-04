@@ -1,6 +1,13 @@
 """Helpers de leitura do cardapio, ja localizados (PT/EN)."""
 from .models import Categoria
 
+# Foto (em static/) de cada carro-chefe da landing, por nome do item. Item sem
+# entrada aqui cai no placeholder .ph (ex.: torta de coco — foto ainda pendente).
+DESTAQUE_IMAGENS = {
+    "Cappuccino Mineiro": "img/fotos/destaque-cappuccino.jpg",
+    "Pão de Queijo": "img/fotos/destaque-pao-de-queijo.jpg",
+}
+
 
 def menu_localizado(lang="pt", apenas_disponiveis=False):
     """Lista de categorias -> dict com nome/nota/itens ja no idioma pedido."""
@@ -45,6 +52,7 @@ def destaques_localizados(lang="pt", limite=4):
             "desc": i.desc(lang),
             "preco": i.preco,
             "categoria": i.categoria.nome(lang),
+            "imagem": DESTAQUE_IMAGENS.get(i.nome, ""),
         }
         for i in itens
     ]

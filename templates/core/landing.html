@@ -48,7 +48,7 @@
         <div class="hero-badge"><span class="chip chip-sun">★ {% t 'hero.badge' %}</span></div>
       </div>
       <div class="hero-art rise">
-        <div class="ph ph-coffee" data-label="cappuccino · espuma com sol"></div>
+        <div class="ph has-photo"><img src="{% static 'img/fotos/hero-cappuccino.jpg' %}" alt="Cappuccino com o sol desenhado na espuma" /></div>
       </div>
     </div>
   </div>
@@ -57,7 +57,7 @@
 {# ---------- SOBRE ---------- #}
 <section class="section" id="sobre">
   <div class="wrap about-grid">
-    <div class="ph" data-label="a casa colonial amarela" style="min-height:340px"></div>
+    <div class="ph has-photo" style="min-height:340px"><img src="{% static 'img/fotos/fachada.jpg' %}" alt="A casa colonial amarela da Malto Maia, em Praia Seca" /></div>
     <div>
       <span class="eyebrow-tag">{% t 'about.eyebrow' %}</span>
       <h2 class="h-1">{% t 'about.title' %}</h2>
@@ -83,7 +83,7 @@
     <div class="hl-grid">
       {% for d in destaques %}
       <article class="card hl-card">
-        <div class="ph ph-coffee" data-label="{{ d.nome }}"></div>
+        <div class="ph {% if d.imagem %}has-photo{% else %}ph-coffee{% endif %}" data-label="{{ d.nome }}">{% if d.imagem %}<img src="{% static d.imagem %}" alt="{{ d.nome }}" loading="lazy" />{% endif %}</div>
         <div class="hl-body">
           <h3>{{ d.nome }}</h3>
           {% if d.desc %}<p class="text-muted" style="font-size:14.5px">{{ d.desc }}</p>{% endif %}
@@ -102,11 +102,11 @@
   <div class="wrap">
     <div class="sec-head"><span class="eyebrow-tag">{% t 'gal.eyebrow' %}</span><h2 class="h-1">{% t 'gal.title' %}</h2></div>
     <div class="gal-grid">
-      <div class="ph tall" data-label="o jardim"></div>
-      <div class="ph" data-label="a lousa do dia"></div>
-      <div class="ph ph-coffee" data-label="espresso"></div>
-      <div class="ph" data-label="torta de coco"></div>
-      <div class="ph" data-label="pão de queijo"></div>
+      <div class="ph tall has-photo"><img src="{% static 'img/fotos/gal-jardim.jpg' %}" alt="O jardim com o flamboyant florido" loading="lazy" /></div>
+      <div class="ph has-photo"><img src="{% static 'img/fotos/gal-lousa.jpg' %}" alt="A lousa de boas-vindas na entrada" loading="lazy" /></div>
+      <div class="ph has-photo"><img src="{% static 'img/fotos/gal-cafe.jpg' %}" alt="Espresso extraído na hora" loading="lazy" /></div>
+      <div class="ph has-photo"><img src="{% static 'img/fotos/gal-interior.jpg' %}" alt="O salão com pratos de cerâmica nas paredes" loading="lazy" /></div>
+      <div class="ph has-photo"><img src="{% static 'img/fotos/gal-mesa.jpg' %}" alt="Mesas de madeira patinada coloridas" loading="lazy" /></div>
     </div>
   </div>
 </section>
@@ -121,7 +121,7 @@
         <p class="lead" style="margin-top:14px">{% t 'order.sub' %}</p>
         <div style="margin-top:24px"><a class="btn btn-wa btn-lg" href="{% url 'pedidos:encomenda' %}">{% t 'cta.whatsapp' %}</a></div>
       </div>
-      <div class="ph" data-label="tortas inteiras"></div>
+      <div class="ph has-photo"><img src="{% static 'img/fotos/encomenda.jpg' %}" alt="Mesa de doces e quitutes da casa" loading="lazy" /></div>
     </div>
   </div>
 </section>
@@ -149,7 +149,7 @@
   <div class="wrap">
     <div class="sec-head"><span class="eyebrow-tag">{% t 'visit.eyebrow' %}</span><h2 class="h-1">{% t 'visit.title' %}</h2></div>
     <div class="visit-grid" style="margin-top:30px">
-      <div class="ph" data-label="mapa · Praia Seca"></div>
+      <div class="ph has-photo"><img src="{% static 'img/fotos/visite.jpg' %}" alt="Entrada e jardim da Malto Maia" loading="lazy" /></div>
       <div class="visit-info card card-pad">
         <div class="visit-line"><b>{% t 'visit.eyebrow' %}</b><span>{% t 'visit.addr' %}</span></div>
         <div class="visit-line"><b>{% t 'visit.hoursLabel' %}</b><span>{% t 'visit.hours' %}</span></div>

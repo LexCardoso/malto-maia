@@ -50,3 +50,6 @@ data/skill_router/outbox/
 data/skill_router/state.json
 data/skill_router/STOP
 # feedback.jsonl NAO e ignorado: o aprendizado do router e versionado de proposito.
+
+# Fotos originais (raw, locais) - so as versoes web (static/img/fotos/) vao pro repo
+FOTOS/

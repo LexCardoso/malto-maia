@@ -87,13 +87,13 @@
                (cfg.waAt || "\u00b7") + " " + p2(d.getHours()) + ":" + p2(d.getMinutes());
 
     // Emojis em escape \u (arquivo ASCII puro) -- evita mojibake por charset no deploy.
-    var DIV = "\u2796\u2796\u2796\u2796\u2796\u2796\u2796";
+    var DIV = "\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014";
     var L = [];
     L.push("\u2615 *MALTO MAIA*");
     L.push("_" + (cfg.waSubtitle || "") + "_");
     L.push("");
-    L.push("\ud83e\uddfe *" + (cfg.waComanda || "Comanda") + ":* " + code);
-    L.push("\ud83d\uddd3\ufe0f " + when);
+    L.push("\ud83d\udccb *" + (cfg.waComanda || "Comanda") + ":* " + code);
+    L.push("\ud83d\udcc5 " + when);
     L.push(DIV);
     L.push("\ud83d\uded2 *" + (cfg.waItems || "") + "*");
     var total = 0, tbd = false;

@@ -8,6 +8,7 @@ DESTAQUE_IMAGENS = {
     "Pão de Queijo": "img/fotos/destaque-pao-de-queijo.jpg",
     # placeholder temporario (bolo de cenoura) ate ter foto da torta de coco
     "Torta — fatia": "img/fotos/destaque-torta.jpg",
+    "Café Espresso": "img/fotos/gal-cafe.jpg",
 }
 
 

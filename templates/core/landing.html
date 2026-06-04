@@ -13,20 +13,9 @@
   "telephone": "+{{ WHATSAPP_NUMBER }}",
   "servesCuisine": ["Café", "Doces", "Comida mineira"],
   "priceRange": "$$",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Estrada de Praia Seca",
-    "addressLocality": "Araruama",
-    "addressRegion": "RJ",
-    "addressCountry": "BR"
-  },
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-    "opens": "09:00",
-    "closes": "18:00"
-  },
-  "sameAs": ["https://instagram.com/{{ INSTAGRAM_HANDLE }}"]
+  "address": {"@type": "PostalAddress", "streetAddress": "Estrada de Praia Seca", "addressLocality": "Araruama", "addressRegion": "RJ", "addressCountry": "BR"},
+  "openingHoursSpecification": {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], "opens": "09:00", "closes": "18:00"},
+  "sameAs": ["https://instagram.com/{{ INSTAGRAM_HANDLE }}"{% if TRIPADVISOR_URL %}, "{{ TRIPADVISOR_URL }}"{% endif %}]
 }
 </script>
 {% endblock %}
@@ -34,37 +23,56 @@
 {% block content %}
 {# ---------- HERO ---------- #}
 <section class="hero">
-  <div class="wrap">
-    <div class="hero-grid">
-      <div class="rise">
-        <span class="eyebrow">{% t 'hero.eyebrow' %}</span>
-        {% t 'hero.title' as hero_title %}
-        <h1>{{ hero_title|linebreaksbr }}</h1>
-        <p class="lead">{% t 'hero.sub' %}</p>
-        <div class="hero-cta">
-          <a class="btn btn-primary btn-lg" href="{% url 'cardapio:menu' %}">{% t 'cta.menu' %}</a>
-          <a class="btn btn-ghost btn-lg" href="{% url 'pedidos:encomenda' %}">{% t 'cta.order' %}</a>
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="wrap hero-grid">
+    <div class="rise">
+      <div class="row" style="margin-bottom:22px">
+        <span class="chip chip-leaf"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M20 10c0 5.4-8 12-8 12s-8-6.6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6"/></svg> {% t 'hero.eyebrow' %}</span>
+      </div>
+      {% t 'hero.title' as hero_title %}
+      <h1 class="h-display">{{ hero_title|linebreaksbr }}</h1>
+      <p class="lead">{% t 'hero.sub' %}</p>
+      <div class="row row-wrap" style="gap:14px;margin-bottom:30px">
+        <a class="btn btn-primary btn-lg" href="{% url 'cardapio:menu' %}">{% t 'cta.menu' %} <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost btn-lg" href="{% url 'pedidos:encomenda' %}">{% t 'cta.order' %}</a>
+      </div>
+      <div class="hero-rate">
+        <span class="stars" aria-hidden="true">★★★★<span style="opacity:0.4">★</span></span>
+        <span style="font-weight:700;font-size:14.5px">4,4</span>
+        <span style="color:var(--muted);font-size:14.5px">· {% t 'hero.badge' %}</span>
+      </div>
+    </div>
+    <div class="rise hero-art" style="animation-delay:.1s">
+      <div class="ph ph-coffee has-photo hero-shot"><img src="{% static 'img/fotos/hero-cappuccino.jpg' %}" alt="Cappuccino com o sol desenhado na espuma" /></div>
+      <div class="card card-pad hero-float">
+        <div class="row" style="gap:13px">
+          <div class="ph has-photo thumb"><img src="{% static 'img/fotos/destaque-torta.jpg' %}" alt="" /></div>
+          <div style="min-width:0">
+            <div class="nm">Torta de coco</div>
+            <div class="pr">R$ 13,80</div>
+          </div>
         </div>
-        <div class="hero-badge"><span class="chip chip-sun">★ {% t 'hero.badge' %}</span></div>
       </div>
-      <div class="hero-art rise">
-        <div class="ph has-photo"><img src="{% static 'img/fotos/hero-cappuccino.jpg' %}" alt="Cappuccino com o sol desenhado na espuma" /></div>
-      </div>
+      <div class="hero-seal"><img src="{% static 'img/logo-full.png' %}" alt="Malto Maia" /></div>
     </div>
   </div>
 </section>
 
 {# ---------- SOBRE ---------- #}
-<section class="section" id="sobre">
+<section class="section about" id="sobre">
   <div class="wrap about-grid">
-    <div class="ph has-photo" style="min-height:340px"><img src="{% static 'img/fotos/fachada.jpg' %}" alt="A casa colonial amarela da Malto Maia, em Praia Seca" /></div>
-    <div>
-      <span class="eyebrow-tag">{% t 'about.eyebrow' %}</span>
-      <h2 class="h-1">{% t 'about.title' %}</h2>
-      <p class="lead" style="margin-top:16px">{% t 'about.p1' %}</p>
-      <p class="lead" style="margin-top:12px">{% t 'about.p2' %}</p>
+    <div class="about-photo">
+      <div class="ph has-photo main"><img src="{% static 'img/fotos/fachada.jpg' %}" alt="A casa colonial amarela da Malto Maia" /></div>
+      <div class="ph has-photo about-second"><img src="{% static 'img/fotos/gal-jardim.jpg' %}" alt="O jardim" loading="lazy" /></div>
+    </div>
+    <div class="about-text">
+      <div class="sec-head"><div class="eyebrow-tag">{% t 'about.eyebrow' %}</div><h2 class="h-1">{% t 'about.title' %}</h2></div>
+      <div class="stack" style="margin-top:22px">
+        <p>{% t 'about.p1' %}</p>
+        <p class="muted">{% t 'about.p2' %}</p>
+      </div>
       <div class="about-stats">
-        <div><b>+10</b><span>{% t 'about.stat1' %}</span></div>
+        <div><b>+12</b><span>{% t 'about.stat1' %}</span></div>
         <div><b>100%</b><span>{% t 'about.stat2' %}</span></div>
         <div><b>4,4★</b><span>{% t 'about.stat3' %}</span></div>
       </div>
@@ -73,109 +81,127 @@
 </section>
 
 {# ---------- CARROS-CHEFE ---------- #}
-<section class="section alt-bg">
+<section class="section">
   <div class="wrap">
-    <div class="sec-head center" style="margin:0 auto">
-      <span class="eyebrow">{% t 'high.eyebrow' %}</span>
-      <h2 class="h-1">{% t 'high.title' %}</h2>
-      <p class="lead">{% t 'high.sub' %}</p>
+    <div class="hl-head">
+      <div class="sec-head"><div class="eyebrow">{% t 'high.eyebrow' %}</div><h2 class="h-1">{% t 'high.title' %}</h2><p class="lead">{% t 'high.sub' %}</p></div>
+      <a class="btn btn-ghost" href="{% url 'cardapio:menu' %}">{% t 'cta.menu' %} <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
     <div class="hl-grid">
       {% for d in destaques %}
       <article class="card hl-card">
-        <div class="ph {% if d.imagem %}has-photo{% else %}ph-coffee{% endif %}" data-label="{{ d.nome }}">{% if d.imagem %}<img src="{% static d.imagem %}" alt="{{ d.nome }}" loading="lazy" />{% endif %}</div>
-        <div class="hl-body">
+        <div class="shot">
+          <div class="ph ph-coffee {% if d.imagem %}has-photo{% endif %}">{% if d.imagem %}<img src="{% static d.imagem %}" alt="{{ d.nome }}" loading="lazy" />{% endif %}</div>
+        </div>
+        <div class="card-pad">
           <h3>{{ d.nome }}</h3>
-          {% if d.desc %}<p class="text-muted" style="font-size:14.5px">{{ d.desc }}</p>{% endif %}
-          <span class="hl-price">{% if d.preco %}{{ d.preco|brl }}{% else %}{% t 'common.askPrice' %}{% endif %}</span>
+          {% if d.desc %}<p>{{ d.desc }}</p>{% else %}<p>{{ d.categoria }}</p>{% endif %}
+          <div class="pr">{% if d.preco %}{{ d.preco|brl }}{% else %}{% t 'common.askPrice' %}{% endif %}</div>
         </div>
       </article>
-      {% empty %}
-      <p class="text-muted">Marque itens como “carro-chefe” no painel para destacá-los aqui.</p>
       {% endfor %}
     </div>
   </div>
 </section>
 
-{# ---------- GALERIA ---------- #}
-<section class="section">
+{# ---------- GALERIA (fundo escuro) ---------- #}
+<section class="section gallery">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow-tag">{% t 'gal.eyebrow' %}</span><h2 class="h-1">{% t 'gal.title' %}</h2></div>
+    <div class="eyebrow">{% t 'gal.eyebrow' %}</div>
+    <h2 class="h-1">{% t 'gal.title' %}</h2>
     <div class="gal-grid">
-      <div class="ph tall has-photo"><img src="{% static 'img/fotos/gal-jardim.jpg' %}" alt="O jardim com o flamboyant florido" loading="lazy" /></div>
-      <div class="ph has-photo"><img src="{% static 'img/fotos/gal-lousa.jpg' %}" alt="A lousa de boas-vindas na entrada" loading="lazy" /></div>
-      <div class="ph has-photo"><img src="{% static 'img/fotos/gal-cafe.jpg' %}" alt="Espresso extraído na hora" loading="lazy" /></div>
-      <div class="ph has-photo"><img src="{% static 'img/fotos/gal-interior.jpg' %}" alt="O salão com pratos de cerâmica nas paredes" loading="lazy" /></div>
-      <div class="ph has-photo"><img src="{% static 'img/fotos/gal-mesa.jpg' %}" alt="Mesas de madeira patinada coloridas" loading="lazy" /></div>
+      <div class="ph has-photo tall"><img src="{% static 'img/fotos/gal-mesa.jpg' %}" alt="Mesas no jardim" loading="lazy" /></div>
+      <div class="ph has-photo"><img src="{% static 'img/fotos/gal-cafe.jpg' %}" alt="Espresso na hora" loading="lazy" /></div>
+      <div class="ph has-photo"><img src="{% static 'img/fotos/destaque-cappuccino.jpg' %}" alt="Cappuccino Mineiro" loading="lazy" /></div>
+      <div class="ph has-photo"><img src="{% static 'img/fotos/gal-lousa.jpg' %}" alt="A lousa do dia" loading="lazy" /></div>
+      <div class="ph has-photo wide"><img src="{% static 'img/fotos/gal-interior.jpg' %}" alt="Pratos de cerâmica nas paredes" loading="lazy" /></div>
+      <div class="ph has-photo"><img src="{% static 'img/fotos/encomenda.jpg' %}" alt="Doces da casa" loading="lazy" /></div>
     </div>
   </div>
 </section>
 
-{# ---------- ENCOMENDAS ---------- #}
-<section class="section alt-bg">
+{# ---------- ENCOMENDAS (terracota) ---------- #}
+<section class="section">
   <div class="wrap">
-    <div class="order-strip">
-      <div>
-        <span class="eyebrow" style="color:var(--sun)">{% t 'order.eyebrow' %}</span>
-        <h2 class="h-1" style="margin-top:6px">{% t 'order.title' %}</h2>
-        <p class="lead" style="margin-top:14px">{% t 'order.sub' %}</p>
-        <div style="margin-top:24px"><a class="btn btn-wa btn-lg" href="{% url 'pedidos:encomenda' %}">{% t 'cta.whatsapp' %}</a></div>
+    <div class="order-strip paper-grain">
+      <div class="col-text">
+        <div class="eyebrow">{% t 'order.eyebrow' %}</div>
+        <h2 class="h-1">{% t 'order.title' %}</h2>
+        <p>{% t 'order.sub' %}</p>
       </div>
-      <div class="ph has-photo"><img src="{% static 'img/fotos/encomenda.jpg' %}" alt="Mesa de doces e quitutes da casa" loading="lazy" /></div>
+      <div class="actions">
+        <a class="btn btn-primary btn-lg" href="{% url 'pedidos:encomenda' %}">{% t 'cta.order' %} <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-lg" href="https://wa.me/{{ WHATSAPP_NUMBER }}" target="_blank" rel="noopener" style="background:rgba(255,255,255,0.16);color:#fff;border:2px solid rgba(255,255,255,0.4)"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M.05 24l1.7-6.2A11.86 11.86 0 0 1 .16 11.9C.16 5.34 5.5 0 12.06 0a11.8 11.8 0 0 1 8.4 3.49 11.8 11.8 0 0 1 3.48 8.41c0 6.56-5.34 11.9-11.9 11.9a11.9 11.9 0 0 1-5.69-1.45L.05 24z"/></svg> WhatsApp</a>
+      </div>
+      <div class="blob" aria-hidden="true"></div>
     </div>
   </div>
 </section>
 
 {# ---------- AVALIAÇÕES ---------- #}
-<section class="section">
+<section class="section reviews">
   <div class="wrap">
-    <div class="sec-head center" style="margin:0 auto">
-      <span class="eyebrow">{% t 'rev.eyebrow' %}</span><h2 class="h-1">{% t 'rev.title' %}</h2>
-    </div>
+    <div class="sec-head center"><div class="eyebrow">{% t 'rev.eyebrow' %}</div><h2 class="h-1">{% t 'rev.title' %}</h2></div>
     <div class="rev-grid">
       {% for av in avaliacoes %}
-      <article class="card card-pad rev-card">
-        <div class="stars">{{ av.estrelas }}</div>
-        <p>{{ av.texto }}</p>
-        <cite>{{ av.autor }} · {{ av.get_fonte_display }}</cite>
-      </article>
+      <figure class="card card-pad rev-card">
+        <span class="stars">{{ av.estrelas }}</span>
+        <blockquote>“{{ av.texto }}”</blockquote>
+        <figcaption>{{ av.autor }} · {{ av.get_fonte_display }}</figcaption>
+      </figure>
       {% endfor %}
     </div>
-    {% if TRIPADVISOR_URL %}
-    <div class="center" style="margin-top:28px"><a class="btn btn-ghost" href="{{ TRIPADVISOR_URL }}" target="_blank" rel="noopener">{% t 'rev.seeAll' %}</a></div>
-    {% endif %}
+    {% if TRIPADVISOR_URL %}<div class="center" style="margin-top:24px"><a class="btn btn-ghost" href="{{ TRIPADVISOR_URL }}" target="_blank" rel="noopener">{% t 'rev.seeAll' %}</a></div>{% endif %}
+  </div>
+</section>
+
+{# ---------- INSTAGRAM ---------- #}
+<section class="section-tight">
+  <div class="wrap">
+    <div class="ig-head">
+      <div><div class="eyebrow">{% t 'ig.eyebrow' %}</div><h2 class="h-2">{% t 'ig.title' %}</h2></div>
+      <a class="btn btn-ghost btn-sm" href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg> {% t 'ig.follow' %}</a>
+    </div>
+    <div class="ig-grid">
+      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% static 'img/fotos/hero-cappuccino.jpg' %}" alt="" loading="lazy" /></div></a>
+      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% static 'img/fotos/destaque-torta.jpg' %}" alt="" loading="lazy" /></div></a>
+      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% static 'img/fotos/destaque-pao-de-queijo.jpg' %}" alt="" loading="lazy" /></div></a>
+      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% static 'img/fotos/gal-mesa.jpg' %}" alt="" loading="lazy" /></div></a>
+      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% static 'img/fotos/gal-jardim.jpg' %}" alt="" loading="lazy" /></div></a>
+      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% static 'img/fotos/gal-lousa.jpg' %}" alt="" loading="lazy" /></div></a>
+    </div>
   </div>
 </section>
 
 {# ---------- VISITE ---------- #}
-<section class="section alt-bg" id="visite">
-  <div class="wrap">
-    <div class="sec-head"><span class="eyebrow-tag">{% t 'visit.eyebrow' %}</span><h2 class="h-1">{% t 'visit.title' %}</h2></div>
-    <div class="visit-grid" style="margin-top:30px">
-      {% if TEM_MAPA %}
-      <div class="ph visit-map"><iframe src="https://www.google.com/maps?q={{ MAP_LAT }},{{ MAP_LNG }}&z=16&output=embed" loading="lazy" title="Mapa Malto Maia" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>
-      {% else %}
-      <div class="ph has-photo"><img src="{% static 'img/fotos/visite.jpg' %}" alt="Entrada e jardim da Malto Maia" loading="lazy" /></div>
-      {% endif %}
-      <div class="visit-info card card-pad">
-        <div class="visit-line"><b>{% t 'visit.eyebrow' %}</b><span>{% t 'visit.addr' %}</span></div>
-        <div class="visit-line"><b>{% t 'visit.hoursLabel' %}</b><span>{% t 'visit.hours' %}</span></div>
-        <div class="visit-line"><b>{% t 'visit.phoneLabel' %}</b><a href="https://wa.me/{{ WHATSAPP_NUMBER }}" target="_blank" rel="noopener" class="text-terra">+{{ WHATSAPP_NUMBER }}</a></div>
-        <div class="row row-wrap" style="margin-top:8px">
-          <a class="btn btn-terra" href="{% if TEM_MAPA %}https://www.google.com/maps/dir/?api=1&destination={{ MAP_LAT }},{{ MAP_LNG }}{% else %}https://www.google.com/maps/search/?api=1&query=Malto+Maia+Praia+Seca+Araruama{% endif %}" target="_blank" rel="noopener">{% t 'cta.directions' %}</a>
-          <a class="btn btn-wa" href="https://wa.me/{{ WHATSAPP_NUMBER }}" target="_blank" rel="noopener">WhatsApp</a>
-        </div>
+<section class="section" id="visite">
+  <div class="wrap visit-grid">
+    <div>
+      <div class="sec-head"><div class="eyebrow-tag">{% t 'visit.eyebrow' %}</div><h2 class="h-1">{% t 'visit.title' %}</h2></div>
+      <div class="visit-info">
+        <div class="visit-line"><span class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M20 10c0 5.4-8 12-8 12s-8-6.6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6"/></svg></span><span class="tx">{% t 'visit.addr' %}</span></div>
+        <div class="visit-line"><span class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span><span class="tx">{% t 'visit.hours' %}</span></div>
+        <div class="visit-line"><span class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M.05 24l1.7-6.2A11.86 11.86 0 0 1 .16 11.9C.16 5.34 5.5 0 12.06 0a11.8 11.8 0 0 1 8.4 3.49 11.8 11.8 0 0 1 3.48 8.41c0 6.56-5.34 11.9-11.9 11.9a11.9 11.9 0 0 1-5.69-1.45L.05 24z"/></svg></span><span class="tx"><a href="https://wa.me/{{ WHATSAPP_NUMBER }}" class="text-terra" target="_blank" rel="noopener">+{{ WHATSAPP_NUMBER }}</a></span></div>
       </div>
+      <a class="btn btn-solid btn-lg" style="margin-top:28px" target="_blank" rel="noopener" href="{% if TEM_MAPA %}https://www.google.com/maps/dir/?api=1&destination={{ MAP_LAT }},{{ MAP_LNG }}{% else %}https://www.google.com/maps/search/?api=1&query=Malto+Maia+Praia+Seca+Araruama{% endif %}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M20 10c0 5.4-8 12-8 12s-8-6.6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6"/></svg> {% t 'cta.directions' %}</a>
+    </div>
+    <div class="visit-map-wrap">
+      {% if TEM_MAPA %}
+      <div class="ph visit-shot visit-map"><iframe src="https://www.google.com/maps?q={{ MAP_LAT }},{{ MAP_LNG }}&z=16&output=embed" loading="lazy" title="Mapa Malto Maia" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+      {% else %}
+      <div class="ph visit-shot" data-label="" style="background:repeating-linear-gradient(0deg, rgba(94,107,79,0.10) 0 22px, transparent 22px 44px), repeating-linear-gradient(90deg, rgba(94,107,79,0.10) 0 22px, transparent 22px 44px), linear-gradient(160deg, #E7E3D2, #DCD7C2)"></div>
+      <div style="position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);color:var(--terracota)"><svg viewBox="0 0 24 24" width="48" height="48" fill="var(--terracota)" stroke="#fff" stroke-width="1.2"><path d="M20 10c0 5.4-8 12-8 12s-8-6.6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6" fill="#fff" stroke="none"/></svg></div>
+      {% endif %}
     </div>
   </div>
 </section>
 
 {# ---------- CONCEITO ---------- #}
 <section class="section concept">
-  <div class="wrap center" style="max-width:54em;margin:0 auto">
-    <span class="eyebrow" style="color:var(--sun-soft)">{% t 'concept.eyebrow' %}</span>
+  <div class="wrap">
+    <div class="eyebrow">{% t 'concept.eyebrow' %}</div>
     <h2 class="h-1">{% t 'concept.title' %}</h2>
-    <p class="lead" style="margin:18px auto 0">{% t 'concept.body' %}</p>
+    <p>{% t 'concept.body' %}</p>
   </div>
 </section>
 {% endblock %}

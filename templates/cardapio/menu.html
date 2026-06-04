@@ -4,70 +4,85 @@
 {% block title %}{% t 'menu.title' %} · Malto Maia{% endblock %}
 
 {% block content %}
-<section class="page-intro menu-page">
+<div class="menu-band no-print">
   <div class="wrap">
-    <div class="menu-head">
+    <div class="menu-band-row">
       <div>
-        <span class="eyebrow">{% t 'menu.title' %}</span>
-        <h1 class="h-1">{% t 'menu.title' %}</h1>
-        <p class="lead" style="margin-top:8px">{% t 'menu.sub' %}</p>
-        <p class="text-muted" style="margin-top:6px;font-size:14px">
-          {% t 'common.updated' %} {{ atualizado_em|date:"d/m/Y" }}
-        </p>
+        <div class="eyebrow">{% t 'hero.eyebrow' %}</div>
+        <h1 class="h-display" style="font-size:clamp(40px,7vw,68px)">{% t 'menu.title' %}</h1>
+        <p class="lead">{% t 'menu.sub' %}</p>
+        <div class="menu-updated">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+          <span>{% t 'common.updated' %} <strong>{{ atualizado_em|date:"d/m/Y" }}</strong></span>
+        </div>
       </div>
-      <div class="menu-actions no-print">
-        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('qr-modal').showModal()">{% t 'menu.qr' %}</button>
-        <button class="btn btn-ghost btn-sm" onclick="window.print()">{% t 'menu.exportPdf' %}</button>
+      <div class="menu-actions">
+        <button class="btn btn-ghost" onclick="window.print()"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg> {% t 'menu.exportPdf' %}</button>
+        <button class="btn btn-solid" onclick="document.getElementById('qr-modal').showModal()"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M17 21h4v-4" stroke-linecap="round"/></svg> {% t 'menu.qr' %}</button>
       </div>
     </div>
   </div>
-</section>
+</div>
 
 <nav class="menu-quicknav no-print">
   <div class="wrap">
-    {% for c in categorias %}
-      <a class="chip" href="#cat-{{ c.slug }}">{{ c.nome }}</a>
-    {% endfor %}
+    {% for c in categorias %}<a href="#cat-{{ c.slug }}">{{ c.nome }}</a>{% endfor %}
   </div>
 </nav>
 
-<div class="wrap section-tight">
-  <div class="print-only print-head">
-    <h2 class="h-2">Malto Maia · {% t 'menu.title' %}</h2>
-    <p>{% t 'common.updated' %} {{ atualizado_em|date:"d/m/Y" }} · {% t 'visit.addr' %}</p>
-  </div>
+<div class="print-only print-head">
+  <h2 class="h-2">Malto Maia · {% t 'menu.title' %}</h2>
+  <p>{% t 'common.updated' %} {{ atualizado_em|date:"d/m/Y" }} · {% t 'visit.addr' %}</p>
+</div>
 
+<div class="wrap section-tight">
   {% for c in categorias %}
   <section class="menu-cat" id="cat-{{ c.slug }}">
-    <h2 class="h-2">{{ c.nome }}</h2>
-    {% if c.nota %}<p class="nota">{{ c.nota }}</p>{% endif %}
-    <div class="menu-list menu-cols">
+    <div class="menu-cat-head">
+      <h2>{{ c.nome }}</h2>
+      {% if c.nota %}<span class="note">{{ c.nota }}</span>{% endif %}
+    </div>
+    <div class="menu-cols">
       {% for i in c.itens %}
       <div class="menu-row {% if not i.disponivel %}off{% endif %}">
-        <div>
-          <span class="nm">{{ i.nome }}</span>
-          {% if i.destaque %}<span class="chip chip-sun" style="margin-left:6px">★ {% t 'common.signature' %}</span>{% endif %}
+        <div class="grow">
+          <div class="row" style="gap:9px;flex-wrap:wrap">
+            <span class="nm">{{ i.nome }}</span>
+            {% if i.destaque %}<span class="chip chip-sun" style="padding:3px 9px;font-size:11.5px">★ {% t 'common.signature' %}</span>{% endif %}
+            {% if not i.disponivel %}<span class="chip" style="padding:3px 9px;font-size:11.5px;background:var(--cream-deep);color:var(--muted)">{% t 'common.unavailable' %}</span>{% endif %}
+          </div>
           {% if i.desc %}<div class="ds">{{ i.desc }}</div>{% endif %}
         </div>
-        <span class="leader"></span>
-        {% if not i.disponivel %}
-          <span class="tag-off">{% t 'common.unavailable' %}</span>
-        {% elif i.preco %}
-          <span class="pr">{{ i.preco|brl }}</span>
-        {% else %}
-          <span class="pr" style="color:var(--muted)">{% t 'common.askPrice' %}</span>
-        {% endif %}
+        <div class="pr {% if not i.preco %}tbd{% endif %}">{% if i.preco %}{{ i.preco|brl }}{% else %}{% t 'common.askPrice' %}{% endif %}</div>
       </div>
       {% endfor %}
     </div>
   </section>
   {% endfor %}
+  <p class="text-muted no-print" style="font-size:13.5px;margin-top:8px">* {% t 'ord.totalNote' %}</p>
 </div>
 
 <dialog id="qr-modal" class="qr-modal no-print">
-  <h3 class="h-2 center">{% t 'menu.qrTitle' %}</h3>
-  <p class="text-muted center" style="margin-top:6px">{% t 'menu.qrHint' %}</p>
-  <img src="{% url 'cardapio:menu_qr' %}" alt="QR Code do cardápio" width="220" height="220" style="display:block;margin:16px auto" />
-  <div class="center"><button class="btn btn-ghost btn-sm" onclick="document.getElementById('qr-modal').close()">{% t 'menu.close' %}</button></div>
+  <div class="eyebrow" style="margin-bottom:4px">{% t 'menu.qrTitle' %}</div>
+  <h3 class="h-2" style="margin-bottom:18px">Malto Maia</h3>
+  <img src="{% url 'cardapio:menu_qr' %}" alt="QR Code do cardápio" />
+  <p class="text-muted" style="margin-top:16px;font-size:14.5px">{% t 'menu.qrHint' %}</p>
+  <button class="btn btn-ghost btn-block" style="margin-top:18px" onclick="document.getElementById('qr-modal').close()">{% t 'menu.close' %}</button>
 </dialog>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  (function () {
+    var links = [].slice.call(document.querySelectorAll('.menu-quicknav a'));
+    var cats = [].slice.call(document.querySelectorAll('.menu-cat'));
+    if (!cats.length) return;
+    function spy() {
+      var cur = cats[0];
+      cats.forEach(function (c) { if (c.getBoundingClientRect().top - 160 <= 0) cur = c; });
+      links.forEach(function (a) { a.classList.toggle('active', a.getAttribute('href') === '#' + cur.id); });
+    }
+    window.addEventListener('scroll', spy, { passive: true }); spy();
+  })();
+</script>
 {% endblock %}

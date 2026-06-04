@@ -146,6 +146,13 @@ _PATH_HINTS: dict[str, list[str]] = {
         "design", "brand", "eyebrow", "chip", "btn-primary", "paleta",
         "responsivo", "mobile", "playfair", "nunito", "var(--sun)", "static/css",
     ],
+    # ── Mobile / responsivo (verificacao) ──
+    "maltomaia-mobile": [
+        "mobile", "celular", "responsivo", "responsive", "overflow",
+        "scroll horizontal", "estourou", "estourando", "cortado", "cortou",
+        "burger", "breakpoint", "viewport", "media query", "object-fit",
+        "toque", "touch", "375px", "375", "preview_resize",
+    ],
     # ── Deploy / infra Render ──
     "maltomaia-deploy": [
         "build.sh", "render.yaml", "procfile", "collectstatic", "gunicorn",

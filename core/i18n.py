@@ -100,6 +100,15 @@ STRINGS = {
     "menu.jump": {"pt": "Ir para", "en": "Jump to"},
     "menu.close": {"pt": "Fechar", "en": "Close"},
 
+    # Menu PDF (pagina de impressao)
+    "pdf.house": {"pt": "Doceria & Cafeteria", "en": "Coffee & Sweets House"},
+    "pdf.place": {"pt": "Praia Seca · Araruama – RJ", "en": "Praia Seca · Araruama – RJ"},
+    "pdf.tagline": {"pt": "Café de raiz mineira, à beira-mar.", "en": "Coffee with Minas roots, by the sea."},
+    "pdf.priceNote": {"pt": "Preços sujeitos a alteração sem aviso prévio.", "en": "Prices subject to change without notice."},
+    "pdf.order": {"pt": "Encomendas e reservas pelo WhatsApp", "en": "Orders & bookings on WhatsApp"},
+    "pdf.print": {"pt": "Imprimir / Salvar PDF", "en": "Print / Save PDF"},
+    "pdf.back": {"pt": "Voltar ao cardápio", "en": "Back to menu"},
+
     # Order page
     "ord.title": {"pt": "Fazer encomenda", "en": "Place an order"},
     "ord.sub": {"pt": "Escolha os itens, ajuste as quantidades e finalize pelo WhatsApp.", "en": "Pick your items, adjust quantities and finish on WhatsApp."},

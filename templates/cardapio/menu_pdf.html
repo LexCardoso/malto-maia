@@ -1,0 +1,150 @@
+{% load static maltomaia %}<!DOCTYPE html>
+<html lang="{{ LANG }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% t 'menu.title' %} · Malto Maia</title>
+  <link rel="icon" type="image/png" href="{% static 'img/logo-mark.png' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #F7F1E6; --cream-soft: #FBF7EF; --espresso: #3B2A20; --espresso-ink: #2A1D16;
+      --terracota: #C0623B; --sun: #F5A623; --leaf: #5E6B4F; --muted: #7E6E60;
+      --line: #E7DCC9; --line-strong: #D8C7A8;
+      --display: 'Playfair Display', Georgia, serif;
+      --body: 'Nunito Sans', system-ui, sans-serif; --script: 'Caveat', cursive;
+    }
+    html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { font-family: var(--body); color: var(--espresso); background: #cdbfa6; -webkit-font-smoothing: antialiased; }
+
+    /* Barra de acoes (some na impressao) */
+    .bar { position: fixed; inset: 0 0 auto 0; z-index: 50; display: flex; gap: 10px; align-items: center;
+           justify-content: center; padding: 11px; background: rgba(42,29,22,0.93); }
+    .bar button, .bar a { font-family: var(--body); font-weight: 800; font-size: 14px; border-radius: 999px;
+           padding: 10px 20px; cursor: pointer; border: 1.6px solid transparent; text-decoration: none; line-height: 1; }
+    .bar .b-print { background: var(--sun); color: var(--espresso-ink); display: inline-flex; align-items: center; gap: 8px; }
+    .bar .b-back { background: transparent; color: var(--cream); border-color: rgba(247,241,230,0.42); }
+
+    /* A folha */
+    .sheet { background: var(--cream); color: var(--espresso); }
+
+    .ph-head { text-align: center; }
+    .ph-logo { width: 184px; max-width: 58%; height: auto; }
+    .ph-tag { font-family: var(--script); font-size: 25px; line-height: 1; color: var(--terracota); margin-top: -2px; }
+
+    .divider { display: block; width: 100%; height: 104px; object-fit: cover; object-position: center; margin: 4px 0; }
+
+    .menu-label { text-align: center; font-family: var(--display); font-weight: 700; font-size: 14px;
+                  letter-spacing: 0.42em; text-transform: uppercase; color: var(--terracota);
+                  padding-left: 0.42em; margin: 2px 0 16px; }
+
+    .cats { column-count: 2; column-gap: 36px; }
+    .cat { break-inside: avoid; margin-bottom: 18px; }
+    .cat-head { display: flex; align-items: baseline; gap: 8px; border-bottom: 2px solid var(--terracota);
+                padding-bottom: 5px; margin-bottom: 10px; }
+    .cat-head h2 { font-family: var(--display); font-weight: 700; font-size: 19.5px; color: var(--espresso-ink); }
+    .cat-note { font-family: var(--script); font-size: 17px; color: var(--leaf); margin-left: auto; white-space: nowrap; }
+
+    .item { break-inside: avoid; margin-bottom: 9px; }
+    .i-main { display: flex; align-items: baseline; gap: 6px; }
+    .i-name { font-weight: 700; font-size: 14.5px; color: var(--espresso-ink); }
+    .i-star { color: var(--sun); font-size: 12.5px; }
+    .i-dots { flex: 1 1 auto; min-width: 14px; height: 0; border-bottom: 1.6px dotted var(--line-strong); transform: translateY(-4px); }
+    .i-price { font-weight: 800; font-size: 14px; color: var(--terracota); white-space: nowrap; }
+    .i-price.tbd { font-weight: 700; font-style: italic; font-size: 12.5px; color: var(--muted); }
+    .i-desc { font-size: 11.5px; line-height: 1.42; color: var(--muted); margin-top: 1px; max-width: 94%; }
+
+    .trio { display: flex; gap: 12px; justify-content: center; align-items: flex-end; margin: 6px 0 2px; }
+    .trio img { width: 132px; max-width: 30%; height: auto; }
+
+    .ph-foot { text-align: center; margin-top: 4px; }
+    .foot-order { display: inline-flex; align-items: center; gap: 8px; background: var(--sun); color: var(--espresso-ink);
+                  font-weight: 800; font-size: 13.5px; padding: 8px 18px; border-radius: 999px; }
+    .foot-contact { margin-top: 11px; font-weight: 800; font-size: 13px; color: var(--espresso-ink); }
+    .foot-contact .sep { color: var(--terracota); margin: 0 7px; }
+    .foot-meta { margin-top: 5px; font-size: 11px; color: var(--muted); }
+
+    @media screen {
+      body { padding: 72px 16px 44px; }
+      .sheet { max-width: 840px; margin: 0 auto; padding: 42px 46px 34px; border-radius: 5px;
+               box-shadow: 0 30px 64px -28px rgba(42,29,22,0.55); }
+    }
+    @media screen and (max-width: 640px) {
+      body { padding: 66px 10px 30px; }
+      .sheet { padding: 26px 22px 24px; }
+      .cats { column-count: 1; }
+      .ph-logo { width: 150px; }
+    }
+
+    @media print {
+      @page { size: A4; margin: 0; }
+      html, body { background: #fff; }
+      .no-print { display: none !important; }
+      .sheet { max-width: none; margin: 0; border-radius: 0; box-shadow: none; padding: 15mm 14mm 12mm; }
+      .cats { column-count: 2; }
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bar no-print">
+    <button class="b-print" type="button" onclick="window.print()">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      {% t 'pdf.print' %}
+    </button>
+    <a class="b-back" href="{% url 'cardapio:menu' %}">{% t 'pdf.back' %}</a>
+  </div>
+
+  <main class="sheet">
+    <header class="ph-head">
+      <img class="ph-logo" src="{% static 'img/logo-full.png' %}" alt="Malto Maia — Doceria & Cafeteria" />
+      <p class="ph-tag">{% t 'pdf.tagline' %}</p>
+    </header>
+
+    <img class="divider" src="{% static 'img/pdf/pdf-divider-a.jpg' %}" alt="" />
+
+    <div class="menu-label">{% t 'menu.title' %}</div>
+
+    <section class="cats">
+      {% for c in categorias %}
+      <div class="cat">
+        <div class="cat-head">
+          <h2>{{ c.nome }}</h2>
+          {% if c.nota %}<span class="cat-note">{{ c.nota }}</span>{% endif %}
+        </div>
+        {% for i in c.itens %}
+        <div class="item">
+          <div class="i-main">
+            <span class="i-name">{{ i.nome }}{% if i.destaque %} <span class="i-star">&#9733;</span>{% endif %}</span>
+            <span class="i-dots"></span>
+            {% if i.preco %}<span class="i-price">{{ i.preco|brl }}</span>{% else %}<span class="i-price tbd">{% t 'common.askPrice' %}</span>{% endif %}
+          </div>
+          {% if i.desc %}<div class="i-desc">{{ i.desc }}</div>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </section>
+
+    <img class="divider" src="{% static 'img/pdf/pdf-divider-b.jpg' %}" alt="" />
+
+    <div class="trio">
+      <img src="{% static 'img/pdf/pdf-trio-coffee.jpg' %}" alt="" />
+      <img src="{% static 'img/pdf/pdf-trio-desserts.jpg' %}" alt="" />
+      <img src="{% static 'img/pdf/pdf-trio-drinks.jpg' %}" alt="" />
+    </div>
+
+    <footer class="ph-foot">
+      <div class="foot-order">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.2 14.8l-.4-.2-2.5.7.7-2.4-.3-.4A8 8 0 0 1 12 4zm-2.8 3.7c-.2 0-.5 0-.7.4-.3.4-1 1-1 2.3s1 2.7 1.2 2.9c.1.2 2 3.1 4.9 4.2 2.4 1 2.9.8 3.4.8.5-.1 1.6-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.4-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.8-.8-1.4-1.7-1.5-2-.2-.3 0-.4.1-.6l.4-.5.3-.5v-.5c-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4z"/></svg>
+        {% t 'pdf.order' %}: ({{ WHATSAPP_NUMBER|slice:":2" }}) {{ WHATSAPP_NUMBER|slice:"2:7" }}-{{ WHATSAPP_NUMBER|slice:"7:" }}
+      </div>
+      <div class="foot-contact">{% t 'visit.addr' %}<span class="sep">·</span>@{{ INSTAGRAM_HANDLE }}</div>
+      <div class="foot-meta">{% t 'common.updated' %} {{ atualizado_em|date:"d/m/Y" }} &nbsp;·&nbsp; {% t 'pdf.priceNote' %}</div>
+    </footer>
+  </main>
+</body>
+</html>

@@ -54,3 +54,7 @@ data/skill_router/STOP
 # Fotos originais (raw, locais) - so as versoes web (static/img/fotos/) vao pro repo.
 # Ancorado na raiz (/) senao o git no Windows (case-insensitive) ignora static/img/fotos/.
 /FOTOS/
+
+# Arquivos de origem que o operador solta na raiz (zips do WhatsApp/design).
+# So as versoes web processadas (static/img/...) vao pro repo.
+/*.zip

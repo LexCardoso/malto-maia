@@ -24,6 +24,23 @@ def menu(request):
     )
 
 
+def menu_pdf(request):
+    """Pagina dedicada de impressao do cardapio — charme da marca, pronta pra PDF.
+
+    Autossuficiente (estilo inline) e so com itens disponiveis, pra um impresso limpo.
+    """
+    lang = getattr(request, "LANG", "pt")
+    config = ConfiguracaoSite.get()
+    return render(
+        request,
+        "cardapio/menu_pdf.html",
+        {
+            "categorias": menu_localizado(lang, apenas_disponiveis=True),
+            "atualizado_em": config.cardapio_atualizado_em,
+        },
+    )
+
+
 def menu_qr(request):
     """QR Code (SVG) que aponta para o cardapio online — pra imprimir nas mesas."""
     url = request.build_absolute_uri(reverse("cardapio:menu"))

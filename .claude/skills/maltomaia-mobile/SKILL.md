@@ -72,6 +72,11 @@ aponta o elemento culpado (classe + onde a borda direita passa de 375).
 - ❌ "Resolver" overflow com `overflow-x: hidden` no body (esconde o sintoma, quebra
   sticky; some com conteúdo). Achar e consertar o elemento que estoura.
 - ❌ Largura fixa em px que não cabe em 360-390px.
+- ❌ **`aspect-ratio` + `min-height` num slot de foto**: o `min-height` impõe uma largura
+  mínima (`min-height × ratio`) que estoura a tela no mobile. Use só `aspect-ratio` (a
+  altura sai da largura). Foi o bug do hero/visit a 375px (herdado do design original).
+- ❌ `margin: 0 auto` num grid item **sem `width`**: ele encolhe pro conteúdo em vez de
+  esticar. Dê `width: 100%` se quer que preencha a coluna.
 - ❌ Imagem sem `object-fit` (estica/distorce).
 
 ## Referências

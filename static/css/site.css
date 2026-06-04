@@ -21,6 +21,8 @@
 .brand .b-doceria { font-family: var(--body); font-weight: 800; font-size: 9px; letter-spacing: 0.34em; color: var(--muted); margin-bottom: 4px; }
 .brand .b-name { font-family: var(--display); font-weight: 700; font-size: 19px; line-height: 1; letter-spacing: 0.01em; color: var(--espresso-ink); }
 .brand .b-place { font-family: var(--body); font-weight: 700; font-size: 7.5px; letter-spacing: 0.16em; color: var(--terracota); margin-top: 5px; }
+.brand > span { display: flex; flex-direction: column; line-height: 1; min-width: 0; }
+.brand .b-doceria, .brand .b-name, .brand .b-place { white-space: nowrap; }
 
 .hdr-nav { display: flex; align-items: center; gap: 4px; }
 .hdr-nav a { position: relative; padding: 9px 14px; border-radius: 999px; font-weight: 700; font-size: 15.5px; color: var(--muted); }
@@ -31,9 +33,9 @@
 .lang-toggle a { padding: 7px 13px; font-weight: 800; font-size: 13px; letter-spacing: 0.04em; color: var(--muted); }
 .lang-toggle a.on { background: var(--sun); color: var(--espresso-ink); }
 .hdr-burger { display: none; background: var(--cream-soft); border: 1.5px solid var(--line-strong); border-radius: 12px; width: 46px; height: 46px; align-items: center; justify-content: center; color: var(--espresso); }
-.hdr-drawer { display: none; border-top: 1px solid var(--line); background: var(--cream-soft); }
+.hdr-drawer { display: none; position: absolute; top: 100%; left: 0; right: 0; border-top: 1px solid var(--line); background: var(--cream-soft); box-shadow: 0 18px 34px -18px var(--shadow-deep); }
 .hdr-drawer.open { display: block; }
-.hdr-drawer .wrap { padding-top: 14px; padding-bottom: 20px; display: flex; flex-direction: column; gap: 4px; }
+.hdr-drawer .wrap { height: auto; align-items: stretch; padding-top: 14px; padding-bottom: 20px; display: flex; flex-direction: column; gap: 4px; }
 .hdr-drawer a { text-align: left; padding: 14px 16px; border-radius: 12px; font-family: var(--display); font-weight: 600; font-size: 22px; color: var(--espresso-ink); }
 .hdr-drawer a.active { background: var(--cream-deep); }
 .hdr-drawer .lang-toggle { margin-top: 12px; align-self: flex-start; }

@@ -55,7 +55,7 @@
 .badge.on { background: #E2EFDA; color: #3c5530; }
 .badge.off { background: #F0E2DA; color: #8a4a2c; }
 
-.row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.row-actions { display: flex; gap: 6px; flex-wrap: nowrap; }
 .row-actions form { display: inline; }
 .iconbtn { border: 1px solid var(--line-strong); background: var(--cream); border-radius: var(--r-sm); padding: 6px 10px; font-weight: 700; font-size: 13px; color: var(--espresso); }
 .iconbtn:hover { border-color: var(--espresso); }

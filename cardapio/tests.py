@@ -69,6 +69,19 @@ class LocalizacaoTests(TestCase):
         self.assertEqual(a.pk, b.pk)
         self.assertEqual(ConfiguracaoSite.objects.count(), 1)
 
+    def test_menu_filtra_encomendaveis(self):
+        cat = Categoria.objects.create(slug="z", nome_pt="Z", ordem=50)
+        Item.objects.create(categoria=cat, nome="So Cardapio", preco="5.00", encomendavel=False)
+        Item.objects.create(categoria=cat, nome="Na Encomenda", preco="5.00", encomendavel=True)
+        # cardapio (sem filtro) mostra os dois
+        cardapio = [i["nome"] for c in menu_localizado("pt") for i in c["itens"]]
+        self.assertIn("So Cardapio", cardapio)
+        self.assertIn("Na Encomenda", cardapio)
+        # encomenda (apenas_encomendaveis) esconde o nao-encomendavel
+        enc = [i["nome"] for c in menu_localizado("pt", apenas_encomendaveis=True) for i in c["itens"]]
+        self.assertNotIn("So Cardapio", enc)
+        self.assertIn("Na Encomenda", enc)
+
 
 class QrTests(TestCase):
     def test_qr_svg(self):

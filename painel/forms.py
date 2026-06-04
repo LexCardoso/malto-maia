@@ -10,7 +10,7 @@ class ItemForm(forms.ModelForm):
         model = Item
         fields = [
             "categoria", "nome", "desc_pt", "desc_en",
-            "preco", "destaque", "disponivel", "ordem",
+            "preco", "destaque", "disponivel", "encomendavel", "ordem",
         ]
         widgets = {
             "categoria": forms.Select(attrs={"class": _INPUT}),

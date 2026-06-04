@@ -12,12 +12,19 @@ DESTAQUE_IMAGENS = {
 }
 
 
-def menu_localizado(lang="pt", apenas_disponiveis=False):
-    """Lista de categorias -> dict com nome/nota/itens ja no idioma pedido."""
+def menu_localizado(lang="pt", apenas_disponiveis=False, apenas_encomendaveis=False):
+    """Lista de categorias -> dict com nome/nota/itens ja no idioma pedido.
+
+    apenas_encomendaveis=True (pagina de encomenda): so itens com encomendavel=True.
+    """
     categorias = Categoria.objects.prefetch_related("itens").all()
     resultado = []
     for c in categorias:
-        itens = [i for i in c.itens.all() if i.disponivel or not apenas_disponiveis]
+        itens = [
+            i for i in c.itens.all()
+            if (i.disponivel or not apenas_disponiveis)
+            and (i.encomendavel or not apenas_encomendaveis)
+        ]
         if not itens:
             continue
         resultado.append(

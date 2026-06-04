@@ -43,6 +43,10 @@ class Item(models.Model):
     )
     destaque = models.BooleanField("carro-chefe", default=False)
     disponivel = models.BooleanField(default=True)
+    encomendavel = models.BooleanField(
+        "aparece na encomenda", default=True,
+        help_text="Desligado: some da página de Encomenda (mas continua no cardápio).",
+    )
     ordem = models.PositiveIntegerField(default=0)
     atualizado_em = models.DateTimeField(auto_now=True)
     criado_em = models.DateTimeField(auto_now_add=True)

@@ -9,5 +9,5 @@ def encomenda(request):
     return render(
         request,
         "pedidos/encomenda.html",
-        {"categorias": menu_localizado(lang, apenas_disponiveis=True)},
+        {"categorias": menu_localizado(lang, apenas_disponiveis=True, apenas_encomendaveis=True)},
     )

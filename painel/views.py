@@ -35,6 +35,9 @@ def dashboard(request):
             "itens": itens,
             "n_total": Item.objects.count(),
             "n_disp": Item.objects.filter(disponivel=True).count(),
+            "n_indisp": Item.objects.filter(disponivel=False).count(),
+            "n_tbd": Item.objects.filter(preco__isnull=True).count(),
+            "n_encomenda": Item.objects.filter(encomendavel=True).count(),
             "n_cat": Categoria.objects.count(),
             "config": ConfiguracaoSite.get(),
             "busca": busca,
@@ -78,6 +81,17 @@ def item_toggle(request, pk):
         request,
         f"“{item.nome}” marcado como {'disponível' if item.disponivel else 'indisponível'}.",
     )
+    return redirect("painel:dashboard")
+
+
+@require_POST
+@staff_required
+def item_toggle_encomenda(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+    item.encomendavel = not item.encomendavel
+    item.save(update_fields=["encomendavel", "atualizado_em"])
+    estado = "entra na" if item.encomendavel else "saiu da"
+    messages.success(request, f"“{item.nome}” {estado} encomenda.")
     return redirect("painel:dashboard")
 
 

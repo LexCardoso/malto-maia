@@ -16,21 +16,25 @@
   <header class="adm-top">
     <div class="wrap">
       <a class="brand" href="{% url 'painel:dashboard' %}">
-        <img src="{% static 'img/logo-mark.png' %}" alt="" style="height:34px" />
-        <span><b>Malto Maia</b>Administração</span>
+        <img src="{% static 'img/logo-mark.png' %}" alt="" />
+        <span>
+          <span class="b-doceria">DOCERIA</span>
+          <span class="b-name">Malto Maia</span>
+          <span class="b-place">ADMINISTRAÇÃO</span>
+        </span>
       </a>
       {% if user.is_authenticated %}
       <nav class="adm-nav">
-        <a href="{% url 'painel:dashboard' %}">Cardápio</a>
-        <a href="{% url 'painel:avaliacoes' %}">Avaliações</a>
-        <a href="{% url 'painel:configuracoes' %}">Config</a>
+        <a href="{% url 'painel:dashboard' %}"{% if request.resolver_match.url_name == 'dashboard' %} class="active"{% endif %}>Cardápio</a>
+        <a href="{% url 'painel:avaliacoes' %}"{% if request.resolver_match.url_name == 'avaliacoes' %} class="active"{% endif %}>Avaliações</a>
+        <a href="{% url 'painel:configuracoes' %}"{% if request.resolver_match.url_name == 'configuracoes' %} class="active"{% endif %}>Config</a>
       </nav>
       {% endif %}
       <div class="spacer"></div>
       {% if user.is_authenticated %}
-        <a href="{% url 'core:landing' %}" target="_blank">Ver site ↗</a>
+        <a class="adm-link" href="{% url 'core:landing' %}" target="_blank">Ver site ↗</a>
         <form method="post" action="{% url 'painel:logout' %}" style="display:inline">{% csrf_token %}
-          <button class="iconbtn" type="submit" style="background:transparent;border-color:rgba(247,241,230,0.3);color:var(--cream)">Sair</button>
+          <button class="adm-sair" type="submit">Sair</button>
         </form>
       {% endif %}
     </div>

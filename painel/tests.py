@@ -42,6 +42,14 @@ class AcessoPainelTests(TestCase):
         r = self.client.get(reverse("painel:item_toggle", args=[self.item.pk]))
         self.assertEqual(r.status_code, 405)
 
+    def test_toggle_encomenda(self):
+        self.client.force_login(self.staff)
+        self.assertTrue(self.item.encomendavel)
+        r = self.client.post(reverse("painel:item_toggle_encomenda", args=[self.item.pk]))
+        self.assertEqual(r.status_code, 302)
+        self.item.refresh_from_db()
+        self.assertFalse(self.item.encomendavel)
+
     def test_editar_item_marca_data(self):
         self.client.force_login(self.staff)
         r = self.client.post(

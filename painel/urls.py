@@ -12,6 +12,7 @@ urlpatterns = [
     path("item/novo/", views.item_novo, name="item_novo"),
     path("item/<int:pk>/editar/", views.item_editar, name="item_editar"),
     path("item/<int:pk>/disponibilidade/", views.item_toggle, name="item_toggle"),
+    path("item/<int:pk>/encomenda/", views.item_toggle_encomenda, name="item_toggle_encomenda"),
     path("item/<int:pk>/excluir/", views.item_excluir, name="item_excluir"),
     path("atualizar-data/", views.marcar_atualizado, name="marcar_atualizado"),
     path("configuracoes/", views.configuracoes, name="configuracoes"),

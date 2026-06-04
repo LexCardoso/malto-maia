@@ -156,6 +156,9 @@ STRINGS = {
     "adm.priceField": {"pt": "Preço (R$)", "en": "Price (R$)"},
     "adm.priceTbd": {"pt": "A definir", "en": "To be defined"},
     "adm.newItem": {"pt": "Adicionar item", "en": "Add item"},
+    "adm.encomenda": {"pt": "Encomenda", "en": "Order"},
+    "adm.onOrder": {"pt": "Na encomenda", "en": "On order"},
+    "adm.delete": {"pt": "Excluir", "en": "Delete"},
 }
 
 LANGS = ("pt", "en")

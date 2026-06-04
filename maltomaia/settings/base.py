@@ -1,4 +1,5 @@
 """Shared settings for all environments — Malto Maia."""
+from datetime import timedelta
 from pathlib import Path
 
 import environ
@@ -66,8 +67,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # django-axes: anti-bruteforce no login do painel
-AXES_FAILURE_LIMIT = 5
-AXES_COOLOFF_TIME = 1  # 1 hora de bloqueio
+AXES_FAILURE_LIMIT = 10  # o dono erra a senha as vezes; 10 tentativas antes do bloqueio
+AXES_COOLOFF_TIME = timedelta(minutes=10)  # bloqueio curto (era 1h, longo demais p/ o dono)
 AXES_LOCKOUT_PARAMETERS = ["username", "ip_address"]
 AXES_RESET_ON_SUCCESS = True
 AXES_LOCKOUT_TEMPLATE = "painel/lockout.html"

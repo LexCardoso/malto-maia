@@ -43,10 +43,11 @@
 
     .cats { column-count: 2; column-gap: 36px; }
     .cat { break-inside: avoid; margin-bottom: 18px; }
-    .cat-head { display: flex; align-items: baseline; gap: 8px; border-bottom: 2px solid var(--terracota);
+    .cat-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 3px 8px; border-bottom: 2px solid var(--terracota);
                 padding-bottom: 5px; margin-bottom: 10px; }
     .cat-head h2 { font-family: var(--display); font-weight: 700; font-size: 19.5px; color: var(--espresso-ink); }
-    .cat-note { font-family: var(--script); font-size: 17px; color: var(--leaf); margin-left: auto; white-space: nowrap; }
+    /* nota na propria linha, dentro da coluna (antes vazava: nowrap + margin-left:auto) */
+    .cat-note { font-family: var(--script); font-size: 15.5px; color: var(--leaf); flex-basis: 100%; white-space: normal; line-height: 1.15; }
 
     .item { break-inside: avoid; margin-bottom: 9px; }
     .i-main { display: flex; align-items: baseline; gap: 6px; }

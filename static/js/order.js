@@ -78,23 +78,41 @@
       e.preventDefault();
       return;
     }
-    var lines = [cfg.waHeader || "", ""];
+    var d = new Date();
+    var p2 = function (n) { return (n < 10 ? "0" : "") + n; };
+    // codigo da comanda com SEGUNDOS (2 pedidos no mesmo minuto nao colidem)
+    var code = "MM-" + p2(d.getDate()) + p2(d.getMonth() + 1) + "-" +
+               p2(d.getHours()) + p2(d.getMinutes()) + p2(d.getSeconds());
+    var when = p2(d.getDate()) + "/" + p2(d.getMonth() + 1) + " " +
+               (cfg.waAt || "·") + " " + p2(d.getHours()) + ":" + p2(d.getMinutes());
+
+    var L = [];
+    L.push("☕ *MALTO MAIA*");
+    L.push("_" + (cfg.waSubtitle || "") + "_");
+    L.push("");
+    L.push("🧾 *" + (cfg.waComanda || "Comanda") + ":* " + code);
+    L.push("🗓️ " + when);
+    L.push("➖➖➖➖➖➖➖");
+    L.push("🛒 *" + (cfg.waItems || "") + "*");
     var total = 0, tbd = false;
     ids.forEach(function (id) {
       var it = cart[id];
       var sub = it.price != null ? fmt(it.price * it.qty) : (cfg.askPrice || "");
       if (it.price != null) total += it.price * it.qty; else tbd = true;
-      lines.push("• " + it.qty + "x " + it.name + " — " + sub);
+      L.push("• " + it.qty + "x " + it.name + " — *" + sub + "*");
     });
-    lines.push("");
-    lines.push((cfg.total || "Total") + ": " + fmt(total) + (tbd ? " (+ a definir)" : ""));
+    L.push("➖➖➖➖➖➖➖");
+    L.push("💰 *" + (cfg.total || "Total") + ":* " + fmt(total) +
+           (tbd ? " (+ " + (cfg.askPrice || "") + ")" : ""));
     var nome = (document.getElementById("cli-nome").value || "").trim();
     var obs = (document.getElementById("cli-obs").value || "").trim();
-    if (nome) lines.push((cfg.name || "Nome") + ": " + nome);
-    if (obs) lines.push((cfg.notes || "Obs") + ": " + obs);
+    if (nome || obs) L.push("");
+    if (nome) L.push("🙋 *" + (cfg.waClient || "Cliente") + ":* " + nome);
+    if (obs) L.push("📝 *" + (cfg.notes || "Obs") + ":* " + obs);
+
     this.setAttribute(
       "href",
-      "https://wa.me/" + cfg.wa + "?text=" + encodeURIComponent(lines.join("\n"))
+      "https://wa.me/" + cfg.wa + "?text=" + encodeURIComponent(L.join("\n"))
     );
   });
 

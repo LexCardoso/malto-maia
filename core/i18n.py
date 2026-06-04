@@ -126,6 +126,11 @@ STRINGS = {
     "ord.clear": {"pt": "Limpar", "en": "Clear"},
     "ord.search": {"pt": "Buscar item…", "en": "Search item…"},
     "ord.waHeader": {"pt": "Olá! Gostaria de fazer uma encomenda na Malto Maia:", "en": "Hello! I’d like to place an order at Malto Maia:"},
+    "ord.waSubtitle": {"pt": "Pedido feito pelo site", "en": "Order placed on the website"},
+    "ord.waComanda": {"pt": "Comanda", "en": "Order no."},
+    "ord.waItems": {"pt": "Seu pedido", "en": "Your order"},
+    "ord.waClient": {"pt": "Cliente", "en": "Customer"},
+    "ord.waAt": {"pt": "às", "en": "at"},
 
     # Admin (painel)
     "adm.title": {"pt": "Painel do Cardápio", "en": "Menu Dashboard"},

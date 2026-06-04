@@ -145,8 +145,9 @@
 .visit-line { display: flex; align-items: center; gap: 14px; }
 .visit-line .ic { width: 46px; height: 46px; flex: 0 0 auto; border-radius: 14px; background: var(--sun-soft); color: var(--terracota); display: flex; align-items: center; justify-content: center; }
 .visit-line span.tx { font-size: 17px; font-weight: 600; }
-.visit-map-wrap { position: relative; }
+.visit-map-wrap { display: flex; flex-direction: column; gap: 16px; }
 .visit-shot { aspect-ratio: 4/3; border-radius: var(--r-xl); overflow: hidden; }
+.visit-map { position: relative; }
 .visit-map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
 /* ---------- CONCEPT ---------- */
@@ -155,6 +156,9 @@
 .concept .eyebrow { color: var(--sun-soft); margin-bottom: 10px; }
 .concept h2 { color: var(--cream); }
 .concept p { margin-top: 22px; font-size: clamp(18px, 2.4vw, 22px); line-height: 1.7; color: rgba(247,241,230,0.92); }
+.concept .concept-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(26px, 4vw, 52px); align-items: center; max-width: 1040px; margin: 0 auto; text-align: left; }
+.concept-shot { aspect-ratio: 3/4; border-radius: var(--r-xl); overflow: hidden; box-shadow: 0 24px 50px -24px rgba(0, 0, 0, 0.5); }
+@media (max-width: 760px) { .concept .concept-grid { grid-template-columns: 1fr; text-align: center; } .concept-shot { max-width: 320px; margin: 0 auto; } }
 
 /* ---------- FOOTER ---------- */
 .site-footer { background: var(--espresso-ink); color: var(--cream); margin-top: auto; }

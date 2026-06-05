@@ -44,6 +44,10 @@
 .adm-table { width: 100%; border-collapse: collapse; background: var(--cream-soft); border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
 .adm-table th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
   padding: 12px 14px; border-bottom: 2px solid var(--line); }
+.adm-table th[data-sort] { cursor: pointer; user-select: none; white-space: nowrap; }
+.adm-table th[data-sort]::after { content: " \2195"; opacity: 0.3; font-size: 11px; }
+.adm-table th[data-dir="asc"]::after { content: " \2191"; opacity: 1; color: var(--terracota); }
+.adm-table th[data-dir="desc"]::after { content: " \2193"; opacity: 1; color: var(--terracota); }
 .adm-table td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
 .adm-table tr:last-child td { border-bottom: 0; }
 .adm-table .nm { font-weight: 700; }

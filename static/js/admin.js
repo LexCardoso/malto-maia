@@ -31,4 +31,45 @@
         .then(function () { if (sw) sw.disabled = false; });
     });
   });
+
+  /* ----- Tabela tipo Excel: busca instantanea + ordenar por coluna ----- */
+  var table = document.querySelector(".adm-table");
+  var search = document.querySelector('.adm-toolbar input[type="search"]');
+
+  function cellText(tr, idx) { var td = tr.children[idx]; return td ? td.textContent.trim() : ""; }
+
+  if (table && search) {
+    var form = search.closest("form");
+    if (form) form.addEventListener("submit", function (e) { e.preventDefault(); });
+    search.addEventListener("input", function () {
+      var q = search.value.trim().toLowerCase();
+      [].forEach.call(table.querySelectorAll("tbody tr"), function (tr) {
+        tr.style.display = (!q || tr.textContent.toLowerCase().indexOf(q) >= 0) ? "" : "none";
+      });
+    });
+  }
+
+  if (table) {
+    [].forEach.call(table.querySelectorAll("thead th[data-sort]"), function (th) {
+      var idx = [].indexOf.call(th.parentNode.children, th);
+      var numeric = th.getAttribute("data-sort") === "num";
+      th.addEventListener("click", function () {
+        var asc = th.getAttribute("data-dir") !== "asc";
+        [].forEach.call(th.parentNode.children, function (t) { t.removeAttribute("data-dir"); });
+        th.setAttribute("data-dir", asc ? "asc" : "desc");
+        var tbody = table.querySelector("tbody");
+        var trs = [].slice.call(tbody.querySelectorAll("tr"));
+        trs.sort(function (a, b) {
+          var av = cellText(a, idx), bv = cellText(b, idx);
+          if (numeric) {
+            var an = parseFloat(av.replace(/[^0-9.,-]/g, "").replace(/\./g, "").replace(",", ".")) || 0;
+            var bn = parseFloat(bv.replace(/[^0-9.,-]/g, "").replace(/\./g, "").replace(",", ".")) || 0;
+            return asc ? an - bn : bn - an;
+          }
+          return asc ? av.localeCompare(bv, "pt") : bv.localeCompare(av, "pt");
+        });
+        trs.forEach(function (tr) { tbody.appendChild(tr); });
+      });
+    });
+  }
 })();

@@ -123,6 +123,23 @@ class AvaliacoesPainelTests(TestCase):
         self.av.refresh_from_db()
         self.assertFalse(self.av.aparece)
 
+    def test_editar_avaliacao_ajax(self):
+        self.client.force_login(self.staff)
+        r = self.client.get(
+            reverse("painel:avaliacao_editar", args=[self.av.pk]),
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertIn(b"<form", r.content)
+        r2 = self.client.post(
+            reverse("painel:avaliacao_editar", args=[self.av.pk]),
+            {"autor": "Joao Edit", "texto": "Otimo mesmo", "nota": "5",
+             "fonte": "google", "ordem": "0", "aparece": "on"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+        self.assertEqual(r2.status_code, 200)
+        self.assertIn("Joao Edit", r2.json()["row"])
+
     def test_landing_mostra_so_visiveis(self):
         self.Avaliacao.objects.create(autor="Oculto", texto="x", nota=5, fonte="outro", aparece=False)
         html = self.client.get(reverse("core:landing")).content.decode()

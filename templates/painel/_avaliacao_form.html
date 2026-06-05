@@ -1,0 +1,26 @@
+{% load maltomaia %}
+<h3 class="h-2" style="margin-bottom:16px">{% if novo %}Nova avaliação{% else %}Editar avaliação{% endif %}</h3>
+<form method="post" action="{% if novo %}{% url 'painel:avaliacao_nova' %}{% else %}{% url 'painel:avaliacao_editar' av.pk %}{% endif %}" class="adm-edit-form">
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+  <div class="field">
+    <label for="{{ form.autor.id_for_label }}">Autor</label>
+    {{ form.autor }}
+    {% if form.autor.errors %}<ul class="errorlist">{{ form.autor.errors }}</ul>{% endif %}
+  </div>
+  <div class="field">
+    <label for="{{ form.texto.id_for_label }}">Texto da avaliação</label>
+    {{ form.texto }}
+    {% if form.texto.errors %}<ul class="errorlist">{{ form.texto.errors }}</ul>{% endif %}
+  </div>
+  <div class="row" style="gap:14px;align-items:flex-start;flex-wrap:wrap">
+    <div class="field" style="flex:1;min-width:90px"><label for="{{ form.nota.id_for_label }}">Nota (1 a 5)</label>{{ form.nota }}</div>
+    <div class="field" style="flex:1;min-width:120px"><label for="{{ form.fonte.id_for_label }}">Fonte</label>{{ form.fonte }}</div>
+    <div class="field" style="flex:1;min-width:80px"><label for="{{ form.ordem.id_for_label }}">Ordem</label>{{ form.ordem }}</div>
+  </div>
+  <label class="row" style="gap:8px;cursor:pointer;margin:8px 0">{{ form.aparece }} <span>Aparece no site</span></label>
+  <div class="row" style="gap:10px;margin-top:8px">
+    <button class="btn btn-primary" type="submit">Salvar</button>
+    <button class="btn btn-ghost" type="button" data-close onclick="if(!this.closest('dialog'))location.href='{% url 'painel:avaliacoes' %}'">Cancelar</button>
+  </div>
+</form>

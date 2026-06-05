@@ -202,8 +202,13 @@ def avaliacao_nova(request):
     form = AvaliacaoForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         form.save()
+        if _ajax(request):
+            return JsonResponse({"ok": True, "reload": True})
         messages.success(request, "Avaliação adicionada.")
         return redirect("painel:avaliacoes")
+    if _ajax(request):
+        html = render_to_string("painel/_avaliacao_form.html", {"form": form, "novo": True}, request)
+        return JsonResponse({"ok": False, "form": html}) if request.method == "POST" else HttpResponse(html)
     return render(request, "painel/avaliacao_form.html", {"form": form, "novo": True})
 
 
@@ -213,8 +218,13 @@ def avaliacao_editar(request, pk):
     form = AvaliacaoForm(request.POST or None, instance=av)
     if request.method == "POST" and form.is_valid():
         form.save()
+        if _ajax(request):
+            return JsonResponse({"ok": True, "row": render_to_string("painel/_avaliacao_row.html", {"av": av}, request)})
         messages.success(request, "Avaliação atualizada.")
         return redirect("painel:avaliacoes")
+    if _ajax(request):
+        html = render_to_string("painel/_avaliacao_form.html", {"form": form, "av": av, "novo": False}, request)
+        return JsonResponse({"ok": False, "form": html}) if request.method == "POST" else HttpResponse(html)
     return render(request, "painel/avaliacao_form.html", {"form": form, "av": av, "novo": False})
 
 

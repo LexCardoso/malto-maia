@@ -6,32 +6,8 @@
 {% block body %}
 <div class="adm-wrap" style="max-width:620px">
   <p><a href="{% url 'painel:avaliacoes' %}" class="text-muted">← Avaliações</a></p>
-  <h1 class="h-1">{% if novo %}Nova avaliação{% else %}Editar avaliação{% endif %}</h1>
-
-  <form method="post" class="card card-pad" style="margin-top:20px">
-    {% csrf_token %}
-    {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
-    <div class="field">
-      <label for="{{ form.autor.id_for_label }}">Autor</label>
-      {{ form.autor }}
-      {% if form.autor.errors %}<ul class="errorlist">{{ form.autor.errors }}</ul>{% endif %}
-    </div>
-    <div class="field">
-      <label for="{{ form.texto.id_for_label }}">Texto da avaliação</label>
-      {{ form.texto }}
-      {% if form.texto.errors %}<ul class="errorlist">{{ form.texto.errors }}</ul>{% endif %}
-    </div>
-    <div class="row" style="gap:14px;align-items:flex-start">
-      <div class="field" style="flex:1"><label for="{{ form.nota.id_for_label }}">Nota (1 a 5)</label>{{ form.nota }}</div>
-      <div class="field" style="flex:1"><label for="{{ form.fonte.id_for_label }}">Fonte</label>{{ form.fonte }}</div>
-      <div class="field" style="flex:1"><label for="{{ form.ordem.id_for_label }}">Ordem</label>{{ form.ordem }}</div>
-    </div>
-    <label class="row" style="gap:8px;cursor:pointer;margin:8px 0">{{ form.aparece }} <span>Aparece no site</span></label>
-
-    <div class="row" style="gap:10px;margin-top:8px">
-      <button class="btn btn-primary" type="submit">Salvar</button>
-      <a class="btn btn-ghost" href="{% url 'painel:avaliacoes' %}">Cancelar</a>
-    </div>
-  </form>
+  <div class="card card-pad" style="margin-top:14px">
+    {% include 'painel/_avaliacao_form.html' %}
+  </div>
 </div>
 {% endblock %}

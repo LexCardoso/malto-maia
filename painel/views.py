@@ -5,15 +5,25 @@ Acesso restrito a usuarios staff. Login com django-axes (anti-bruteforce).
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
 from cardapio.images import FotoInvalida, processar_foto
-from cardapio.models import Avaliacao, Categoria, ConfiguracaoSite, Item
+from cardapio.models import (
+    Avaliacao, Categoria, ConfiguracaoSite, FotoSite, Item, TextoSite,
+)
+from core.i18n import STRINGS
+from core.site_content import (
+    FOTOS_SITE, SLUGS_VALIDOS, TEXTOS_EDITAVEIS, foto_site_url,
+    fotos_overrides, textos_overrides,
+)
 
 from .forms import AvaliacaoForm, ConfiguracaoForm, ItemForm
+
+TEXTOS_CHAVES = {c for (c, *_r) in TEXTOS_EDITAVEIS}
+FOTO_META = {s: (sec, lbl) for (s, sec, lbl, _d) in FOTOS_SITE}
 
 staff_required = user_passes_test(
     lambda u: u.is_active and u.is_staff, login_url="painel:login"
@@ -280,3 +290,94 @@ def avaliacao_excluir(request, pk):
     av.delete()
     messages.success(request, f"Avaliação de “{autor}” removida.")
     return redirect("painel:avaliacoes")
+
+
+# ── Conteudo do site (textos do i18n + fotos dos slots) ──
+def _texto_valor(chave, lang, ov):
+    if chave in ov and ov[chave].get(lang):
+        return ov[chave][lang]
+    return STRINGS.get(chave, {}).get(lang, "")
+
+
+def _texto_ctx(chave):
+    ov = textos_overrides()
+    sec, lbl, ml = next(((s, l, m) for (c, s, l, m) in TEXTOS_EDITAVEIS if c == chave), ("", chave, False))
+    return {"tx": {
+        "chave": chave, "secao": sec, "label": lbl, "multiline": ml,
+        "pt": _texto_valor(chave, "pt", ov), "en": _texto_valor(chave, "en", ov),
+        "tem_override": chave in ov,
+    }}
+
+
+def _foto_ctx(slug):
+    sec, lbl = FOTO_META.get(slug, ("", slug))
+    return {"fs": {
+        "slug": slug, "secao": sec, "label": lbl,
+        "url": foto_site_url(slug), "tem_override": slug in fotos_overrides(),
+    }}
+
+
+@staff_required
+def conteudo(request):
+    ov = textos_overrides()
+    textos = [
+        {"chave": c, "secao": sec, "label": lbl, "multiline": ml,
+         "pt": _texto_valor(c, "pt", ov), "en": _texto_valor(c, "en", ov),
+         "tem_override": c in ov}
+        for (c, sec, lbl, ml) in TEXTOS_EDITAVEIS
+    ]
+    fov = fotos_overrides()
+    fotos = [
+        {"slug": s, "secao": sec, "label": lbl,
+         "url": foto_site_url(s), "tem_override": s in fov}
+        for (s, sec, lbl, _d) in FOTOS_SITE
+    ]
+    return render(request, "painel/conteudo.html", {"textos": textos, "fotos": fotos})
+
+
+@staff_required
+def texto_editar(request, chave):
+    if chave not in TEXTOS_CHAVES:
+        raise Http404("texto nao editavel")
+    if request.method == "POST":
+        obj, _ = TextoSite.objects.get_or_create(chave=chave)
+        obj.pt = request.POST.get("pt", "").strip()
+        obj.en = request.POST.get("en", "").strip()
+        obj.save()  # invalida o cache de conteudo
+        if _ajax(request):
+            return JsonResponse({"ok": True, "row": render_to_string("painel/_texto_row.html", _texto_ctx(chave), request)})
+        messages.success(request, "Texto atualizado.")
+        return redirect("painel:conteudo")
+    if _ajax(request):
+        return HttpResponse(render_to_string("painel/_texto_row_edit.html", _texto_ctx(chave), request))
+    return redirect("painel:conteudo")
+
+
+@staff_required
+def foto_site_editar(request, slug):
+    if slug not in SLUGS_VALIDOS:
+        raise Http404("slot invalido")
+    erro_foto = None
+    if request.method == "POST":
+        obj, _ = FotoSite.objects.get_or_create(slug=slug)
+        foto_file = request.FILES.get("foto")
+        if foto_file:
+            try:
+                obj.foto, obj.foto_mime = processar_foto(foto_file)
+                obj.save()
+            except FotoInvalida as e:
+                erro_foto = str(e)
+        elif request.POST.get("foto_clear") == "1":
+            obj.foto, obj.foto_mime = None, ""
+            obj.save()
+        if not erro_foto:
+            if _ajax(request):
+                return JsonResponse({"ok": True, "row": render_to_string("painel/_foto_site_row.html", _foto_ctx(slug), request)})
+            messages.success(request, "Foto do site atualizada.")
+            return redirect("painel:conteudo")
+    ctx = _foto_ctx(slug)
+    ctx["erro_foto"] = erro_foto
+    if _ajax(request):
+        cells = render_to_string("painel/_foto_site_row_edit.html", ctx, request)
+        return JsonResponse({"ok": False, "rowedit": cells}) if request.method == "POST" else HttpResponse(cells)
+    return redirect("painel:conteudo")

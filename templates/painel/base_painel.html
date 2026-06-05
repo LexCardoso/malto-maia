@@ -27,6 +27,7 @@
       <nav class="adm-nav">
         <a href="{% url 'painel:dashboard' %}"{% if request.resolver_match.url_name == 'dashboard' %} class="active"{% endif %}>Cardápio</a>
         <a href="{% url 'painel:avaliacoes' %}"{% if request.resolver_match.url_name == 'avaliacoes' %} class="active"{% endif %}>Avaliações</a>
+        <a href="{% url 'painel:conteudo' %}"{% if request.resolver_match.url_name == 'conteudo' %} class="active"{% endif %}>Conteúdo</a>
         <a href="{% url 'painel:configuracoes' %}"{% if request.resolver_match.url_name == 'configuracoes' %} class="active"{% endif %}>Config</a>
       </nav>
       {% endif %}

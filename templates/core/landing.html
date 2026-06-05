@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="rise hero-art" style="animation-delay:.1s">
-      <div class="ph ph-coffee has-photo hero-shot"><img src="{% static 'img/fotos/hero-cappuccino.jpg' %}" alt="Cappuccino com o sol desenhado na espuma" /></div>
+      <div class="ph ph-coffee has-photo hero-shot"><img src="{% foto_site 'hero' %}" alt="Cappuccino com o sol desenhado na espuma" /></div>
       {% if hero_item %}
       <div class="card card-pad hero-float">
         <div class="row" style="gap:13px">
@@ -64,8 +64,8 @@
 <section class="section about" id="sobre">
   <div class="wrap about-grid">
     <div class="about-photo">
-      <div class="ph has-photo main"><img src="{% static 'img/fotos/fachada.jpg' %}" alt="A casa colonial amarela da Malto Maia" /></div>
-      <div class="ph has-photo about-second"><img src="{% static 'img/fotos/gal-jardim.jpg' %}" alt="O jardim" loading="lazy" /></div>
+      <div class="ph has-photo main"><img src="{% foto_site 'sobre-fachada' %}" alt="A casa colonial amarela da Malto Maia" /></div>
+      <div class="ph has-photo about-second"><img src="{% foto_site 'sobre-jardim' %}" alt="O jardim" loading="lazy" /></div>
     </div>
     <div class="about-text">
       <div class="sec-head"><div class="eyebrow-tag">{% t 'about.eyebrow' %}</div><h2 class="h-1">{% t 'about.title' %}</h2></div>
@@ -112,12 +112,12 @@
     <div class="eyebrow">{% t 'gal.eyebrow' %}</div>
     <h2 class="h-1">{% t 'gal.title' %}</h2>
     <div class="gal-grid">
-      <div class="ph has-photo tall"><img src="{% static 'img/fotos/gal-mesa.jpg' %}" alt="Mesas no jardim" loading="lazy" /></div>
-      <div class="ph has-photo"><img src="{% static 'img/fotos/gal-cafe.jpg' %}" alt="Espresso na hora" loading="lazy" /></div>
-      <div class="ph has-photo"><img src="{% static 'img/fotos/destaque-cappuccino.jpg' %}" alt="Cappuccino Mineiro" loading="lazy" /></div>
-      <div class="ph has-photo"><img src="{% static 'img/fotos/gal-lousa.jpg' %}" alt="A lousa do dia" loading="lazy" /></div>
-      <div class="ph has-photo wide"><img src="{% static 'img/fotos/gal-interior.jpg' %}" alt="Pratos de cerâmica nas paredes" loading="lazy" /></div>
-      <div class="ph has-photo"><img src="{% static 'img/fotos/encomenda.jpg' %}" alt="Doces da casa" loading="lazy" /></div>
+      <div class="ph has-photo tall"><img src="{% foto_site 'galeria-1' %}" alt="Mesas no jardim" loading="lazy" /></div>
+      <div class="ph has-photo"><img src="{% foto_site 'galeria-2' %}" alt="Espresso na hora" loading="lazy" /></div>
+      <div class="ph has-photo"><img src="{% foto_site 'galeria-3' %}" alt="Cappuccino Mineiro" loading="lazy" /></div>
+      <div class="ph has-photo"><img src="{% foto_site 'galeria-4' %}" alt="A lousa do dia" loading="lazy" /></div>
+      <div class="ph has-photo wide"><img src="{% foto_site 'galeria-5' %}" alt="Pratos de cerâmica nas paredes" loading="lazy" /></div>
+      <div class="ph has-photo"><img src="{% foto_site 'galeria-6' %}" alt="Doces da casa" loading="lazy" /></div>
     </div>
   </div>
 </section>
@@ -165,12 +165,12 @@
       <a class="btn btn-ghost btn-sm" href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg> {% t 'ig.follow' %}</a>
     </div>
     <div class="ig-grid">
-      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% static 'img/fotos/hero-cappuccino.jpg' %}" alt="" loading="lazy" /></div></a>
-      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% static 'img/fotos/destaque-torta.jpg' %}" alt="" loading="lazy" /></div></a>
-      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% static 'img/fotos/destaque-pao-de-queijo.jpg' %}" alt="" loading="lazy" /></div></a>
-      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% static 'img/fotos/gal-mesa.jpg' %}" alt="" loading="lazy" /></div></a>
-      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% static 'img/fotos/gal-jardim.jpg' %}" alt="" loading="lazy" /></div></a>
-      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% static 'img/fotos/gal-lousa.jpg' %}" alt="" loading="lazy" /></div></a>
+      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% foto_site 'ig-1' %}" alt="" loading="lazy" /></div></a>
+      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% foto_site 'ig-2' %}" alt="" loading="lazy" /></div></a>
+      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% foto_site 'ig-3' %}" alt="" loading="lazy" /></div></a>
+      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% foto_site 'ig-4' %}" alt="" loading="lazy" /></div></a>
+      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% foto_site 'ig-5' %}" alt="" loading="lazy" /></div></a>
+      <a href="https://instagram.com/{{ INSTAGRAM_HANDLE }}" target="_blank" rel="noopener"><div class="ph has-photo"><img src="{% foto_site 'ig-6' %}" alt="" loading="lazy" /></div></a>
     </div>
   </div>
 </section>
@@ -188,7 +188,7 @@
       <a class="btn btn-solid btn-lg" style="margin-top:28px" target="_blank" rel="noopener" href="{% if TEM_MAPA %}https://www.google.com/maps/dir/?api=1&destination={{ MAP_LAT }},{{ MAP_LNG }}{% else %}https://www.google.com/maps/search/?api=1&query=Malto+Maia+Praia+Seca+Araruama{% endif %}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M20 10c0 5.4-8 12-8 12s-8-6.6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="2.6"/></svg> {% t 'cta.directions' %}</a>
     </div>
     <div class="visit-map-wrap">
-      <div class="ph visit-shot has-photo"><img src="{% static 'img/fotos/visite.jpg' %}" alt="Entrada da Malto Maia, em Praia Seca" loading="lazy" /></div>
+      <div class="ph visit-shot has-photo"><img src="{% foto_site 'visite' %}" alt="Entrada da Malto Maia, em Praia Seca" loading="lazy" /></div>
       {% if TEM_MAPA %}
       <div class="ph visit-shot visit-map"><iframe src="https://www.google.com/maps?q={{ MAP_LAT }},{{ MAP_LNG }}&z=16&output=embed" loading="lazy" title="Mapa Malto Maia" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
       {% else %}
@@ -202,7 +202,7 @@
 {# ---------- CONCEITO ---------- #}
 <section class="section concept">
   <div class="wrap concept-grid">
-    <div class="ph concept-shot has-photo"><img src="{% static 'img/fotos/conceito.jpg' %}" alt="Lousa de boas-vindas da Malto Maia" loading="lazy" /></div>
+    <div class="ph concept-shot has-photo"><img src="{% foto_site 'conceito' %}" alt="Lousa de boas-vindas da Malto Maia" loading="lazy" /></div>
     <div class="concept-text">
       <div class="eyebrow">{% t 'concept.eyebrow' %}</div>
       <h2 class="h-1">{% t 'concept.title' %}</h2>

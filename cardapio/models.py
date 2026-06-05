@@ -7,6 +7,12 @@ from django.db import models
 from django.utils import timezone
 
 
+def _limpa_cache_conteudo():
+    """Invalida o cache dos overrides de texto/foto do site (apos editar no painel)."""
+    from django.core.cache import cache
+    cache.delete_many(["textos_site", "fotos_site_map"])
+
+
 class Categoria(models.Model):
     slug = models.SlugField(max_length=40, unique=True)
     nome_pt = models.CharField("nome (PT)", max_length=80)
@@ -136,3 +142,60 @@ class Avaliacao(models.Model):
     def estrelas(self):
         n = max(0, min(5, int(self.nota)))
         return "★" * n + "☆" * (5 - n)
+
+
+class TextoSite(models.Model):
+    """Override editavel de uma string de UI (core/i18n.py STRINGS).
+
+    O dono edita pelo painel; o tag {% t %} usa o valor daqui se existir, senao
+    cai no i18n. Vazio nos dois idiomas = volta a usar o i18n.
+    """
+
+    chave = models.CharField(max_length=60, unique=True)
+    pt = models.TextField(blank=True)
+    en = models.TextField(blank=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "texto do site"
+        verbose_name_plural = "textos do site"
+
+    def __str__(self):
+        return self.chave
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        _limpa_cache_conteudo()
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        _limpa_cache_conteudo()
+
+
+class FotoSite(models.Model):
+    """Foto do site (hero, fachada, galeria, Visite, Conceito, Instagram...) trocada
+    pelo dono. Guardada NO BANCO como bytes. Vazio = usa o estatico padrao do slot."""
+
+    slug = models.SlugField(max_length=40, unique=True)
+    foto = models.BinaryField(null=True, blank=True, editable=False)
+    foto_mime = models.CharField(max_length=60, blank=True, default="")
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "foto do site"
+        verbose_name_plural = "fotos do site"
+
+    def __str__(self):
+        return self.slug
+
+    @property
+    def tem_foto(self):
+        return bool(self.foto_mime)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        _limpa_cache_conteudo()
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        _limpa_cache_conteudo()

@@ -1,0 +1,44 @@
+{% extends 'painel/base_painel.html' %}
+{% load maltomaia %}
+
+{% block title %}Conteúdo do site · Malto Maia{% endblock %}
+
+{% block body %}
+<div class="adm-wrap">
+  <div class="adm-head">
+    <div>
+      <div class="eyebrow">{% t 'nav.admin' %}</div>
+      <h1 class="h-1">Conteúdo do site</h1>
+      <p class="adm-sub">Edite os textos (PT e EN) e troque as fotos do site — as mudanças aparecem na hora, sem mexer no código.</p>
+    </div>
+  </div>
+
+  <h2 class="h-2" style="margin:26px 0 12px">Textos</h2>
+  <table class="adm-table">
+    <thead>
+      <tr><th>Texto</th><th>Português</th><th>English</th><th style="text-align:right">Ações</th></tr>
+    </thead>
+    <tbody>
+      {% regroup textos by secao as grupos_txt %}
+      {% for g in grupos_txt %}
+      <tr class="adm-cat-row"><td colspan="4">{{ g.grouper }}</td></tr>
+      {% for tx in g.list %}{% include 'painel/_texto_row.html' %}{% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2 class="h-2" style="margin:36px 0 12px">Fotos</h2>
+  <table class="adm-table">
+    <thead>
+      <tr><th>Foto</th><th>Prévia</th><th>Estado</th><th style="text-align:right">Ações</th></tr>
+    </thead>
+    <tbody>
+      {% regroup fotos by secao as grupos_fot %}
+      {% for g in grupos_fot %}
+      <tr class="adm-cat-row"><td colspan="4">{{ g.grouper }}</td></tr>
+      {% for fs in g.list %}{% include 'painel/_foto_site_row.html' %}{% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

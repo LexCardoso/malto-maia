@@ -265,3 +265,80 @@ class FotoProdutoTests(TestCase):
         self.assertFalse(r.json()["ok"])  # erro_foto -> reabre o editor
         self.item.refresh_from_db()
         self.assertFalse(self.item.tem_foto)
+
+
+class ConteudoSiteTests(TestCase):
+    def setUp(self):
+        from django.core.cache import cache
+        cache.clear()
+        U = get_user_model()
+        self.staff = U.objects.create_user("dono", password="senha-forte-123", is_staff=True)
+
+    def _imagem(self):
+        from io import BytesIO
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from PIL import Image
+        buff = BytesIO()
+        Image.new("RGB", (50, 40), (120, 90, 60)).save(buff, format="PNG")
+        return SimpleUploadedFile("f.png", buff.getvalue(), content_type="image/png")
+
+    def test_t_usa_override_do_banco(self):
+        from cardapio.models import TextoSite
+        from core.i18n import STRINGS, t
+        self.assertEqual(t("hero.title", "pt"), STRINGS["hero.title"]["pt"])
+        TextoSite.objects.create(chave="hero.title", pt="Café da roça", en="Country coffee")
+        self.assertEqual(t("hero.title", "pt"), "Café da roça")
+        self.assertEqual(t("hero.title", "en"), "Country coffee")
+
+    def test_pagina_conteudo_exige_staff(self):
+        self.assertEqual(self.client.get(reverse("painel:conteudo")).status_code, 302)
+        self.client.force_login(self.staff)
+        r = self.client.get(reverse("painel:conteudo"))
+        self.assertEqual(r.status_code, 200)
+        self.assertContains(r, "Conteúdo do site")
+
+    def test_editar_texto_salva_e_reflete(self):
+        from core.i18n import t
+        self.client.force_login(self.staff)
+        r = self.client.post(
+            reverse("painel:texto_editar", args=["hero.title"]),
+            {"pt": "Novo título", "en": "New title"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(r.json()["ok"])
+        self.assertEqual(t("hero.title", "pt"), "Novo título")
+
+    def test_chave_nao_editavel_404(self):
+        self.client.force_login(self.staff)
+        r = self.client.post(
+            reverse("painel:texto_editar", args=["nav.home"]),
+            {"pt": "x", "en": "y"}, HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+        self.assertEqual(r.status_code, 404)
+
+    def test_foto_site_upload_e_serve(self):
+        from core.site_content import foto_site_url
+        self.client.force_login(self.staff)
+        r = self.client.post(
+            reverse("painel:foto_site_editar", args=["hero"]),
+            {"foto": self._imagem()}, HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(r.json()["ok"])
+        self.assertIn("/foto-site/hero/", foto_site_url("hero"))
+        sr = self.client.get(reverse("cardapio:foto_site", args=["hero"]))
+        self.assertEqual(sr.status_code, 200)
+        self.assertEqual(sr["Content-Type"], "image/jpeg")
+
+    def test_foto_site_default_quando_vazio(self):
+        from core.site_content import foto_site_url
+        self.assertIn("hero-cappuccino", foto_site_url("hero"))
+
+    def test_foto_site_slug_invalido_404(self):
+        self.client.force_login(self.staff)
+        r = self.client.post(
+            reverse("painel:foto_site_editar", args=["nao-existe"]),
+            {}, HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+        self.assertEqual(r.status_code, 404)

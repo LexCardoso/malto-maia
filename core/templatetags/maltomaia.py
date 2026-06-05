@@ -16,6 +16,13 @@ def t(context, key):
     return _t(key, lang)
 
 
+@register.simple_tag
+def foto_site(slug):
+    """{% foto_site 'hero' %} -> URL da foto do slot (a do banco, se trocada, ou o estatico)."""
+    from core.site_content import foto_site_url
+    return foto_site_url(slug)
+
+
 @register.filter
 def brl(value):
     """Decimal/float -> 'R$ 1.234,56'. Vazio se None."""

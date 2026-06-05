@@ -170,7 +170,14 @@ LANG_DEFAULT = "pt"
 
 
 def t(key, lang="pt"):
-    """Devolve a string no idioma pedido, com fallback pt -> key."""
+    """Devolve a string no idioma pedido. Override do painel (TextoSite) tem
+    prioridade; senao usa STRINGS; fallback final = a propria chave."""
+    from core.site_content import textos_overrides
+    ov = textos_overrides().get(key)
+    if ov:
+        val = ov.get(lang) or ov.get("pt")
+        if val:
+            return val
     entry = STRINGS.get(key)
     if not entry:
         return key

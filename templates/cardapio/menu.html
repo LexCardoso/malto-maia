@@ -47,7 +47,7 @@
       <div class="menu-row {% if not i.disponivel %}off{% endif %}">
         <div class="grow">
           <div class="row" style="gap:9px;flex-wrap:wrap">
-            <span class="nm">{{ i.nome }}</span>
+            {% if i.tem_foto %}<button type="button" class="nm nm-photo" data-foto="{{ i.foto_url }}" aria-label="{{ i.nome }} — {% t 'menu.seePhoto' %}">{{ i.nome }}<svg class="nm-cam" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="3.5"/></svg></button>{% else %}<span class="nm">{{ i.nome }}</span>{% endif %}
             {% if i.destaque %}<span class="chip chip-sun" style="padding:3px 9px;font-size:11.5px">★ {% t 'common.signature' %}</span>{% endif %}
             {% if not i.disponivel %}<span class="chip" style="padding:3px 9px;font-size:11.5px;background:var(--cream-deep);color:var(--muted)">{% t 'common.unavailable' %}</span>{% endif %}
           </div>
@@ -72,17 +72,35 @@
 {% endblock %}
 
 {% block extra_scripts %}
+<dialog id="lightbox" class="lightbox no-print">
+  <button type="button" class="lightbox-close" aria-label="{% t 'menu.close' %}">&times;</button>
+  <img alt="" />
+</dialog>
 <script>
   (function () {
     var links = [].slice.call(document.querySelectorAll('.menu-quicknav a'));
     var cats = [].slice.call(document.querySelectorAll('.menu-cat'));
-    if (!cats.length) return;
-    function spy() {
-      var cur = cats[0];
-      cats.forEach(function (c) { if (c.getBoundingClientRect().top - 160 <= 0) cur = c; });
-      links.forEach(function (a) { a.classList.toggle('active', a.getAttribute('href') === '#' + cur.id); });
+    if (cats.length) {
+      var spy = function () {
+        var cur = cats[0];
+        cats.forEach(function (c) { if (c.getBoundingClientRect().top - 160 <= 0) cur = c; });
+        links.forEach(function (a) { a.classList.toggle('active', a.getAttribute('href') === '#' + cur.id); });
+      };
+      window.addEventListener('scroll', spy, { passive: true }); spy();
     }
-    window.addEventListener('scroll', spy, { passive: true }); spy();
+    // Clicar no nome (quando tem foto) abre a foto por cima, com X, sem recarregar.
+    var lb = document.getElementById('lightbox');
+    if (lb && typeof lb.showModal === 'function') {
+      var big = lb.querySelector('img');
+      document.querySelectorAll('.nm-photo').forEach(function (b) {
+        b.addEventListener('click', function () {
+          big.src = b.getAttribute('data-foto') || '';
+          big.alt = b.textContent || '';
+          lb.showModal();
+        });
+      });
+      lb.addEventListener('click', function (e) { if (e.target !== big) lb.close(); });
+    }
   })();
 </script>
 {% endblock %}

@@ -1,8 +1,12 @@
 """Helpers de leitura do cardapio, ja localizados (PT/EN)."""
-from .models import Categoria
+from django.db.models import Prefetch
+from django.templatetags.static import static
+from django.urls import reverse
 
-# Foto (em static/) de cada carro-chefe da landing, por nome do item. Item sem
-# entrada aqui cai no placeholder .ph (ex.: torta de coco — foto ainda pendente).
+from .models import Categoria, Item
+
+# Placeholder (em static/) de cada carro-chefe, por nome do item. So entra em acao
+# quando o produto AINDA nao tem foto propria no banco (item.tem_foto == False).
 DESTAQUE_IMAGENS = {
     "Cappuccino Mineiro": "img/fotos/destaque-cappuccino.jpg",
     "Pão de Queijo": "img/fotos/destaque-pao-de-queijo.jpg",
@@ -12,12 +16,33 @@ DESTAQUE_IMAGENS = {
 }
 
 
+def _foto_url(item):
+    """URL publica da foto do produto (ou "" se nao tiver). Com cache-buster pela
+    data de atualizacao, pra trocar a foto invalidar o cache do navegador."""
+    if not item.tem_foto:
+        return ""
+    v = int(item.atualizado_em.timestamp()) if item.atualizado_em else 0
+    return f"{reverse('cardapio:item_foto', args=[item.id])}?v={v}"
+
+
+def _destaque_imagem(item):
+    """Foto do destaque: a do proprio produto se existir; senao o placeholder fixo."""
+    propria = _foto_url(item)
+    if propria:
+        return propria
+    nome_static = DESTAQUE_IMAGENS.get(item.nome, "")
+    return static(nome_static) if nome_static else ""
+
+
 def menu_localizado(lang="pt", apenas_disponiveis=False, apenas_encomendaveis=False):
     """Lista de categorias -> dict com nome/nota/itens ja no idioma pedido.
 
     apenas_encomendaveis=True (pagina de encomenda): so itens com encomendavel=True.
+    Os bytes da foto NAO sao carregados aqui (defer) — so o foto_url/tem_foto.
     """
-    categorias = Categoria.objects.prefetch_related("itens").all()
+    categorias = Categoria.objects.prefetch_related(
+        Prefetch("itens", queryset=Item.objects.defer("foto"))
+    ).all()
     resultado = []
     for c in categorias:
         itens = [
@@ -40,6 +65,8 @@ def menu_localizado(lang="pt", apenas_disponiveis=False, apenas_encomendaveis=Fa
                         "preco": i.preco,
                         "destaque": i.destaque,
                         "disponivel": i.disponivel,
+                        "tem_foto": i.tem_foto,
+                        "foto_url": _foto_url(i),
                     }
                     for i in itens
                 ],
@@ -50,19 +77,19 @@ def menu_localizado(lang="pt", apenas_disponiveis=False, apenas_encomendaveis=Fa
 
 def destaques_localizados(lang="pt", limite=4):
     """Carros-chefe disponiveis para a landing."""
-    from .models import Item
-
     itens = (
         Item.objects.filter(destaque=True, disponivel=True)
-        .select_related("categoria")[:limite]
+        .select_related("categoria")
+        .defer("foto")[:limite]
     )
     return [
         {
+            "id": i.id,
             "nome": i.nome,
             "desc": i.desc(lang),
             "preco": i.preco,
             "categoria": i.categoria.nome(lang),
-            "imagem": DESTAQUE_IMAGENS.get(i.nome, ""),
+            "imagem_url": _destaque_imagem(i),
         }
         for i in itens
     ]

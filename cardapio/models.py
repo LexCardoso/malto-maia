@@ -47,6 +47,10 @@ class Item(models.Model):
         "aparece na encomenda", default=True,
         help_text="Desligado: some da página de Encomenda (mas continua no cardápio).",
     )
+    # Foto do produto guardada NO BANCO (Render free nao tem disco persistente).
+    # Os bytes ja entram redimensionados/comprimidos (ver painel._salvar_foto).
+    foto = models.BinaryField(null=True, blank=True, editable=False)
+    foto_mime = models.CharField(max_length=60, blank=True, default="")
     ordem = models.PositiveIntegerField(default=0)
     atualizado_em = models.DateTimeField(auto_now=True)
     criado_em = models.DateTimeField(auto_now_add=True)
@@ -61,6 +65,11 @@ class Item(models.Model):
 
     def desc(self, lang="pt"):
         return self.desc_en if lang == "en" and self.desc_en else self.desc_pt
+
+    @property
+    def tem_foto(self):
+        """True se o item tem foto — checa o mime (barato), sem carregar os bytes."""
+        return bool(self.foto_mime)
 
 
 class ConfiguracaoSite(models.Model):

@@ -188,3 +188,80 @@ class ConfiguracoesPainelTests(TestCase):
         cfg = ConfiguracaoSite.get()
         self.assertTrue(cfg.tem_mapa)
         self.assertEqual(cfg.tripadvisor_url, "https://www.tripadvisor.com/x")
+
+
+class FotoProdutoTests(TestCase):
+    def setUp(self):
+        self.cat = Categoria.objects.create(slug="q", nome_pt="Quentes", ordem=0)
+        self.item = Item.objects.create(
+            categoria=self.cat, nome="Cappuccino", preco="12.00", destaque=True
+        )
+        U = get_user_model()
+        self.staff = U.objects.create_user("dono", password="senha-forte-123", is_staff=True)
+
+    def _imagem(self, cor=(200, 120, 60), tam=(40, 30)):
+        from io import BytesIO
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from PIL import Image
+        buff = BytesIO()
+        Image.new("RGB", tam, cor).save(buff, format="PNG")
+        return SimpleUploadedFile("foto.png", buff.getvalue(), content_type="image/png")
+
+    def _editar(self, **extra):
+        dados = {"categoria": self.cat.pk, "nome": self.item.nome, "desc_pt": "",
+                 "desc_en": "", "preco": "12.00", "ordem": "0",
+                 "disponivel": "on", "encomendavel": "on", "destaque": "on"}
+        dados.update(extra)
+        return self.client.post(
+            reverse("painel:item_editar", args=[self.item.pk]), dados,
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+    def test_upload_guarda_foto_como_jpeg(self):
+        self.client.force_login(self.staff)
+        r = self._editar(foto=self._imagem())
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(r.json()["ok"])
+        self.item.refresh_from_db()
+        self.assertTrue(self.item.tem_foto)
+        self.assertEqual(self.item.foto_mime, "image/jpeg")
+        self.assertEqual(bytes(self.item.foto)[:2], b"\xff\xd8")  # cabecalho JPEG
+
+    def test_serve_foto_publica(self):
+        self.client.force_login(self.staff)
+        self._editar(foto=self._imagem())
+        r = self.client.get(reverse("cardapio:item_foto", args=[self.item.pk]))
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r["Content-Type"], "image/jpeg")
+        self.assertIn("max-age", r["Cache-Control"])
+
+    def test_serve_404_sem_foto(self):
+        r = self.client.get(reverse("cardapio:item_foto", args=[self.item.pk]))
+        self.assertEqual(r.status_code, 404)
+
+    def test_remover_foto(self):
+        self.client.force_login(self.staff)
+        self._editar(foto=self._imagem())
+        self.item.refresh_from_db()
+        self.assertTrue(self.item.tem_foto)
+        self._editar(foto_clear="1")
+        self.item.refresh_from_db()
+        self.assertFalse(self.item.tem_foto)
+
+    def test_menu_inclui_foto_url(self):
+        from cardapio.services import menu_localizado
+        self.client.force_login(self.staff)
+        self._editar(foto=self._imagem())
+        it = menu_localizado("pt")[0]["itens"][0]
+        self.assertTrue(it["tem_foto"])
+        self.assertIn(f"/item/{self.item.pk}/foto/", it["foto_url"])
+
+    def test_imagem_invalida_nao_quebra(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        self.client.force_login(self.staff)
+        ruim = SimpleUploadedFile("x.png", b"isto nao e imagem", content_type="image/png")
+        r = self._editar(foto=ruim)
+        self.assertEqual(r.status_code, 200)
+        self.assertFalse(r.json()["ok"])  # erro_foto -> reabre o editor
+        self.item.refresh_from_db()
+        self.assertFalse(self.item.tem_foto)

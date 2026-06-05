@@ -47,7 +47,7 @@
       {% if hero_item %}
       <div class="card card-pad hero-float">
         <div class="row" style="gap:13px">
-          <div class="ph has-photo thumb">{% if hero_item.imagem %}<img src="{% static hero_item.imagem %}" alt="" />{% endif %}</div>
+          <div class="ph has-photo thumb">{% if hero_item.imagem_url %}<img src="{{ hero_item.imagem_url }}" alt="" />{% endif %}</div>
           <div style="min-width:0">
             <div class="nm">{{ hero_item.nome }}</div>
             <div class="pr">{% if hero_item.preco %}{{ hero_item.preco|brl }}{% else %}{% t 'common.askPrice' %}{% endif %}</div>
@@ -93,7 +93,7 @@
       {% for d in destaques %}
       <article class="card hl-card">
         <div class="shot">
-          <div class="ph ph-coffee {% if d.imagem %}has-photo{% endif %}">{% if d.imagem %}<img src="{% static d.imagem %}" alt="{{ d.nome }}" loading="lazy" />{% endif %}</div>
+          <div class="ph ph-coffee {% if d.imagem_url %}has-photo{% endif %}">{% if d.imagem_url %}<img src="{{ d.imagem_url }}" alt="{{ d.nome }}" loading="lazy" />{% endif %}</div>
         </div>
         <div class="card-pad">
           <h3>{{ d.nome }}</h3>

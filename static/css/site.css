@@ -118,6 +118,14 @@
 .lightbox-close { position: fixed; top: 16px; right: 18px; width: 48px; height: 48px; border-radius: 999px; border: none; background: rgba(247, 241, 230, 0.16); color: var(--cream); font-size: 28px; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background 0.15s; }
 .lightbox-close:hover { background: rgba(247, 241, 230, 0.3); }
 
+/* Nome do item com foto: clicavel (abre o lightbox). Mantem o visual do nome,
+   so adiciona um icone discreto de camera + cursor de zoom — layout intacto. */
+.menu-row .nm-photo { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0;
+  cursor: zoom-in; display: inline-flex; align-items: center; gap: 6px; text-align: left; }
+.menu-row .nm-photo .nm-cam { color: var(--sun-deep); opacity: 0.9; flex: 0 0 auto; }
+.menu-row .nm-photo:hover { color: var(--terracota); }
+.menu-row .nm-photo:hover .nm-cam { color: var(--terracota); }
+
 /* ---------- ORDER STRIP (terracota) ---------- */
 .order-strip { position: relative; overflow: hidden;
   background: linear-gradient(135deg, var(--terracota), var(--terracota-d));

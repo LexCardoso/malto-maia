@@ -11,6 +11,7 @@
     if (token) h["X-CSRFToken"] = token;
     return h;
   }
+  var CAM_SVG = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
 
   /* ----- Toggle sem reload (delegado) ----- */
   document.addEventListener("submit", function (e) {
@@ -65,6 +66,7 @@
     var body = new FormData();
     [].forEach.call(row.querySelectorAll("[name]"), function (el) {
       if (el.name === "csrfmiddlewaretoken") return;
+      if (el.type === "file") { if (el.files && el.files[0]) body.append(el.name, el.files[0]); return; }
       body.append(el.name, el.value);
     });
     // switches/estrela: presentes so quando ligados (semantica de checkbox)
@@ -102,9 +104,42 @@
     if (toggle) { e.preventDefault(); toggle.classList.toggle("on"); return; }
     var saveBtn = e.target.closest(".js-ed-save");
     if (saveBtn) { e.preventDefault(); saveEditor(saveBtn); return; }
+    var pick = e.target.closest(".js-foto-pick");
+    if (pick && editingRow) {
+      e.preventDefault();
+      var inp = editingRow.querySelector(".js-foto-input");
+      if (inp) inp.click();
+      return;
+    }
+    var rem = e.target.closest(".js-foto-remove");
+    if (rem && editingRow) {
+      e.preventDefault();
+      var fin = editingRow.querySelector(".js-foto-input"); if (fin) fin.value = "";
+      var clr = editingRow.querySelector('input[name="foto_clear"]'); if (clr) clr.value = "1";
+      var thumb = editingRow.querySelector("[data-foto-thumb]");
+      if (thumb) { thumb.classList.add("empty"); thumb.innerHTML = CAM_SVG; }
+      rem.setAttribute("hidden", "");
+      return;
+    }
     if (e.target.closest(".js-ed-cancel") || e.target.closest("[data-close]")) {
       if (editingRow) { e.preventDefault(); closeEditor(true); }
     }
+  });
+
+  // Preview da foto escolhida (sem upload ainda): mostra na miniatura.
+  document.addEventListener("change", function (e) {
+    var inp = e.target.closest ? e.target.closest(".js-foto-input") : null;
+    if (!inp || !editingRow) return;
+    var file = inp.files && inp.files[0];
+    if (!file) return;
+    var clr = editingRow.querySelector('input[name="foto_clear"]'); if (clr) clr.value = "";
+    var thumb = editingRow.querySelector("[data-foto-thumb]");
+    if (thumb) {
+      thumb.classList.remove("empty");
+      thumb.innerHTML = '<img alt="" />';
+      thumb.firstChild.src = URL.createObjectURL(file);
+    }
+    var rem = editingRow.querySelector(".js-foto-remove"); if (rem) rem.removeAttribute("hidden");
   });
 
   // Teclado: Enter salva (fora de textarea), Esc cancela

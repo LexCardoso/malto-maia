@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
+from cardapio.images import FotoInvalida, processar_foto
 from cardapio.models import Avaliacao, Categoria, ConfiguracaoSite, Item
 
 from .forms import AvaliacaoForm, ConfiguracaoForm, ItemForm
@@ -71,26 +72,37 @@ def item_novo(request):
 def item_editar(request, pk):
     item = get_object_or_404(Item, pk=pk)
     form = ItemForm(request.POST or None, instance=item)
+    erro_foto = None
     if request.method == "POST" and form.is_valid():
-        form.save()
-        ConfiguracaoSite.get().marcar_atualizado_hoje()
-        if _ajax(request):
-            return JsonResponse({
-                "ok": True,
-                "row": render_to_string("painel/_item_row.html", {"i": item}, request),
-                "stats": {
-                    "disp": Item.objects.filter(disponivel=True).count(),
-                    "indisp": Item.objects.filter(disponivel=False).count(),
-                    "enc": Item.objects.filter(encomendavel=True).count(),
-                    "tbd": Item.objects.filter(preco__isnull=True).count(),
-                },
-            })
-        messages.success(request, "Item atualizado.")
-        return redirect("painel:dashboard")
+        obj = form.save(commit=False)
+        foto_file = request.FILES.get("foto")
+        if foto_file:
+            try:
+                obj.foto, obj.foto_mime = processar_foto(foto_file)
+            except FotoInvalida as e:
+                erro_foto = str(e)
+        elif request.POST.get("foto_clear") == "1":
+            obj.foto, obj.foto_mime = None, ""
+        if not erro_foto:
+            obj.save()
+            ConfiguracaoSite.get().marcar_atualizado_hoje()
+            if _ajax(request):
+                return JsonResponse({
+                    "ok": True,
+                    "row": render_to_string("painel/_item_row.html", {"i": item}, request),
+                    "stats": {
+                        "disp": Item.objects.filter(disponivel=True).count(),
+                        "indisp": Item.objects.filter(disponivel=False).count(),
+                        "enc": Item.objects.filter(encomendavel=True).count(),
+                        "tbd": Item.objects.filter(preco__isnull=True).count(),
+                    },
+                })
+            messages.success(request, "Item atualizado.")
+            return redirect("painel:dashboard")
     if _ajax(request):
         cells = render_to_string(
             "painel/_item_row_edit.html",
-            {"form": form, "item": item, "categorias": Categoria.objects.all()},
+            {"form": form, "item": item, "categorias": Categoria.objects.all(), "erro_foto": erro_foto},
             request,
         )
         return JsonResponse({"ok": False, "rowedit": cells}) if request.method == "POST" else HttpResponse(cells)

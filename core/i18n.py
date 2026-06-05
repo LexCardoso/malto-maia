@@ -99,6 +99,7 @@ STRINGS = {
     "menu.qrHint": {"pt": "Aponte a câmera para abrir o cardápio no celular.", "en": "Point your camera to open the menu on your phone."},
     "menu.jump": {"pt": "Ir para", "en": "Jump to"},
     "menu.close": {"pt": "Fechar", "en": "Close"},
+    "menu.seePhoto": {"pt": "ver foto", "en": "see photo"},
 
     # Menu PDF (pagina de impressao)
     "pdf.house": {"pt": "Doceria & Cafeteria", "en": "Coffee & Sweets House"},
@@ -159,6 +160,9 @@ STRINGS = {
     "adm.encomenda": {"pt": "Encomenda", "en": "Order"},
     "adm.onOrder": {"pt": "Na encomenda", "en": "On order"},
     "adm.delete": {"pt": "Excluir", "en": "Delete"},
+    "adm.photoAdd": {"pt": "Adicionar foto", "en": "Add photo"},
+    "adm.photoChange": {"pt": "Trocar foto", "en": "Change photo"},
+    "adm.photoRemove": {"pt": "Remover", "en": "Remove"},
 }
 
 LANGS = ("pt", "en")

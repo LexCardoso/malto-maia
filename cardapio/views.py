@@ -2,11 +2,12 @@
 import io
 
 import segno
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.http import http_date
 
-from .models import ConfiguracaoSite
+from .models import ConfiguracaoSite, Item
 from .services import menu_localizado
 
 
@@ -39,6 +40,22 @@ def menu_pdf(request):
             "atualizado_em": config.cardapio_atualizado_em,
         },
     )
+
+
+def item_foto(request, pk):
+    """Serve a foto do produto guardada no banco (bytes). Publica (aparece no site)."""
+    item = (
+        Item.objects.filter(pk=pk)
+        .only("foto", "foto_mime", "atualizado_em")
+        .first()
+    )
+    if not item or not item.foto:
+        raise Http404("item sem foto")
+    resp = HttpResponse(bytes(item.foto), content_type=item.foto_mime or "image/jpeg")
+    resp["Cache-Control"] = "public, max-age=86400"
+    if item.atualizado_em:
+        resp["Last-Modified"] = http_date(item.atualizado_em.timestamp())
+    return resp
 
 
 def menu_qr(request):

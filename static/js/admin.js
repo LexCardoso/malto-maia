@@ -1,4 +1,4 @@
-/* Malto Maia - admin: toggles AJAX, edicao no modal, tabela tipo Excel. */
+/* Malto Maia - admin: toggles AJAX, edicao IN-LINE na linha, buscar/filtrar/ordenar. */
 (function () {
   "use strict";
 
@@ -12,7 +12,7 @@
     return h;
   }
 
-  /* ----- Toggle sem reload (delegado: vale tambem p/ linhas recriadas) ----- */
+  /* ----- Toggle sem reload (delegado) ----- */
   document.addEventListener("submit", function (e) {
     var form = e.target.closest ? e.target.closest("form.js-toggle") : null;
     if (!form) return;
@@ -34,60 +34,96 @@
       .then(function () { if (sw) sw.disabled = false; });
   });
 
-  /* ----- Editar no box (modal) ----- */
-  var modal = document.getElementById("edit-modal");
-  var modalBody = document.getElementById("edit-modal-body");
-  var editRow = null;
+  /* ----- Editar NA LINHA (in-place; a linha fica mais escura) ----- */
+  var editingRow = null, editingHTML = "";
+
+  function closeEditor(restore) {
+    if (!editingRow) return;
+    if (restore) editingRow.outerHTML = editingHTML;
+    editingRow = null; editingHTML = "";
+  }
 
   document.addEventListener("click", function (e) {
     if (!e.target.closest) return;
     var link = e.target.closest(".js-edit");
-    if (link && modal) {
+    if (link) {
       e.preventDefault();
-      editRow = link.closest("tr");
+      var tr = link.closest("tr");
+      if (editingRow && editingRow !== tr) closeEditor(true);
+      editingRow = tr;
+      editingHTML = tr.outerHTML;
+      var cols = tr.children.length;
       fetch(link.getAttribute("href"), { headers: ajaxHeaders() })
         .then(function (r) { return r.text(); })
-        .then(function (html) { modalBody.innerHTML = html; modal.showModal(); });
+        .then(function (html) {
+          tr.classList.add("editing");
+          tr.innerHTML = '<td colspan="' + cols + '" class="edit-cell">' + html + "</td>";
+          var f = tr.querySelector("input, select, textarea");
+          if (f) f.focus();
+        });
       return;
     }
-    if (modal && modal.open && (e.target === modal || e.target.closest("[data-close]"))) {
-      modal.close();
-    }
+    if (e.target.closest("[data-close]") && editingRow) { e.preventDefault(); closeEditor(true); }
   });
 
-  if (modal) {
-    modal.addEventListener("submit", function (e) {
-      var form = e.target;
-      e.preventDefault();
-      fetch(form.action, { method: "POST", headers: ajaxHeaders(csrf(form)), body: new FormData(form) })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          if (data.ok) {
-            if (data.reload) { location.reload(); return; }
-            if (data.row && editRow) editRow.outerHTML = data.row;
-            modal.close();
-          } else if (data.form) {
-            modalBody.innerHTML = data.form;
-          }
-        });
-    });
-  }
+  document.addEventListener("submit", function (e) {
+    var form = e.target.closest ? e.target.closest(".adm-edit-form") : null;
+    if (!form) return;
+    e.preventDefault();
+    fetch(form.action, { method: "POST", headers: ajaxHeaders(csrf(form)), body: new FormData(form) })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.ok) {
+          if (data.reload) { location.reload(); return; }
+          if (data.row && editingRow) { editingRow.outerHTML = data.row; editingRow = null; editingHTML = ""; }
+        } else if (data.form && editingRow) {
+          var cell = editingRow.querySelector(".edit-cell");
+          if (cell) cell.innerHTML = data.form;
+        }
+      });
+  });
 
-  /* ----- Tabela tipo Excel: busca instantanea + ordenar por coluna ----- */
+  /* ----- Tabela tipo Excel: buscar + filtrar categoria + ordenar ----- */
   var table = document.querySelector(".adm-table");
   var search = document.querySelector('.adm-toolbar input[type="search"]');
+  var catFilter = document.getElementById("filter-cat");
   function cellText(tr, idx) { var td = tr.children[idx]; return td ? td.textContent.trim() : ""; }
+  function rows() { return table ? [].slice.call(table.querySelectorAll("tbody tr")) : []; }
 
-  if (table && search) {
-    var sform = search.closest("form");
-    if (sform) sform.addEventListener("submit", function (e) { e.preventDefault(); });
-    search.addEventListener("input", function () {
-      var q = search.value.trim().toLowerCase();
-      [].forEach.call(table.querySelectorAll("tbody tr"), function (tr) {
-        tr.style.display = (!q || tr.textContent.toLowerCase().indexOf(q) >= 0) ? "" : "none";
-      });
+  var catIdx = -1;
+  if (table) {
+    [].forEach.call(table.querySelectorAll("thead th"), function (th, i) {
+      if (th.getAttribute("data-col") === "cat") catIdx = i;
     });
   }
+
+  // popula o filtro de categoria com os valores presentes na tabela
+  if (table && catFilter && catIdx >= 0) {
+    var cats = {};
+    rows().forEach(function (tr) { var v = cellText(tr, catIdx); if (v) cats[v] = 1; });
+    Object.keys(cats).sort(function (a, b) { return a.localeCompare(b, "pt"); }).forEach(function (c) {
+      var o = document.createElement("option");
+      o.value = c.toLowerCase(); o.textContent = c;
+      catFilter.appendChild(o);
+    });
+  }
+
+  function applyFilters() {
+    var q = search ? search.value.trim().toLowerCase() : "";
+    var cat = catFilter ? catFilter.value : "";
+    rows().forEach(function (tr) {
+      if (tr.classList.contains("editing")) return;
+      var okText = !q || tr.textContent.toLowerCase().indexOf(q) >= 0;
+      var okCat = !cat || (catIdx >= 0 && cellText(tr, catIdx).toLowerCase() === cat);
+      tr.style.display = okText && okCat ? "" : "none";
+    });
+  }
+  if (search) {
+    var sf = search.closest("form");
+    if (sf) sf.addEventListener("submit", function (e) { e.preventDefault(); });
+    search.addEventListener("input", applyFilters);
+  }
+  if (catFilter) catFilter.addEventListener("change", applyFilters);
 
   if (table) {
     [].forEach.call(table.querySelectorAll("thead th[data-sort]"), function (th) {

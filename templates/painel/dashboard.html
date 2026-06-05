@@ -28,6 +28,7 @@
 
   <form class="adm-toolbar" method="get">
     <input class="adm-input grow" type="search" name="q" value="{{ busca }}" placeholder="{% t 'adm.search' %}" />
+    <select class="adm-input" id="filter-cat" style="max-width:220px"><option value="">Todas as categorias</option></select>
     <a class="btn btn-ghost btn-sm" href="{% url 'cardapio:menu_pdf' %}" target="_blank">{% t 'adm.exportPdf' %}</a>
     <a class="btn btn-ghost btn-sm" href="{% url 'cardapio:menu_qr' %}" target="_blank">{% t 'adm.qr' %}</a>
     <a class="btn btn-primary btn-sm" href="{% url 'painel:item_novo' %}">+ {% t 'adm.add' %}</a>
@@ -37,7 +38,7 @@
     <thead>
       <tr>
         <th data-sort="text">{% t 'adm.col.item' %}</th>
-        <th data-sort="text">{% t 'adm.col.cat' %}</th>
+        <th data-sort="text" data-col="cat">{% t 'adm.col.cat' %}</th>
         <th data-sort="num">{% t 'adm.col.price' %}</th>
         <th class="center">{% t 'adm.available' %}</th>
         <th class="center">{% t 'adm.encomenda' %}</th>

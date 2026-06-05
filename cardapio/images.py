@@ -10,7 +10,10 @@ from PIL import Image, ImageOps
 
 MAX_LADO = 1280
 QUALIDADE = 82
-TAMANHO_MAX_ENTRADA = 12 * 1024 * 1024  # 12 MB no upload cru
+# Rede de seguranca: o navegador ja recorta/encolhe antes de enviar (cropper.js),
+# entao o servidor quase sempre recebe uma imagem pequena. O limite alto cobre o
+# caso de JS desligado/falho — o Pillow reduz de qualquer jeito.
+TAMANHO_MAX_ENTRADA = 25 * 1024 * 1024  # 25 MB no upload cru
 
 
 class FotoInvalida(Exception):

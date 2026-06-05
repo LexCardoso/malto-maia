@@ -66,7 +66,11 @@
     var body = new FormData();
     [].forEach.call(row.querySelectorAll("[name]"), function (el) {
       if (el.name === "csrfmiddlewaretoken") return;
-      if (el.type === "file") { if (el.files && el.files[0]) body.append(el.name, el.files[0]); return; }
+      if (el.type === "file") {
+        if (el._croppedBlob) body.append(el.name, el._croppedBlob, "foto.jpg");
+        else if (el.files && el.files[0]) body.append(el.name, el.files[0]);
+        return;
+      }
       body.append(el.name, el.value);
     });
     // switches/estrela: presentes so quando ligados (semantica de checkbox)
@@ -126,20 +130,23 @@
     }
   });
 
-  // Preview da foto escolhida (sem upload ainda): mostra na miniatura.
+  // Foto escolhida -> abre o editor de recorte; o resultado (ja encolhido) vira o upload.
   document.addEventListener("change", function (e) {
     var inp = e.target.closest ? e.target.closest(".js-foto-input") : null;
     if (!inp || !editingRow) return;
     var file = inp.files && inp.files[0];
     if (!file) return;
-    var clr = editingRow.querySelector('input[name="foto_clear"]'); if (clr) clr.value = "";
-    var thumb = editingRow.querySelector("[data-foto-thumb]");
-    if (thumb) {
-      thumb.classList.remove("empty");
-      thumb.innerHTML = '<img alt="" />';
-      thumb.firstChild.src = URL.createObjectURL(file);
+    var row = editingRow;
+    function aplicar(blob) {
+      if (!blob) { inp._croppedBlob = null; inp.value = ""; return; }  // cancelou: nao troca nada
+      inp._croppedBlob = blob;  // guardado no input; o save manda este blob (ja recortado/encolhido)
+      var clr = row.querySelector('input[name="foto_clear"]'); if (clr) clr.value = "";
+      var thumb = row.querySelector("[data-foto-thumb]");
+      if (thumb) { thumb.classList.remove("empty"); thumb.innerHTML = '<img alt="" />'; thumb.firstChild.src = URL.createObjectURL(blob); }
+      var rem = row.querySelector(".js-foto-remove"); if (rem) rem.removeAttribute("hidden");
     }
-    var rem = editingRow.querySelector(".js-foto-remove"); if (rem) rem.removeAttribute("hidden");
+    if (window.MaltoCrop) window.MaltoCrop.open(file, aplicar);
+    else aplicar(file);
   });
 
   // Teclado: Enter salva (fora de textarea), Esc cancela

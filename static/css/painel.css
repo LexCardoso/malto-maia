@@ -116,6 +116,24 @@ textarea.ed-in { resize: vertical; min-height: 40px; line-height: 1.35; }
   background: var(--cream-deep); border: 1px solid var(--line); }
 .fs-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
+/* Editor de recorte da foto (modal client-side, antes de enviar). */
+.crop-ov { position: fixed; inset: 0; z-index: 200; background: rgba(31, 22, 16, 0.86);
+  display: flex; align-items: center; justify-content: center; padding: 16px; }
+.crop-modal { background: var(--cream-soft); border-radius: var(--r-md); padding: 16px 16px 14px;
+  max-width: 100%; box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6); }
+.crop-head { font-family: var(--display); font-weight: 700; font-size: 20px; color: var(--espresso-ink); margin-bottom: 12px; }
+.crop-stage { position: relative; margin: 0 auto; background: #000; touch-action: none; user-select: none; -webkit-user-select: none; }
+.crop-img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+.crop-box { position: absolute; border: 2px solid var(--sun); box-shadow: 0 0 0 9999px rgba(31, 22, 16, 0.5); cursor: move; }
+.crop-h { position: absolute; width: 22px; height: 22px; background: var(--sun); border: 2px solid #fff;
+  border-radius: 50%; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); }
+.crop-h.h0 { left: -12px; top: -12px; cursor: nwse-resize; }
+.crop-h.h1 { right: -12px; top: -12px; cursor: nesw-resize; }
+.crop-h.h2 { right: -12px; bottom: -12px; cursor: nwse-resize; }
+.crop-h.h3 { left: -12px; bottom: -12px; cursor: nesw-resize; }
+.crop-hint { font-size: 13px; color: var(--muted); margin: 12px 2px 0; max-width: 520px; }
+.crop-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; flex-wrap: wrap; }
+
 /* Login */
 .adm-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;
   background: linear-gradient(170deg, var(--cream) 0%, var(--cream-deep) 100%); }

@@ -1,0 +1,33 @@
+{% load l10n maltomaia %}{% comment %}Celulas editaveis da avaliacao (edicao in-place estilo planilha).{% endcomment %}
+<td class="c-item ed-cell">
+  {% csrf_token %}
+  <div class="ed-line">
+    <input name="autor" class="ed-in ed-nome" value="{{ form.autor.value|default_if_none:'' }}" placeholder="Autor" autocomplete="off" />
+  </div>
+  <div class="ed-line">
+    <textarea name="texto" class="ed-in" rows="2" placeholder="Texto da avaliação">{{ form.texto.value|default_if_none:'' }}</textarea>
+  </div>
+  {% if form.errors %}<div class="ed-err">{% for f in form %}{% for e in f.errors %}{{ f.label }}: {{ e }} {% endfor %}{% endfor %}</div>{% endif %}
+</td>
+<td class="c-cat ed-cell" data-l="Fonte">
+  <select name="fonte" class="ed-in">
+    {% for val, label in form.fonte.field.choices %}<option value="{{ val }}"{% if val|stringformat:'s' == form.fonte.value|stringformat:'s' %} selected{% endif %}>{{ label }}</option>{% endfor %}
+  </select>
+  <label class="ed-ordem"><span>Ordem</span><input name="ordem" type="number" min="0" class="ed-in" value="{{ form.ordem.value|default_if_none:'0'|unlocalize }}" /></label>
+</td>
+<td class="c-rate ed-cell" data-l="Nota">
+  <input name="nota" type="number" min="1" max="5" class="ed-in ed-nota" value="{{ form.nota.value|default_if_none:'5'|unlocalize }}" />
+</td>
+<td class="c-disp center ed-cell" data-l="No site">
+  <button type="button" class="switch js-ed-toggle{% if form.aparece.value %} on{% endif %}" data-field="aparece" title="Aparece no site"><span class="knob"></span></button>
+</td>
+<td class="c-act ed-cell">
+  <div class="row-actions" style="justify-content:flex-end">
+    <button type="button" class="iconbtn icon js-ed-save" data-action="{% url 'painel:avaliacao_editar' av.pk %}" title="{% t 'adm.save' %}" aria-label="{% t 'adm.save' %}">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    </button>
+    <button type="button" class="iconbtn icon js-ed-cancel" title="{% t 'adm.cancel' %}" aria-label="{% t 'adm.cancel' %}">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+</td>

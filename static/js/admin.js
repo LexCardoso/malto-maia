@@ -1,9 +1,9 @@
-/* Malto Maia - admin: toggles AJAX, edicao IN-LINE na linha, buscar/filtrar/ordenar. */
+/* Malto Maia - admin: toggles AJAX, edicao NA CELULA (estilo planilha), buscar/filtrar/ordenar. */
 (function () {
   "use strict";
 
-  function csrf(form) {
-    var i = form.querySelector('input[name="csrfmiddlewaretoken"]');
+  function csrfFrom(el) {
+    var i = el.querySelector('input[name="csrfmiddlewaretoken"]');
     return i ? i.value : "";
   }
   function ajaxHeaders(token) {
@@ -19,7 +19,7 @@
     e.preventDefault();
     var sw = form.querySelector(".switch");
     if (sw) sw.disabled = true;
-    fetch(form.action, { method: "POST", headers: ajaxHeaders(csrf(form)), body: new FormData(form) })
+    fetch(form.action, { method: "POST", headers: ajaxHeaders(csrfFrom(form)), body: new FormData(form) })
       .then(function (r) { return r.ok ? r.json() : Promise.reject(r); })
       .then(function (data) {
         if (sw && typeof data.on === "boolean") sw.classList.toggle("on", data.on);
@@ -34,7 +34,7 @@
       .then(function () { if (sw) sw.disabled = false; });
   });
 
-  /* ----- Editar NA LINHA (in-place; a linha fica mais escura) ----- */
+  /* ----- Editar NA CELULA (in-place; a linha vira editavel ali mesmo) ----- */
   var editingRow = null, editingHTML = "";
 
   function closeEditor(restore) {
@@ -43,44 +43,78 @@
     editingRow = null; editingHTML = "";
   }
 
-  document.addEventListener("click", function (e) {
-    if (!e.target.closest) return;
-    var link = e.target.closest(".js-edit");
-    if (link) {
-      e.preventDefault();
-      var tr = link.closest("tr");
-      if (editingRow && editingRow !== tr) closeEditor(true);
-      editingRow = tr;
-      editingHTML = tr.outerHTML;
-      var cols = tr.children.length;
-      fetch(link.getAttribute("href"), { headers: ajaxHeaders() })
-        .then(function (r) { return r.text(); })
-        .then(function (html) {
-          tr.classList.add("editing");
-          tr.innerHTML = '<td colspan="' + cols + '" class="edit-cell">' + html + "</td>";
-          var f = tr.querySelector("input, select, textarea");
-          if (f) f.focus();
-        });
-      return;
-    }
-    if (e.target.closest("[data-close]") && editingRow) { e.preventDefault(); closeEditor(true); }
-  });
+  function openEditor(link) {
+    var tr = link.closest("tr");
+    if (!tr) return;
+    if (editingRow && editingRow !== tr) closeEditor(true);
+    editingRow = tr;
+    editingHTML = tr.outerHTML;
+    fetch(link.getAttribute("href"), { headers: ajaxHeaders() })
+      .then(function (r) { return r.text(); })
+      .then(function (cells) {
+        tr.classList.add("editing");
+        tr.innerHTML = cells;            // resposta = as proprias <td> editaveis
+        var f = tr.querySelector("input, select, textarea");
+        if (f) { f.focus(); if (f.select) f.select(); }
+      });
+  }
 
-  document.addEventListener("submit", function (e) {
-    var form = e.target.closest ? e.target.closest(".adm-edit-form") : null;
-    if (!form) return;
-    e.preventDefault();
-    fetch(form.action, { method: "POST", headers: ajaxHeaders(csrf(form)), body: new FormData(form) })
+  function saveEditor(btn) {
+    if (!editingRow) return;
+    var row = editingRow;
+    var body = new FormData();
+    [].forEach.call(row.querySelectorAll("[name]"), function (el) {
+      if (el.name === "csrfmiddlewaretoken") return;
+      body.append(el.name, el.value);
+    });
+    // switches/estrela: presentes so quando ligados (semantica de checkbox)
+    [].forEach.call(row.querySelectorAll(".js-ed-toggle.on"), function (b) {
+      var f = b.getAttribute("data-field");
+      if (f) body.append(f, "on");
+    });
+    btn.disabled = true;
+    fetch(btn.getAttribute("data-action"), { method: "POST", headers: ajaxHeaders(csrfFrom(row)), body: body })
       .then(function (r) { return r.json(); })
       .then(function (data) {
-        if (data.ok) {
-          if (data.reload) { location.reload(); return; }
-          if (data.row && editingRow) { editingRow.outerHTML = data.row; editingRow = null; editingHTML = ""; }
-        } else if (data.form && editingRow) {
-          var cell = editingRow.querySelector(".edit-cell");
-          if (cell) cell.innerHTML = data.form;
+        if (data.ok && data.row) {
+          row.outerHTML = data.row;       // volta a linha normal, ja atualizada
+          editingRow = null; editingHTML = "";
+          if (data.stats) {
+            Object.keys(data.stats).forEach(function (k) {
+              var el = document.querySelector('[data-stat="' + k + '"]');
+              if (el) el.textContent = data.stats[k];
+            });
+          }
+        } else if (data.rowedit) {
+          row.innerHTML = data.rowedit;   // erros de validacao: remostra com aviso
+          var f = row.querySelector("input, select, textarea");
+          if (f) f.focus();
         }
-      });
+      })
+      .catch(function () { if (btn) btn.disabled = false; });
+  }
+
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest) return;
+    var editLink = e.target.closest(".js-edit");
+    if (editLink) { e.preventDefault(); openEditor(editLink); return; }
+    var toggle = e.target.closest(".js-ed-toggle");
+    if (toggle) { e.preventDefault(); toggle.classList.toggle("on"); return; }
+    var saveBtn = e.target.closest(".js-ed-save");
+    if (saveBtn) { e.preventDefault(); saveEditor(saveBtn); return; }
+    if (e.target.closest(".js-ed-cancel") || e.target.closest("[data-close]")) {
+      if (editingRow) { e.preventDefault(); closeEditor(true); }
+    }
+  });
+
+  // Teclado: Enter salva (fora de textarea), Esc cancela
+  document.addEventListener("keydown", function (e) {
+    if (!editingRow) return;
+    if (e.key === "Escape") { e.preventDefault(); closeEditor(true); return; }
+    if (e.key === "Enter" && editingRow.contains(e.target) && e.target.tagName !== "TEXTAREA") {
+      var btn = editingRow.querySelector(".js-ed-save");
+      if (btn) { e.preventDefault(); saveEditor(btn); }
+    }
   });
 
   /* ----- Tabela tipo Excel: buscar + filtrar categoria + ordenar ----- */

@@ -75,12 +75,25 @@ def item_editar(request, pk):
         form.save()
         ConfiguracaoSite.get().marcar_atualizado_hoje()
         if _ajax(request):
-            return JsonResponse({"ok": True, "row": render_to_string("painel/_item_row.html", {"i": item}, request)})
+            return JsonResponse({
+                "ok": True,
+                "row": render_to_string("painel/_item_row.html", {"i": item}, request),
+                "stats": {
+                    "disp": Item.objects.filter(disponivel=True).count(),
+                    "indisp": Item.objects.filter(disponivel=False).count(),
+                    "enc": Item.objects.filter(encomendavel=True).count(),
+                    "tbd": Item.objects.filter(preco__isnull=True).count(),
+                },
+            })
         messages.success(request, "Item atualizado.")
         return redirect("painel:dashboard")
     if _ajax(request):
-        html = render_to_string("painel/_item_form.html", {"form": form, "item": item, "novo": False}, request)
-        return JsonResponse({"ok": False, "form": html}) if request.method == "POST" else HttpResponse(html)
+        cells = render_to_string(
+            "painel/_item_row_edit.html",
+            {"form": form, "item": item, "categorias": Categoria.objects.all()},
+            request,
+        )
+        return JsonResponse({"ok": False, "rowedit": cells}) if request.method == "POST" else HttpResponse(cells)
     return render(
         request, "painel/item_form.html", {"form": form, "item": item, "novo": False}
     )
@@ -219,12 +232,16 @@ def avaliacao_editar(request, pk):
     if request.method == "POST" and form.is_valid():
         form.save()
         if _ajax(request):
-            return JsonResponse({"ok": True, "row": render_to_string("painel/_avaliacao_row.html", {"av": av}, request)})
+            return JsonResponse({
+                "ok": True,
+                "row": render_to_string("painel/_avaliacao_row.html", {"av": av}, request),
+                "stats": {"vis": Avaliacao.objects.filter(aparece=True).count()},
+            })
         messages.success(request, "Avaliação atualizada.")
         return redirect("painel:avaliacoes")
     if _ajax(request):
-        html = render_to_string("painel/_avaliacao_form.html", {"form": form, "av": av, "novo": False}, request)
-        return JsonResponse({"ok": False, "form": html}) if request.method == "POST" else HttpResponse(html)
+        cells = render_to_string("painel/_avaliacao_row_edit.html", {"form": form, "av": av}, request)
+        return JsonResponse({"ok": False, "rowedit": cells}) if request.method == "POST" else HttpResponse(cells)
     return render(request, "painel/avaliacao_form.html", {"form": form, "av": av, "novo": False})
 
 

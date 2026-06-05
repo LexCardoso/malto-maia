@@ -75,11 +75,30 @@
 .switch.enc.on { background: var(--sun-deep); }
 .switch.on .knob { left: 23px; }
 
-/* Edicao IN-LINE: a propria linha vira um painel mais escuro (na paleta), sem modal/reload. */
-.adm-table tr.editing { background: var(--cream-deep); }
-.adm-table td.edit-cell { display: block; padding: 18px 16px; border-top: 2px solid var(--sun); }
-.edit-cell h3 { margin-bottom: 14px; }
-.edit-cell .adm-edit-form { max-width: 640px; }
+/* Edicao NA CELULA (estilo planilha): a propria linha vira editavel ali mesmo,
+   compacta e on-brand — sem modal, sem formularzao, sem trocar de tela. */
+.adm-table tr.editing { background: var(--cream-deep); box-shadow: inset 3px 0 0 var(--sun); }
+.adm-table tr.editing > td { vertical-align: top; padding-top: 11px; padding-bottom: 11px; }
+.ed-in { width: 100%; font-family: var(--body); font-size: 14px; padding: 7px 9px; color: var(--espresso);
+  background: #fff; border: 1px solid var(--line-strong); border-radius: var(--r-sm); }
+.ed-in:focus { outline: none; border-color: var(--sun-deep); box-shadow: 0 0 0 3px var(--sun-soft); }
+textarea.ed-in { resize: vertical; min-height: 40px; line-height: 1.35; }
+.ed-line { display: flex; align-items: center; gap: 8px; }
+.ed-line + .ed-line { margin-top: 7px; }
+.ed-descs .ed-in { font-size: 13px; }
+.ed-nome { font-weight: 700; }
+.star-toggle { flex: 0 0 auto; width: 33px; height: 33px; border-radius: var(--r-sm);
+  border: 1px solid var(--line-strong); background: var(--cream); color: var(--line-strong);
+  font-size: 16px; line-height: 1; cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
+.star-toggle:hover { border-color: var(--sun-deep); color: var(--sun-deep); }
+.star-toggle.on { background: var(--sun-soft); border-color: var(--sun-deep); color: var(--sun-deep); }
+.ed-ordem { display: flex; align-items: center; gap: 7px; margin-top: 7px; font-size: 12px; color: var(--muted); }
+.ed-ordem .ed-in { width: 66px; }
+.ed-preco { max-width: 112px; }
+.ed-nota { max-width: 72px; }
+.ed-err { color: var(--terracota-d); font-size: 12.5px; font-weight: 600; margin-top: 7px; }
+.js-ed-save { color: var(--leaf); }
+.js-ed-save:hover { border-color: var(--leaf); }
 
 /* Login */
 .adm-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;
@@ -102,4 +121,13 @@
   .adm-table td.c-item { display: block; border-top: 0; padding: 0 84px 6px 0; }
   .adm-table td.c-act { position: absolute; top: 13px; right: 13px; padding: 0; border-top: 0; }
   .adm-table td[data-l]::before { content: attr(data-l); font-size: 13px; font-weight: 700; color: var(--muted); }
+  /* Edicao na celula tambem no card do celular: rotulo em cima, campo full-width. */
+  .adm-table tr.editing { box-shadow: inset 0 3px 0 var(--sun); }
+  .adm-table tr.editing > td { display: block; padding: 0; border-top: 0; }
+  .adm-table tr.editing > td + td { margin-top: 12px; }
+  .adm-table tr.editing > td[data-l]::before { display: block; margin-bottom: 5px; }
+  .adm-table tr.editing > td.c-item { padding: 0; }
+  .adm-table tr.editing > td.c-act { position: static; }
+  .adm-table tr.editing .row-actions { justify-content: flex-end; }
+  .ed-descs { flex-direction: column; align-items: stretch; }
 }

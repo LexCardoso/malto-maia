@@ -80,7 +80,9 @@ class AcessoPainelTests(TestCase):
             HTTP_X_REQUESTED_WITH="XMLHttpRequest",
         )
         self.assertEqual(r.status_code, 200)
-        self.assertIn(b"<form", r.content)
+        # Agora a resposta sao as celulas editaveis (edicao na linha), nao um <form>.
+        self.assertIn(b"ed-cell", r.content)
+        self.assertIn(b'name="nome"', r.content)
         r2 = self.client.post(
             reverse("painel:item_editar", args=[self.item.pk]),
             {"categoria": self.cat.pk, "nome": "Espresso Inline", "desc_pt": "",
@@ -130,7 +132,9 @@ class AvaliacoesPainelTests(TestCase):
             HTTP_X_REQUESTED_WITH="XMLHttpRequest",
         )
         self.assertEqual(r.status_code, 200)
-        self.assertIn(b"<form", r.content)
+        # Resposta = celulas editaveis da avaliacao (edicao na linha), sem <form>.
+        self.assertIn(b"ed-cell", r.content)
+        self.assertIn(b'name="autor"', r.content)
         r2 = self.client.post(
             reverse("painel:avaliacao_editar", args=[self.av.pk]),
             {"autor": "Joao Edit", "texto": "Otimo mesmo", "nota": "5",

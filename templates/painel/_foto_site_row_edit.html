@@ -1,7 +1,6 @@
 {% load maltomaia %}
-<td class="c-item ed-cell">
-  {% csrf_token %}
-  <div class="ed-label">{{ fs.label }}</div>
+<td class="c-item ed-cell">{% csrf_token %}<div class="ed-label">{{ fs.label }}</div><div class="ds">{{ fs.secao }}</div></td>
+<td class="ed-cell" data-l="Conteúdo">
   <div class="ed-foto">
     <span class="ed-foto-thumb" data-foto-thumb>
       {% if fs.url %}<img src="{{ fs.url }}" alt="" />
@@ -12,9 +11,9 @@
     <input type="file" name="foto" accept="image/*" class="js-foto-input" hidden />
     <input type="hidden" name="foto_clear" value="" />
   </div>
+  <div class="text-muted" style="font-size:12.5px;margin-top:7px;max-width:340px">A imagem é encolhida e comprimida sozinha antes de salvar. Vazio = volta à foto padrão do site.</div>
   {% if erro_foto %}<div class="ed-err">{{ erro_foto }}</div>{% endif %}
 </td>
-<td class="ed-cell" colspan="2"><div class="text-muted" style="font-size:13px;max-width:320px">A imagem é encolhida e comprimida sozinha antes de salvar. Vazio = volta a usar a foto padrão do site.</div></td>
 <td class="c-act ed-cell">
   <div class="row-actions" style="justify-content:flex-end">
     <button type="button" class="iconbtn icon js-ed-save" data-action="{% url 'painel:foto_site_editar' fs.slug %}" title="{% t 'adm.save' %}" aria-label="{% t 'adm.save' %}">

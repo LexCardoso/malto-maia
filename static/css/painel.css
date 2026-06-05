@@ -111,6 +111,7 @@ textarea.ed-in { resize: vertical; min-height: 40px; line-height: 1.35; }
 .ed-foto-remove:hover { color: var(--terracota); }
 /* Conteudo do site: rotulo do campo + miniatura da foto na listagem. */
 .ed-label { font-weight: 800; color: var(--espresso-ink); margin-bottom: 6px; }
+.ed-mini { display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
 .fs-thumb { display: inline-flex; width: 66px; height: 46px; border-radius: var(--r-sm); overflow: hidden;
   background: var(--cream-deep); border: 1px solid var(--line); }
 .fs-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }

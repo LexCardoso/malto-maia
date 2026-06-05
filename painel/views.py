@@ -292,47 +292,45 @@ def avaliacao_excluir(request, pk):
     return redirect("painel:avaliacoes")
 
 
-# ── Conteudo do site (textos do i18n + fotos dos slots) ──
+# ── Conteudo do site: cada BLOCO num lugar so (textos + foto da secao juntos) ──
+SECOES_ORDEM = ["Hero", "Sobre", "Destaques", "Galeria", "Encomenda",
+                "Avaliações", "Instagram", "Visite", "Conceito", "Cardápio"]
+
+
 def _texto_valor(chave, lang, ov):
     if chave in ov and ov[chave].get(lang):
         return ov[chave][lang]
     return STRINGS.get(chave, {}).get(lang, "")
 
 
-def _texto_ctx(chave):
+def _texto_entry(chave):
     ov = textos_overrides()
     sec, lbl, ml = next(((s, l, m) for (c, s, l, m) in TEXTOS_EDITAVEIS if c == chave), ("", chave, False))
-    return {"tx": {
-        "chave": chave, "secao": sec, "label": lbl, "multiline": ml,
+    return {
+        "tipo": "texto", "chave": chave, "secao": sec, "label": lbl, "multiline": ml,
         "pt": _texto_valor(chave, "pt", ov), "en": _texto_valor(chave, "en", ov),
         "tem_override": chave in ov,
-    }}
+    }
 
 
-def _foto_ctx(slug):
+def _foto_entry(slug):
     sec, lbl = FOTO_META.get(slug, ("", slug))
-    return {"fs": {
-        "slug": slug, "secao": sec, "label": lbl,
+    return {
+        "tipo": "foto", "slug": slug, "secao": sec, "label": lbl,
         "url": foto_site_url(slug), "tem_override": slug in fotos_overrides(),
-    }}
+    }
 
 
 @staff_required
 def conteudo(request):
-    ov = textos_overrides()
-    textos = [
-        {"chave": c, "secao": sec, "label": lbl, "multiline": ml,
-         "pt": _texto_valor(c, "pt", ov), "en": _texto_valor(c, "en", ov),
-         "tem_override": c in ov}
-        for (c, sec, lbl, ml) in TEXTOS_EDITAVEIS
-    ]
-    fov = fotos_overrides()
-    fotos = [
-        {"slug": s, "secao": sec, "label": lbl,
-         "url": foto_site_url(s), "tem_override": s in fov}
-        for (s, sec, lbl, _d) in FOTOS_SITE
-    ]
-    return render(request, "painel/conteudo.html", {"textos": textos, "fotos": fotos})
+    por_secao = {}
+    for (c, sec, _lbl, _ml) in TEXTOS_EDITAVEIS:
+        por_secao.setdefault(sec, []).append(_texto_entry(c))
+    for (s, sec, _lbl, _d) in FOTOS_SITE:
+        por_secao.setdefault(sec, []).append(_foto_entry(s))
+    ordem = SECOES_ORDEM + [s for s in por_secao if s not in SECOES_ORDEM]
+    blocos = [{"secao": s, "entradas": por_secao[s]} for s in ordem if s in por_secao]
+    return render(request, "painel/conteudo.html", {"blocos": blocos})
 
 
 @staff_required
@@ -345,11 +343,11 @@ def texto_editar(request, chave):
         obj.en = request.POST.get("en", "").strip()
         obj.save()  # invalida o cache de conteudo
         if _ajax(request):
-            return JsonResponse({"ok": True, "row": render_to_string("painel/_texto_row.html", _texto_ctx(chave), request)})
+            return JsonResponse({"ok": True, "row": render_to_string("painel/_conteudo_row.html", {"e": _texto_entry(chave)}, request)})
         messages.success(request, "Texto atualizado.")
         return redirect("painel:conteudo")
     if _ajax(request):
-        return HttpResponse(render_to_string("painel/_texto_row_edit.html", _texto_ctx(chave), request))
+        return HttpResponse(render_to_string("painel/_texto_row_edit.html", {"tx": _texto_entry(chave)}, request))
     return redirect("painel:conteudo")
 
 
@@ -372,12 +370,11 @@ def foto_site_editar(request, slug):
             obj.save()
         if not erro_foto:
             if _ajax(request):
-                return JsonResponse({"ok": True, "row": render_to_string("painel/_foto_site_row.html", _foto_ctx(slug), request)})
+                return JsonResponse({"ok": True, "row": render_to_string("painel/_conteudo_row.html", {"e": _foto_entry(slug)}, request)})
             messages.success(request, "Foto do site atualizada.")
             return redirect("painel:conteudo")
-    ctx = _foto_ctx(slug)
-    ctx["erro_foto"] = erro_foto
     if _ajax(request):
+        ctx = {"fs": _foto_entry(slug), "erro_foto": erro_foto}
         cells = render_to_string("painel/_foto_site_row_edit.html", ctx, request)
         return JsonResponse({"ok": False, "rowedit": cells}) if request.method == "POST" else HttpResponse(cells)
     return redirect("painel:conteudo")

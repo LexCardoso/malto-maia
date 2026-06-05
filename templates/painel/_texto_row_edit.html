@@ -1,7 +1,11 @@
 {% load maltomaia %}
 <td class="c-item ed-cell">{% csrf_token %}<div class="ed-label">{{ tx.label }}</div><div class="ds">{{ tx.secao }}</div></td>
-<td class="ed-cell" data-l="Português"><textarea name="pt" class="ed-in" rows="{% if tx.multiline %}3{% else %}2{% endif %}">{{ tx.pt }}</textarea></td>
-<td class="ed-cell" data-l="English"><textarea name="en" class="ed-in" rows="{% if tx.multiline %}3{% else %}2{% endif %}">{{ tx.en }}</textarea></td>
+<td class="ed-cell" data-l="Conteúdo">
+  <label class="ed-mini">Português</label>
+  <textarea name="pt" class="ed-in" rows="{% if tx.multiline %}3{% else %}2{% endif %}">{{ tx.pt }}</textarea>
+  <label class="ed-mini" style="margin-top:9px">English</label>
+  <textarea name="en" class="ed-in" rows="{% if tx.multiline %}3{% else %}2{% endif %}">{{ tx.en }}</textarea>
+</td>
 <td class="c-act ed-cell">
   <div class="row-actions" style="justify-content:flex-end">
     <button type="button" class="iconbtn icon js-ed-save" data-action="{% url 'painel:texto_editar' tx.chave %}" title="{% t 'adm.save' %}" aria-label="{% t 'adm.save' %}">

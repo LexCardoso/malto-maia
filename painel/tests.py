@@ -37,6 +37,17 @@ class AcessoPainelTests(TestCase):
         self.item.refresh_from_db()
         self.assertFalse(self.item.disponivel)
 
+    def test_toggle_ajax_retorna_json(self):
+        self.client.force_login(self.staff)
+        r = self.client.post(
+            reverse("painel:item_toggle", args=[self.item.pk]),
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+        self.assertEqual(r.status_code, 200)
+        data = r.json()
+        self.assertIn("on", data)
+        self.assertIn("disp", data["stats"])
+
     def test_toggle_exige_post(self):
         self.client.force_login(self.staff)
         r = self.client.get(reverse("painel:item_toggle", args=[self.item.pk]))

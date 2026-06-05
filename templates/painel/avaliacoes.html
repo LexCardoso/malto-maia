@@ -23,7 +23,7 @@
 
   <div class="adm-stats">
     <div class="adm-stat"><b>{{ avaliacoes|length }}</b><span>cadastradas</span></div>
-    <div class="adm-stat"><b>{{ n_visiveis }}</b><span>aparecem no site</span></div>
+    <div class="adm-stat"><b data-stat="vis">{{ n_visiveis }}</b><span>aparecem no site</span></div>
   </div>
 
   <table class="adm-table">
@@ -37,7 +37,7 @@
         <td class="c-cat text-muted" data-l="Fonte">{{ av.get_fonte_display }}</td>
         <td class="c-rate" data-l="Nota"><span class="stars" style="font-size:14px">{{ av.estrelas }}</span></td>
         <td class="c-disp center" data-l="No site">
-          <form method="post" action="{% url 'painel:avaliacao_toggle' av.pk %}">{% csrf_token %}
+          <form method="post" class="js-toggle" action="{% url 'painel:avaliacao_toggle' av.pk %}">{% csrf_token %}
             <button type="submit" class="switch {% if av.aparece %}on{% endif %}" title="Aparece no site"><span class="knob"></span></button>
           </form>
         </td>

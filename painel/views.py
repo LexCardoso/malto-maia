@@ -5,6 +5,7 @@ Acesso restrito a usuarios staff. Login com django-axes (anti-bruteforce).
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.views import LoginView
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -15,6 +16,10 @@ from .forms import AvaliacaoForm, ConfiguracaoForm, ItemForm
 staff_required = user_passes_test(
     lambda u: u.is_active and u.is_staff, login_url="painel:login"
 )
+
+
+def _ajax(request):
+    return request.headers.get("x-requested-with") == "XMLHttpRequest"
 
 
 class PainelLoginView(LoginView):
@@ -77,6 +82,11 @@ def item_toggle(request, pk):
     item.disponivel = not item.disponivel
     item.save(update_fields=["disponivel", "atualizado_em"])
     ConfiguracaoSite.get().marcar_atualizado_hoje()
+    if _ajax(request):
+        return JsonResponse({"on": item.disponivel, "stats": {
+            "disp": Item.objects.filter(disponivel=True).count(),
+            "indisp": Item.objects.filter(disponivel=False).count(),
+        }})
     messages.success(
         request,
         f"“{item.nome}” marcado como {'disponível' if item.disponivel else 'indisponível'}.",
@@ -90,6 +100,10 @@ def item_toggle_encomenda(request, pk):
     item = get_object_or_404(Item, pk=pk)
     item.encomendavel = not item.encomendavel
     item.save(update_fields=["encomendavel", "atualizado_em"])
+    if _ajax(request):
+        return JsonResponse({"on": item.encomendavel, "stats": {
+            "enc": Item.objects.filter(encomendavel=True).count(),
+        }})
     estado = "entra na" if item.encomendavel else "saiu da"
     messages.success(request, f"“{item.nome}” {estado} encomenda.")
     return redirect("painel:dashboard")
@@ -199,6 +213,10 @@ def avaliacao_toggle(request, pk):
     av = get_object_or_404(Avaliacao, pk=pk)
     av.aparece = not av.aparece
     av.save(update_fields=["aparece"])
+    if _ajax(request):
+        return JsonResponse({"on": av.aparece, "stats": {
+            "vis": Avaliacao.objects.filter(aparece=True).count(),
+        }})
     estado = "aparece" if av.aparece else "está oculta"
     messages.success(request, f"Avaliação de “{av.autor}” {estado} no site.")
     return redirect("painel:avaliacoes")

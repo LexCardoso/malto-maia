@@ -20,10 +20,10 @@
 
   <div class="adm-stats">
     <div class="adm-stat"><b>{{ n_total }}</b><span>{% t 'adm.itemsCount' %}</span></div>
-    <div class="adm-stat"><b>{{ n_disp }}</b><span>{% t 'adm.available' %}</span></div>
-    <div class="adm-stat"><b class="warn">{{ n_indisp }}</b><span>{% t 'common.unavailable' %}</span></div>
+    <div class="adm-stat"><b data-stat="disp">{{ n_disp }}</b><span>{% t 'adm.available' %}</span></div>
+    <div class="adm-stat"><b class="warn" data-stat="indisp">{{ n_indisp }}</b><span>{% t 'common.unavailable' %}</span></div>
     <div class="adm-stat"><b>{{ n_tbd }}</b><span>{% t 'adm.priceTbd' %}</span></div>
-    <div class="adm-stat"><b>{{ n_encomenda }}</b><span>{% t 'adm.onOrder' %}</span></div>
+    <div class="adm-stat"><b data-stat="enc">{{ n_encomenda }}</b><span>{% t 'adm.onOrder' %}</span></div>
   </div>
 
   <form class="adm-toolbar" method="get">
@@ -54,12 +54,12 @@
         <td class="c-cat text-muted" data-l="{% t 'adm.col.cat' %}">{{ i.categoria.nome_pt }}</td>
         <td class="c-price" data-l="{% t 'adm.col.price' %}">{% if i.preco %}{{ i.preco|brl }}{% else %}<span class="text-muted">{% t 'adm.priceTbd' %}</span>{% endif %}</td>
         <td class="c-disp center" data-l="{% t 'adm.available' %}">
-          <form method="post" action="{% url 'painel:item_toggle' i.pk %}">{% csrf_token %}
+          <form method="post" class="js-toggle" action="{% url 'painel:item_toggle' i.pk %}">{% csrf_token %}
             <button type="submit" class="switch {% if i.disponivel %}on{% endif %}" title="{% t 'adm.available' %}"><span class="knob"></span></button>
           </form>
         </td>
         <td class="c-enc center" data-l="{% t 'adm.encomenda' %}">
-          <form method="post" action="{% url 'painel:item_toggle_encomenda' i.pk %}">{% csrf_token %}
+          <form method="post" class="js-toggle" action="{% url 'painel:item_toggle_encomenda' i.pk %}">{% csrf_token %}
             <button type="submit" class="switch enc {% if i.encomendavel %}on{% endif %}" title="{% t 'adm.encomenda' %}"><span class="knob"></span></button>
           </form>
         </td>

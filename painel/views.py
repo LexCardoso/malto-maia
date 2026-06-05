@@ -5,8 +5,9 @@ Acesso restrito a usuarios staff. Login com django-axes (anti-bruteforce).
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.views import LoginView
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
 from cardapio.models import Avaliacao, Categoria, ConfiguracaoSite, Item
@@ -56,8 +57,13 @@ def item_novo(request):
     if request.method == "POST" and form.is_valid():
         form.save()
         ConfiguracaoSite.get().marcar_atualizado_hoje()
+        if _ajax(request):
+            return JsonResponse({"ok": True, "reload": True})
         messages.success(request, "Item adicionado.")
         return redirect("painel:dashboard")
+    if _ajax(request):
+        html = render_to_string("painel/_item_form.html", {"form": form, "novo": True}, request)
+        return JsonResponse({"ok": False, "form": html}) if request.method == "POST" else HttpResponse(html)
     return render(request, "painel/item_form.html", {"form": form, "novo": True})
 
 
@@ -68,8 +74,13 @@ def item_editar(request, pk):
     if request.method == "POST" and form.is_valid():
         form.save()
         ConfiguracaoSite.get().marcar_atualizado_hoje()
+        if _ajax(request):
+            return JsonResponse({"ok": True, "row": render_to_string("painel/_item_row.html", {"i": item}, request)})
         messages.success(request, "Item atualizado.")
         return redirect("painel:dashboard")
+    if _ajax(request):
+        html = render_to_string("painel/_item_form.html", {"form": form, "item": item, "novo": False}, request)
+        return JsonResponse({"ok": False, "form": html}) if request.method == "POST" else HttpResponse(html)
     return render(
         request, "painel/item_form.html", {"form": form, "item": item, "novo": False}
     )

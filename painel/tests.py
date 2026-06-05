@@ -73,6 +73,25 @@ class AcessoPainelTests(TestCase):
         self.item.refresh_from_db()
         self.assertEqual(self.item.nome, "Espresso Duplo")
 
+    def test_editar_ajax_get_form_e_post_linha(self):
+        self.client.force_login(self.staff)
+        r = self.client.get(
+            reverse("painel:item_editar", args=[self.item.pk]),
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertIn(b"<form", r.content)
+        r2 = self.client.post(
+            reverse("painel:item_editar", args=[self.item.pk]),
+            {"categoria": self.cat.pk, "nome": "Espresso Inline", "desc_pt": "",
+             "desc_en": "", "preco": "7.00", "ordem": "0"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+        self.assertEqual(r2.status_code, 200)
+        data = r2.json()
+        self.assertTrue(data["ok"])
+        self.assertIn("Espresso Inline", data["row"])
+
 
 class AvaliacoesPainelTests(TestCase):
     def setUp(self):

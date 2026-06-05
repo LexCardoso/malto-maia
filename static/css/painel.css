@@ -75,6 +75,13 @@
 .switch.enc.on { background: var(--sun-deep); }
 .switch.on .knob { left: 23px; }
 
+/* Modal de edicao (editar no box, sem abrir outra pagina) */
+.edit-modal { width: 100%; max-width: 560px; border: 1px solid var(--line); border-radius: 18px; padding: 26px; background: var(--cream-soft); color: var(--espresso); box-shadow: 0 30px 70px -30px var(--shadow-deep); }
+.edit-modal::backdrop { background: rgba(31, 22, 16, 0.5); backdrop-filter: blur(2px); }
+.edit-modal-x { position: absolute; top: 12px; right: 14px; width: 36px; height: 36px; border-radius: 999px; border: none; background: transparent; color: var(--muted); font-size: 26px; line-height: 1; cursor: pointer; }
+.edit-modal-x:hover { color: var(--terracota); }
+@media (max-width: 620px) { .edit-modal { max-width: 100%; padding: 22px 16px; } }
+
 /* Login */
 .adm-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;
   background: linear-gradient(170deg, var(--cream) 0%, var(--cream-deep) 100%); }

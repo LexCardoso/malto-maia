@@ -1,0 +1,34 @@
+{% load maltomaia %}
+<h3 class="h-2" style="margin-bottom:16px">{% if novo %}{% t 'adm.newItem' %}{% else %}{% t 'adm.edit' %} — {{ item.nome }}{% endif %}</h3>
+<form method="post" action="{% if novo %}{% url 'painel:item_novo' %}{% else %}{% url 'painel:item_editar' item.pk %}{% endif %}" class="adm-edit-form">
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+  <div class="field">
+    <label for="{{ form.categoria.id_for_label }}">{% t 'adm.col.cat' %}</label>
+    {{ form.categoria }}
+    {% if form.categoria.errors %}<ul class="errorlist">{{ form.categoria.errors }}</ul>{% endif %}
+  </div>
+  <div class="field">
+    <label for="{{ form.nome.id_for_label }}">{% t 'adm.name' %}</label>
+    {{ form.nome }}
+    {% if form.nome.errors %}<ul class="errorlist">{{ form.nome.errors }}</ul>{% endif %}
+  </div>
+  <div class="field"><label for="{{ form.desc_pt.id_for_label }}">{% t 'adm.desc' %} (PT)</label>{{ form.desc_pt }}</div>
+  <div class="field"><label for="{{ form.desc_en.id_for_label }}">{% t 'adm.desc' %} (EN)</label>{{ form.desc_en }}</div>
+  <div class="field">
+    <label for="{{ form.preco.id_for_label }}">{% t 'adm.priceField' %}</label>
+    {{ form.preco }}
+    <div class="help">Deixe vazio para “{% t 'adm.priceTbd' %}”.</div>
+    {% if form.preco.errors %}<ul class="errorlist">{{ form.preco.errors }}</ul>{% endif %}
+  </div>
+  <div class="row" style="gap:24px;margin:14px 0;flex-wrap:wrap">
+    <label class="row" style="gap:8px;cursor:pointer">{{ form.destaque }} <span>★ {% t 'common.signature' %}</span></label>
+    <label class="row" style="gap:8px;cursor:pointer">{{ form.disponivel }} <span>{% t 'adm.available' %}</span></label>
+    <label class="row" style="gap:8px;cursor:pointer">{{ form.encomendavel }} <span>{% t 'adm.encomenda' %}</span></label>
+  </div>
+  <div class="field"><label for="{{ form.ordem.id_for_label }}">Ordem</label>{{ form.ordem }}</div>
+  <div class="row" style="gap:10px;margin-top:8px">
+    <button class="btn btn-primary" type="submit">{% t 'adm.save' %}</button>
+    <button class="btn btn-ghost" type="button" data-close onclick="if(!this.closest('dialog'))location.href='{% url 'painel:dashboard' %}'">{% t 'adm.cancel' %}</button>
+  </div>
+</form>
